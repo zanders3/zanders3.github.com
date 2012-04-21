@@ -81,7 +81,7 @@ a:hover{
 /*************************************/
 
 body {
-	background: url('../img/light_wool.png');
+	background: url('../img/light_wool.png') fixed;
 }
 
 h1, h2 {

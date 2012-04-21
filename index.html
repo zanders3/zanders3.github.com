@@ -25,60 +25,42 @@
 			</ul>
 		</nav>
 		<div id="content">
-			<hr/>
-			<section>
-				<aside>
-					<ul class="code">
-						<li>C++</li>
-						<li>XDK</li>
-						<li>C#</li>
-						<li>As</li>
-					</ul>
-					<p class="date">28/10/11</p>
-				</aside>
-				<h1>Kinect Sports: Season 2</h1>
-				<div class="images">
-					<a class="first" href="img/ks2-1.jpg" rel="lightbox[ks2]"><img src="img/ks2-1-t.jpg"/></a>
-					<a href="img/ks2-2.jpg" rel="lightbox[ks2]"><img src="img/ks2-2-t.jpg"/></a>
-					<a class="last" href="img/ks2-3.jpg" rel="lightbox[ks2]"><img src="img/ks2-3-t.jpg"/></a>
-				</div>
-				<p>The BAFTA award winning game that I helped ship by implementing the 'Challenge Play' gameplay mode including the user interface and save system for local challenge play.</p>
-				<h2>Links</h2>
-				<ul class="links">
-					<li><a href="#">A Test link</a>Some text additionally goes here</li>
-					<li><a href="#">A Test link</a>Some text additionally goes here</li>
-				</ul>
-			</section>
 		</div>
 		<script src="js/jquery-1.7.2.min.js"></script>
 		<script src="js/jquery.xml2json.js"></script>
 		<script type="text/javascript">
 			$.get("items.xml", function(xml) {
-				var items = $.xml2json(xml).entry;
+				var items = $.xml2json(xml, true).entry;
 				var navContent = "\n";
 				var content = "\n";
 				for (var i in items)
 				{
 					var item = items[i];
 					var classType = i == 0 ? "class=\"first\" " : ((i == items.length - 1) ? "class=\"last\" " : "");
-					navContent += "<li><a href=\"#nav\" " + classType + ">" + item.title + "</a></li>\n";
+					navContent += "<li><a href=\"#nav\" " + classType + ">" + item.title[0].text + "</a></li>\n";
 					
-					content += "<section>\n<aside>\n";
-					content += "<p class=\"date\">" + item.date + "</p>\n";
-					content += "</aside><h1>" + item.title + "</h1>\n";
+					content += "<hr/><section>\n<aside>\n";
+					content += "<p class=\"date\">" + item.date[0].text + "</p>\n";
+					content += "</aside><h1>" + item.title[0].text + "</h1>\n";
 					content += "<div class=\"images\">\n";
-					for (var j in item.screenshots)
+					for (var j in item.screenshots[0].screenshot)
 					{
-						content += "<a href=\"" + item.screenshots[j] + ".jpg\" rel=\"lightbox[" + i + "]\"><img src=\"" + item.screenshots[j] + "-t.jpg\"/></a>\n";
+						var link = item.screenshots[0].screenshot[j].text;
+						content += "<a href=\"" + link + ".jpg\" rel=\"lightbox[" + i + "]\"><img src=\"" + link + "-t.jpg\"/></a>\n";
 					}
-					content += "</div>\n<p>" + item.description + "</p>\n";
+					content += "</div>\n<p>" + item.description[0].text + "</p>\n";
 					content += "<h2>Links</h2>\n<ul class=\"links\">\n";
-					content += "</ul></section><hr/>\n";
+					content += "<li><a href=\"#\">A Test link</a>Some text additionally goes here</li>";
+					content += "</ul></section>\n";
 				}
 				$("#nav").html(navContent);
 				$("#content").html(content);
+				$.ajax({
+					url: "js/lightbox.js",
+					dataType: "script",
+					cache: true
+				});
 			});
 		</script>
-		<script src="js/lightbox.js"></script>
 	</body>
 </html>
