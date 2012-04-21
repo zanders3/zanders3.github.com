@@ -1,0 +1,205 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	background: #30C4C9;
+	font-family: 'Open Sans', sans-serif;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+
+a{
+	color:#3D4567;
+}
+
+a:hover{
+	color:#7883AF;
+}
+
+/*************************************/
+
+body {
+	background: url('../img/light_wool.png');
+}
+
+h1, h2 {
+	font-family: 'Chau Philomene One', sans-serif;
+	color: #2E354A;
+}
+
+header h1 {
+	margin-left:225px;
+	padding-top:58px;
+	font-size: 32pt;
+}
+
+header h2 {
+	margin-left:240px;
+	padding-top:5px;
+	font-size: 16pt;
+}
+
+header p {
+	margin-left:245px;
+	margin-top:10px;
+}
+
+nav {
+	position:fixed;
+	left: 50px;
+	top: 10px;
+	padding-top:130px;
+	background: url('../img/Logo.png') no-repeat 30px 0px;
+}
+
+nav ul {
+	margin-top:60px;
+	width: 200px;
+}
+
+nav ul li a {
+	display:block;
+	background:#F8F8F8;
+	text-decoration:none;
+	padding: 10px 10px 10px 15px;
+	border-bottom: 1px inset #EEE;
+}
+
+nav ul li a:hover {
+	background:#EEE;
+}
+
+nav ul li a.first {
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-topright: 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+nav ul li a.last {
+	-webkit-border-bottom-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom:0;
+}
+
+#content {
+	margin-left: 270px;
+	margin-top: 30px;
+}
+
+section {
+	padding: 20px;
+}
+
+section h1 {
+	color:#515F8E;
+	font-size:24pt;
+}
+
+section p {
+	padding:20px;
+	clear:both;
+}
+
+.images {
+	margin-top:30px;
+	margin-left:20px;
+}
+
+.images a {
+	border:10px solid #EEE;
+	display:block;
+	width:160px;
+	height:160px;
+	float:left;
+}
+
+.images a:hover {
+	border:10px solid #DDD;
+}
+
+.images a.first {
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+.images a.last {
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomright: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
