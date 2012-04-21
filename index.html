@@ -39,7 +39,7 @@
 					var classType = i == 0 ? "class=\"first\" " : ((i == items.length - 1) ? "class=\"last\" " : "");
 					
 					var navTitle = (item.menutitle ? item.menutitle[0].text : item.title[0].text);
-					var navLink = navTitle.replace(' ', '').toLowerCase();
+					var navLink = navTitle.replace(/ /g, '').toLowerCase();
 					navContent += "<li><a href=\"#" + navLink + "\" " + classType + ">" + navTitle + "</a></li>\n";
 					
 					content += "<hr/><section>\n<a name=\"" + navLink + "\"></a><aside><ul class=\"code\">\n";
@@ -68,11 +68,61 @@
 				}
 				$("#nav").html(navContent);
 				$("#content").html(content);
+				$("#nav a").hover(
+					function() { $(this).animate({backgroundColor:'#EEEEEE'},'fast'); },
+					function() { $(this).animate({backgroundColor:'#F8F8F8'},'fast'); }
+				);
+				$(".images a").hover(
+					function() { $(this).animate({backgroundColor:'#DDDDDD'},'fast'); },
+					function() { $(this).animate({backgroundColor:'#EEEEEE'},'fast'); }
+				);
+				//Lightbox
 				$.ajax({
 					url: "js/lightbox.js",
 					dataType: "script",
 					cache: true
 				});
+				//Smooth scrolling function
+				$('a[href*=#]').click(function() {
+
+					 // skip SmoothScroll on links inside sliders or scroll boxes also using anchors or if there is a javascript call
+					 if($(this).parent().hasClass('scrollable_navigation') || $(this).attr('href').indexOf('javascript')>-1) return;
+
+					 // duration in ms
+					 var duration=1000;
+
+					 // easing values: swing | linear
+					 var easing='swing';
+
+					 // get / set parameters
+					 var newHash=this.hash;
+					 var oldLocation=window.location.href.replace(window.location.hash, '');
+					 var newLocation=this;
+
+					 // make sure it's the same location      
+					 if(oldLocation+newHash==newLocation)
+					 {
+						// get target
+						var target=$(this.hash+', a[name='+this.hash.slice(1)+']').offset().top;
+
+						// adjust target for anchors near the bottom of the page
+						if(target > $(document).height()-$(window).height()) target=$(document).height()-$(window).height();         
+
+						// set selector
+						if($.browser.safari) var animationSelector='body:not(:animated)';
+						else var animationSelector='html:not(:animated)';
+
+						// animate to target and set the hash to the window.location after the animation
+						$(animationSelector).animate({ scrollTop: target }, duration, easing, function() {
+
+						   // add new hash to the browser location
+						   window.location.href=newLocation;
+						});
+
+						// cancel default click action
+						return false;
+					 }
+				  });
 			});
 		</script>
 	</body>
