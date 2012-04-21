@@ -14,7 +14,7 @@ fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
+menu,nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
 	padding: 0;
@@ -25,7 +25,7 @@ time, mark, audio, video {
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
+footer, header, hgroup, menu,nav, section {
 	display: block;
 }
 body {
@@ -89,24 +89,24 @@ h1, h2 {
 	color: #2E354A;
 }
 
-header h1 {
+.header h1 {
 	margin-left:225px;
 	padding-top:58px;
 	font-size: 32pt;
 }
 
-header h2 {
+.header h2 {
 	margin-left:240px;
 	padding-top:5px;
 	font-size: 16pt;
 }
 
-header p {
+.header p {
 	margin-left:245px;
 	margin-top:10px;
 }
 
-nav {
+.navbar {
 	position:fixed;
 	left: 50px;
 	top: 10px;
@@ -114,12 +114,12 @@ nav {
 	background: url('../img/Logo.png') no-repeat 30px 0px;
 }
 
-nav ul {
+.navbar ul {
 	margin-top:60px;
 	width: 200px;
 }
 
-nav ul li a {
+.navbar ul li a {
 	display:block;
 	background:#F8F8F8;
 	text-decoration:none;
@@ -127,7 +127,7 @@ nav ul li a {
 	border-bottom: 1px inset #EEE;
 }
 
-nav ul li a.first {
+.navbar ul li a.first {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
 	-moz-border-radius-topleft: 10px;
@@ -136,7 +136,7 @@ nav ul li a.first {
 	border-top-right-radius: 10px;
 }
 
-nav ul li a.last {
+.navbar ul li a.last {
 	-webkit-border-bottom-right-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-bottomright: 10px;
