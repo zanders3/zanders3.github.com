@@ -37,20 +37,33 @@
 				{
 					var item = items[i];
 					var classType = i == 0 ? "class=\"first\" " : ((i == items.length - 1) ? "class=\"last\" " : "");
-					navContent += "<li><a href=\"#nav\" " + classType + ">" + item.title[0].text + "</a></li>\n";
 					
-					content += "<hr/><section>\n<aside>\n";
-					content += "<p class=\"date\">" + item.date[0].text + "</p>\n";
+					var navTitle = (item.menutitle ? item.menutitle[0].text : item.title[0].text);
+					var navLink = navTitle.replace(' ', '').toLowerCase();
+					navContent += "<li><a href=\"#" + navLink + "\" " + classType + ">" + navTitle + "</a></li>\n";
+					
+					content += "<hr/><section>\n<a name=\"" + navLink + "\"></a><aside><ul class=\"code\">\n";
+					for (var j in item.languages[0].item)
+					{
+						var name = item.languages[0].item[j].text;
+						content += "<li>" + name + "</li>\n";
+					}
+					content += "</ul><p class=\"date\">" + item.date[0].text + "</p>\n";
 					content += "</aside><h1>" + item.title[0].text + "</h1>\n";
 					content += "<div class=\"images\">\n";
 					for (var j in item.screenshots[0].screenshot)
 					{
+						var classType = j == 0 ? "class=\"first\" " : ((j == item.screenshots[0].screenshot.length - 1) ? "class=\"last\" " : "");
 						var link = item.screenshots[0].screenshot[j].text;
-						content += "<a href=\"" + link + ".jpg\" rel=\"lightbox[" + i + "]\"><img src=\"" + link + "-t.jpg\"/></a>\n";
+						content += "<a href=\"" + link + ".jpg\" rel=\"lightbox[" + i + "]\" " + classType + "><img src=\"" + link + "-t.jpg\"/></a>\n";
 					}
 					content += "</div>\n<p>" + item.description[0].text + "</p>\n";
 					content += "<h2>Links</h2>\n<ul class=\"links\">\n";
-					content += "<li><a href=\"#\">A Test link</a>Some text additionally goes here</li>";
+					for (var j in item.links[0].link)
+					{
+						var link = item.links[0].link[j];
+						content += "<li><a href=\"" + link.link[0].text + "\">" + link.name[0].text + "</a>" + link.description[0].text + "</li>\n";
+					}
 					content += "</ul></section>\n";
 				}
 				$("#nav").html(navContent);

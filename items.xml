@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
 	<entry>
-		<title>Kinect Sports Season Two</title>
+		<title>Kinect Sports: Season Two</title>
+		<menutitle>Kinect Sports 2</menutitle>
 		<description>The BAFTA award winning game that I helped ship by implementing the 'Challenge Play' gameplay mode including the user interface and save system for local challenge play.</description>
 		<languages>
 			<item>C++</item>
+			<item>C#</item>
 			<item>Xbox XDK</item>
 			<item>Actionscipt</item>
 		</languages>
