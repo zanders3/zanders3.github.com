@@ -156,10 +156,10 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>NinjaPeas/Screen1.jpg</screenshot>
-			<screenshot>NinjaPeas/Screen2.jpg</screenshot>
-			<screenshot>NinjaPeas/Screen3.jpg</screenshot>
-			<screenshot>NinjaPeas/Screen4.jpg</screenshot>
+			<screenshot>NinjaPeas/Screen1</screenshot>
+			<screenshot>NinjaPeas/Screen2</screenshot>
+			<screenshot>NinjaPeas/Screen3</screenshot>
+			<screenshot>NinjaPeas/Screen4</screenshot>
 		</screenshots>
 		<videos>
 			<video>WCu9zFG52Kc</video>
@@ -192,10 +192,10 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>Fractal/BurningShip.jpg</screenshot>
-			<screenshot>Fractal/Mandelbrot.jpg</screenshot>
-			<screenshot>Fractal/Julia.jpg</screenshot>
-			<screenshot>Fractal/Mandelbrot2.jpg</screenshot>
+			<screenshot>Fractal/BurningShip</screenshot>
+			<screenshot>Fractal/Mandelbrot</screenshot>
+			<screenshot>Fractal/Julia</screenshot>
+			<screenshot>Fractal/Mandelbrot2</screenshot>
 		</screenshots>
 		<videos>
 			<video>2cNk0QT-AxM</video>
@@ -234,10 +234,10 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>MosaicScreen1.jpg</screenshot>
-			<screenshot>MosaicScreen2.jpg</screenshot>
-			<screenshot>MosaicScreen3.jpg</screenshot>
-			<screenshot>MosaicScreen4.jpg</screenshot>
+			<screenshot>img/bookgalaxy/MosaicScreen1</screenshot>
+			<screenshot>img/bookgalaxy/MosaicScreen2</screenshot>
+			<screenshot>img/bookgalaxy/MosaicScreen3</screenshot>
+			<screenshot>img/bookgalaxy/MosaicScreen4</screenshot>
 		</screenshots>
 	</entry>
 	<entry>
@@ -255,12 +255,13 @@
 		<links>
 			<link>
 				<name>Cloth Simulator</name>
-				<link>/ClothSimulator.zip</link>
+				<link>cloth/ClothSimulator.zip</link>
 				<description>A zip file containing the simulator!</description>
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>cloth.jpg</screenshot>
+			<screenshot>cloth/cloth</screenshot>
+			<screenshot>cloth/cloth2</screenshot>
 		</screenshots>
 	</entry>
 	<entry>
@@ -288,9 +289,9 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>TheExpanse/Shot1.jpg</screenshot>
-			<screenshot>TheExpanse/Shot2.jpg</screenshot>
-			<screenshot>TheExpanse/Shot3.jpg</screenshot>
+			<screenshot>TheExpanse/Shot1</screenshot>
+			<screenshot>TheExpanse/Shot2</screenshot>
+			<screenshot>TheExpanse/Shot3</screenshot>
 		</screenshots>
 		<videos>
 			<video>HVWobyCYRw0</video>
