@@ -323,8 +323,8 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>BigBonesScreen1.jpg</screenshot>
-			<screenshot>BigBonesScreen2.jpg</screenshot>
+			<screenshot>BareBones/BigBonesScreen1</screenshot>
+			<screenshot>BareBones/BigBonesScreen2</screenshot>
 		</screenshots>
 	</entry>
 </document>
