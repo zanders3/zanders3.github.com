@@ -127,10 +127,6 @@ nav ul li a {
 	border-bottom: 1px inset #EEE;
 }
 
-/*nav ul li a:hover {
-	background:#EEE;
-}*/
-
 nav ul li a.first {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
@@ -215,10 +211,6 @@ section p {
 	height:160px;
 	float:left;
 }
-
-/*.images a:hover {
-	border:10px solid #DDD;
-}*/
 
 .images a.first {
 	-webkit-border-top-left-radius: 10px;

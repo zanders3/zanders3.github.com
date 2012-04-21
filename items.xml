@@ -61,11 +61,11 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>trapped/Trapped1.jpg</screenshot>
-			<screenshot>trapped/Trapped2.jpg</screenshot>
-			<screenshot>trapped/Trapped3.jpg</screenshot>
-			<screenshot>trapped/Trapped4.jpg</screenshot>
-			<screenshot>trapped/Trapped5.jpg</screenshot>
+			<screenshot>trapped/Trapped1</screenshot>
+			<screenshot>trapped/Trapped2</screenshot>
+			<screenshot>trapped/Trapped3</screenshot>
+			<screenshot>trapped/Trapped4</screenshot>
+			<screenshot>trapped/Trapped5</screenshot>
 		</screenshots>
 	</entry>
 	<entry>
@@ -103,7 +103,8 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>Timeline/screenshot.jpg</screenshot>
+			<screenshot>Timeline/screenshot</screenshot>
+			<screenshot>Timeline/screenshot2</screenshot>
 		</screenshots>
 	</entry>
 	<entry>
@@ -125,7 +126,10 @@
 			</link>
 		</links>
 		<screenshots>
-			<screenshot>detour.jpg</screenshot>
+			<screenshot>img/detour/detour1</screenshot>
+			<screenshot>img/detour/detour2</screenshot>
+			<screenshot>img/detour/detour3</screenshot>
+			<screenshot>img/detour/detour4</screenshot>
 		</screenshots>
 	</entry>
 	<entry>
