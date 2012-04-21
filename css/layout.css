@@ -152,16 +152,49 @@ nav ul li a.last {
 
 #content {
 	margin-left: 270px;
-	margin-top: 30px;
+	margin-top: 50px;
 }
 
 section {
-	padding: 20px;
+	padding:10px 20px 20px 20px;
 }
 
 section h1 {
 	color:#515F8E;
 	font-size:24pt;
+	margin-top:12px;
+}
+
+aside {
+	float:right;
+	padding:0;
+	padding-right:20px;
+}
+
+.date {
+	display:inline-block;
+	padding: 0;
+	margin-top:18px;
+}
+
+.code {
+	float:left;
+	margin-right:20px;
+}
+
+.code li {
+	float:left;
+	padding:10px;
+	margin:5px;
+	font-family: 'VT323', cursive;
+	font-size:16pt;
+	background:#EEE;
+}
+
+section h2 {
+	font-size:14pt;
+	margin-left:20px;
+	margin-top:15px;
 }
 
 section p {
@@ -202,4 +235,29 @@ section p {
 	-moz-border-radius-bottomright: 10px;
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
+}
+
+hr {
+	height:6px;
+	background: #EEE;
+	border:0;
+	margin-right:10px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.links {
+	padding:20px;
+	padding-left:30px;
+	padding-bottom:0px;
+}
+
+.links li {
+	margin-bottom:20px;
+}
+
+.links a {
+	display:block;
+	margin-bottom:5px;
 }
