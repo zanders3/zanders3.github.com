@@ -254,3 +254,43 @@ hr {
 	display:block;
 	margin-bottom:5px;
 }
+
+@media only screen and (max-width: 750px) {
+	#content {
+		display: inline-block;
+	}
+	.header {
+		position:absolute;
+	}
+	.header h1 {
+		margin-left:175px;
+	}
+	.header h2 {
+		margin-left:195px;
+	}
+	.header p {
+		margin-left:210px;
+	}
+	.navbar {
+		position:relative;
+		left:0px;
+		height:50px;
+	}
+	.navbar ul {
+		margin-top: 50px;
+		width:inherit;
+	}
+	.navbar ul li {
+		float:left;
+		margin:5px;
+	}
+	.navbar ul li a {
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
+	}
+	#content {
+		margin-left:5px;
+		margin-top:15px;
+	}
+}
