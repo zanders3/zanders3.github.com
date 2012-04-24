@@ -8,7 +8,7 @@
 			<item>C++</item>
 			<item>C#</item>
 			<item>Xbox XDK</item>
-			<item>Actionscipt</item>
+			<item>Actionscript</item>
 		</languages>
 		<tags>
 			<tag>game</tag>
@@ -43,8 +43,54 @@
 		</screenshots>
 	</entry>
 	<entry>
+		<title>WikiTime</title>
+		<description>My third year project which places all of the historical events mentioned on Wikipedia on a searchable Timeline interface. The main challenge with the project was processing the whole of Wikipedia so a backend processing system was written to distribute the extraction algorithm over multiple machines and multiple threads.</description>
+		<languages>
+			<item>Java</item>
+			<item>Lucene</item>
+			<item>Stanford NER</item>
+			<item>Javascript</item>
+			<item>HTML</item>
+		</languages>
+		<date>24/04/12</date>
+		<links>
+			<link>
+				<name>WikiTime Project Homepage</name>
+				<link>http://wikitime.ecs.soton.ac.uk/</link>
+				<description>The WikiTime project homepage</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>wikitime/screen1</screenshot>
+			<screenshot>wikitime/screen2</screenshot>
+			<screenshot>wikitime/screen3</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>Space Demo</title>
+		<description>A small graphics demo written in C++ using SDL and OpenGL which shows a collection of procedurally animated spaceships flying around a procedurally generated planet.</description>
+		<languages>
+			<item>C++</item>
+			<item>SDL</item>
+			<item>OpenGL 3.0</item>
+			<item>GLSL</item>
+		</languages>
+		<date>05/03/12</date>
+		<links>
+			<link>
+				<name>Space Demo Download</name>
+				<link>http://www.3zanders.co.uk/SpaceDemo.zip</link>
+				<description>The link containing the Space graphics demo</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>spacedemo/space1</screenshot>
+			<screenshot>spacedemo/space2</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
 		<title>Trapped</title>
-		<description>A game entered into Ludum Dare 22 which had the theme 'Alone'.Ludum Dare is a 48 hour game development competition. You must escape from a lonely castle. All design, art and code was created by me within 48 hours.</description>
+		<description>A game entered into Ludum Dare 22 which had the theme 'Alone'. Ludum Dare is a 48 hour game development competition. You must escape from a lonely castle. All design, art and code was created by me within 48 hours.</description>
 		<languages>
 			<item>Unity</item>
 			<item>C#</item>
@@ -241,30 +287,6 @@
 		</screenshots>
 	</entry>
 	<entry>
-		<title>Cloth!</title>
-		<description>A tiny app that simulates cloth physics in 2D! My first attempt at using SDL and Verlet integration physics to make something awesome.</description>
-		<languages>
-		    <item>C</item>
-		    <item>SDL</item>
-		</languages>
-		<tags>
-			<tag>personal</tag>
-			<tag>demo</tag>
-		</tags>
-		<date>06/07/11</date>
-		<links>
-			<link>
-				<name>Cloth Simulator</name>
-				<link>cloth/ClothSimulator.zip</link>
-				<description>A zip file containing the simulator!</description>
-			</link>
-		</links>
-		<screenshots>
-			<screenshot>cloth/cloth</screenshot>
-			<screenshot>cloth/cloth2</screenshot>
-		</screenshots>
-	</entry>
-	<entry>
 		<title>The Expanse</title>
 		<description>An XNA Game written for the DreamBuildPlay 2009 competition. It is a 2D space exploration game where you must mine resources, evade pirates and upgrade your ship!</description>
 		<languages>
@@ -296,35 +318,5 @@
 		<videos>
 			<video>HVWobyCYRw0</video>
 		</videos>
-	</entry>
-	<entry>
-		<title>Big Bones</title>
-		<description>This is the BareBones language interpreter which is an extension to the BareBones programming language. It adds functions, if statements and operators.</description>
-		<languages><item>Java Applet</item></languages>
-		<date>11/10/08</date>
-		<tags>
-			<tag>demo</tag>
-		</tags>
-		<links>
-			<link>
-				<name>BigBones Applet Page</name>
-				<link>http://users.ecs.soton.ac.uk/ajp3g08/bigbones.php</link>
-				<description>The extension of the BareBones language interpreter. Requires Java 6 runtime to run.</description>
-			</link>
-			<link>
-				<name>BareBones Applet Page</name>
-				<link>http://www.3zanders.co.uk/BareBones/barebones.htm</link>
-				<description>The original implementation of the BareBones language interpreter. Requires Java 6 runtime to run.</description>
-			</link>
-			<link>
-				<name>BareBones Language</name>
-				<link>http://www.mhuffman.com/jscript/barebone.htm</link>
-				<description>The page used as a reference.</description>
-			</link>
-		</links>
-		<screenshots>
-			<screenshot>BareBones/BigBonesScreen1</screenshot>
-			<screenshot>BareBones/BigBonesScreen2</screenshot>
-		</screenshots>
 	</entry>
 </document>
