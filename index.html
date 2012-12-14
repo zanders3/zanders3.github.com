@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="en-GB">
+	<head>
+		<meta charset="utf-8">
+		<title>Alex Parker's Portfolio</title>
+		<meta name="description" lang="en" content="Alex Parker's Portfolio Website">
+		<meta name="author" content="Alex Parker">
+		<meta name="viewport" content="width=device-width">
+		<meta name="google-site-verification" content="Yr8oU2NcJafDzSE2plpewVXULngT82aPufJse2FdUk0" />
+		<link rel="shortcut icon" type="image/ico" href="img/logo.ico">
+		<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen">
+		<link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+		<script>
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-29723143-1']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</head>
+	<body>
+		<a name="home"></a>
+		<div class="header">
+			<h1>3zanders</h1>
+			<h2>Alex Parker's Portfolio</h2>
+			<p><a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a></p>
+		</div>
+		<div class="navbar">
+			<ul id="nav">
+				<li><a href="#home" class="first">Home</a></li>
+			</ul>
+		</div>
+		<div id="content">
+			<section>
+				<h3>Hi there!</h3>
+				<h3>I am a graduate programmer/designer with a passion for creating new interactive experiences. I have industry experience doing AAA game development with completed projects using a wide variety of technologies such as C++, C#, DirectX, OpenGL, XNA, Unity, Flash and HTML 5. I hold a First Class degree in Computer Science from the University of Southampton.</h3>
+			</section>
+		</div>
+		<hr/>
+		<div id="footer">
+			&copy; Alex Parker 2009-2012. Kinect Sports: Season Two &copy; Microsoft Corporation. Detour &copy; Sandswept Studios LLC.
+		</div>
+		<script src="js/jquery-1.7.2.min.js"></script>
+		<script src="js/jquery.xml2json.js"></script>
+		<script type="text/javascript">
+			$.get("items.xml", function(xml) {
+				var items = $.xml2json(xml, true).entry;
+				var navContent = $("#nav").html();
+				var content = $("#content").html();
+				for (var i in items)
+				{
+					var item = items[i];
+					var classType = (i == items.length - 1) ? "class=\"last\" " : "";
+					
+					var navTitle = (item.menutitle ? item.menutitle[0].text : item.title[0].text);
+					var navLink = navTitle.replace(/ /g, '').toLowerCase();
+					navContent += "<li><a href=\"#" + navLink + "\" " + classType + ">" + navTitle + "</a></li>\n";
+					
+					content += "<hr/><section>\n<a name=\"" + navLink + "\"></a><aside><ul class=\"code\">\n";
+					for (var j in item.languages[0].item)
+					{
+						var name = item.languages[0].item[j].text;
+						content += "<li>" + name + "</li>\n";
+					}
+					content += "</ul><p class=\"date\">" + item.date[0].text + "</p>\n";
+					content += "</aside><h1>" + item.title[0].text + "</h1>\n";
+					content += "<div class=\"images\">\n";
+					for (var j in item.screenshots[0].screenshot)
+					{
+						var classType = j == 0 ? "class=\"first\" " : ((j == item.screenshots[0].screenshot.length - 1) ? "class=\"last\" " : "");
+						var link = item.screenshots[0].screenshot[j].text;
+						content += "<a href=\"" + link + ".jpg\" rel=\"lightbox[" + i + "]\" " + classType + "><img src=\"" + link + "-t.jpg\"/></a>\n";
+					}
+					content += "</div>\n<p>" + item.description[0].text + "</p>\n";
+					content += "<h2>Links</h2>\n<ul class=\"links\">\n";
+					for (var j in item.links[0].link)
+					{
+						var link = item.links[0].link[j];
+						content += "<li><a href=\"" + link.link[0].text + "\">" + link.name[0].text + "</a>" + link.description[0].text + "</li>\n";
+					}
+					content += "</ul></section>\n";
+				}
+				$("#nav").html(navContent);
+				$("#content").html(content);
+				$("#nav a").hover(
+					function() { $(this).animate({backgroundColor:'#EEEEEE'},'fast'); },
+					function() { $(this).animate({backgroundColor:'#F8F8F8'},'fast'); }
+				);
+				$(".images a").hover(
+					function() { $(this).animate({backgroundColor:'#DDDDDD'},'fast'); },
+					function() { $(this).animate({backgroundColor:'#EEEEEE'},'fast'); }
+				);
+				//Lightbox
+				$.ajax({
+					url: "js/lightbox.js",
+					dataType: "script",
+					cache: true
+				});
+				//Smooth scrolling function
+				$('a[href*=#]').click(function() {
+
+					 // skip SmoothScroll on links inside sliders or scroll boxes also using anchors or if there is a javascript call
+					 if($(this).parent().hasClass('scrollable_navigation') || $(this).attr('href').indexOf('javascript')>-1) return;
+
+					 // duration in ms
+					 var duration=1000;
+
+					 // easing values: swing | linear
+					 var easing='swing';
+
+					 // get / set parameters
+					 var newHash=this.hash;
+					 var oldLocation=window.location.href.replace(window.location.hash, '');
+					 var newLocation=this;
+
+					 // make sure it's the same location      
+					 if(oldLocation+newHash==newLocation)
+					 {
+						// get target
+						var target=$(this.hash+', a[name='+this.hash.slice(1)+']').offset().top;
+
+						// adjust target for anchors near the bottom of the page
+						if(target > $(document).height()-$(window).height()) target=$(document).height()-$(window).height();         
+
+						// set selector
+						if($.browser.safari) var animationSelector='body:not(:animated)';
+						else var animationSelector='html:not(:animated)';
+
+						// animate to target and set the hash to the window.location after the animation
+						$(animationSelector).animate({ scrollTop: target }, duration, easing, function() {
+
+						   // add new hash to the browser location
+						   window.location.href=newLocation;
+						});
+
+						// cancel default click action
+						return false;
+					 }
+				  });
+			});
+		</script>
+	</body>
+</html>

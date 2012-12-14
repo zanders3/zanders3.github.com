@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<entry>
+		<title>Kinect Sports: Season Two</title>
+		<menutitle>Kinect Sports 2</menutitle>
+		<description>The BAFTA award winning game that I helped ship by implementing the 'Challenge Play' gameplay mode including the user interface and save system for local challenge play.</description>
+		<languages>
+			<item>C++</item>
+			<item>C#</item>
+			<item>Xbox 360</item>
+			<item>Actionscript</item>
+		</languages>
+		<tags>
+			<tag>game</tag>
+		</tags>
+		<date>28/10/11</date>
+		<links>
+			<link>
+				<name>Rare's Website</name>
+				<link>http://rare.co.uk/</link>
+				<description>Rare's Studio Website showing the game!</description>
+			</link>
+			<link>
+				<name>Challenge Play Review</name>
+				<link>http://www.wpxbox.com/whats-new-in-kinect-sports-season-2-vs-sports-1/</link>
+				<description>A website reviewing KS2's new UI</description>
+			</link>
+			<link>
+				<name>Challenge Play Video</name>
+				<link>http://www.youtube.com/watch?v=rehYmXTp9yU</link>
+				<description>A video tutorial showing how Challenge Play works</description>
+			</link>
+			<link>
+				<name>Kinect Sports: Season Two BAFTA success</name>
+				<link>http://www.rare.co.uk/news/kinect-sports-season-two-bafta-success</link>
+				<description>Rare celebrates the BAFTA award</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>img/ks2/ks2-1</screenshot>
+			<screenshot>img/ks2/ks2-2</screenshot>
+			<screenshot>img/ks2/ks2-3</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>WikiTime</title>
+		<description>My third year project which places all of the historical events mentioned on Wikipedia on a searchable Timeline interface. The main challenge with the project was processing the whole of Wikipedia so a backend processing system was written to distribute the extraction algorithm over multiple machines and multiple threads.</description>
+		<languages>
+			<item>Java</item>
+			<item>Lucene</item>
+			<item>Stanford NER</item>
+			<item>Javascript</item>
+			<item>HTML 5</item>
+		</languages>
+		<date>24/04/12</date>
+		<links>
+			<link>
+				<name>WikiTime Project Homepage</name>
+				<link>http://www.3zanders.co.uk/wikitime</link>
+				<description>The WikiTime project homepage</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>wikitime/screen1</screenshot>
+			<screenshot>wikitime/screen2</screenshot>
+			<screenshot>wikitime/screen3</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>Space Demo</title>
+		<description>A small graphics demo written in C++ using SDL and OpenGL which shows a collection of procedurally animated spaceships flying around a procedurally generated planet.</description>
+		<languages>
+			<item>C++</item>
+			<item>SDL</item>
+			<item>OpenGL 3.0</item>
+			<item>GLSL</item>
+		</languages>
+		<date>05/03/12</date>
+		<links>
+			<link>
+				<name>Space Demo Download</name>
+				<link>http://www.3zanders.co.uk/spacedemo/SpaceDemo.zip</link>
+				<description>The link containing the Space graphics demo</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>spacedemo/space1</screenshot>
+			<screenshot>spacedemo/space2</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>Trapped</title>
+		<description>A game entered into Ludum Dare 22 which had the theme 'Alone'. Ludum Dare is a 48 hour game development competition. You must escape from a lonely castle. All design, art and code was created by me within 48 hours.</description>
+		<languages>
+			<item>Unity</item>
+			<item>C#</item>
+		</languages>
+		<tags>
+			<tag>competition</tag>
+		</tags>
+		<date>19/12/11</date>
+		<links>
+			<link>
+				<name>Play the Game!</name>
+				<link>http://www.3zanders.co.uk/trapped</link>
+				<description>Requires Unity Player to be installed on your browser to run.</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>trapped/Trapped1</screenshot>
+			<screenshot>trapped/Trapped2</screenshot>
+			<screenshot>trapped/Trapped3</screenshot>
+			<screenshot>trapped/Trapped4</screenshot>
+			<screenshot>trapped/Trapped5</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>Timeline</title>
+		<description>An app that was thrown together for the Discovery Developer Competition which displays all of the photos from the National Archives via Flickr.</description>
+		<languages>
+			<item>Flash</item>
+			<item>Actionscript 3</item>
+			<item>C#</item>
+		</languages>
+		<tags>
+			<tag>competition</tag>
+		</tags>
+		<date>14/09/11</date>
+		<links>
+			<link>
+				<name>Timeline</name>
+				<link>http://www.3zanders.co.uk/Timeline</link>
+				<description>The entry. Requires Flash Player to run.</description>
+			</link>
+			<link>
+				<name>Discovery Developer Competition</name>
+				<link>http://discovery.ac.uk/developers/competition/</link>
+				<description>The competition page.</description>
+			</link>
+			<link>
+				<name>National Archives</name>
+				<link>http://www.nationalarchives.gov.uk/</link>
+				<description>The UK National Archives Website</description>
+			</link>
+			<link>
+				<name>National Archives Flickr</name>
+				<link>http://www.flickr.com/photos/nationalarchives/</link>
+				<description>The National Archives account on Flickr</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>Timeline/screenshot</screenshot>
+			<screenshot>Timeline/screenshot2</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>Detour</title>
+		<description>An Indie game developed in XNA and C#. I wrote the entire graphics pipeline, and implemented the runtime graphics code and shader effects.</description>
+		<languages>
+			<item>C#</item>
+			<item>XNA</item>
+		</languages>
+		<tags>
+			<tag>game</tag>
+		</tags>
+		<date>12/08/10</date>
+		<links>
+			<link>
+				<name>Sandswept Studios</name>
+				<link>http://www.sandswept.net/</link>
+				<description>The Sandswept Studios website</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>img/detour/detour1</screenshot>
+			<screenshot>img/detour/detour2</screenshot>
+			<screenshot>img/detour/detour3</screenshot>
+			<screenshot>img/detour/detour4</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>PlayWithYourPeas</title>
+		<description>A game written individually in C++/DirectX using art and design from Danc at lostgarden.com. You must build a map for peas to bounce around allowing them to score happy points!</description>
+		<languages>
+			<item>C++</item>
+			<item>DirectX 9</item>
+		</languages>
+		<tags>
+			<tag>game</tag>
+		</tags>
+		<date>06/10/09</date>
+		<links>
+			<link>
+				<name>Game Installer</name>
+				<link>/NinjaPeas/PlayWithYourPeasSetup.exe</link>
+				<description>This installer will install the game and any prerequisites automatically!</description>
+			</link>
+			<link>
+				<name>Game Source</name>
+				<link>/NinjaPeas/NinjaPeasSource.zip</link>
+				<description>The full source code of the game!</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>NinjaPeas/Screen1</screenshot>
+			<screenshot>NinjaPeas/Screen2</screenshot>
+			<screenshot>NinjaPeas/Screen3</screenshot>
+			<screenshot>NinjaPeas/Screen4</screenshot>
+		</screenshots>
+		<videos>
+			<video>WCu9zFG52Kc</video>
+		</videos>
+	</entry>
+	<entry>
+		<title>Fractal</title>
+		<description>A fractal explorer that can draw the Mandelbrot, Julia, Burning Ship and Nova Fractal at realtime rates.</description>
+		<languages>
+			<item>HLSL</item>
+			<item>DirectX 9</item>
+			<item>XNA</item>
+			<item>C#</item>
+			<item>C++</item>
+		</languages>
+		<tags>
+			<tag>demo</tag>
+		</tags>
+		<date>04/12/09</date>
+		<links>
+			<link>
+				<name>DirectX Executable</name>
+				<link>/Fractal/Fractal.exe</link>
+				<description>Requires the latest DirectX Update to be installed.</description>
+			</link>
+			<link>
+				<name>XNA Package</name>
+				<link>/Fractal/Fractal.ccgame</link>
+				<description>Requires XNA 3.1 Redistributable to be installed.</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>Fractal/BurningShip</screenshot>
+			<screenshot>Fractal/Mandelbrot</screenshot>
+			<screenshot>Fractal/Julia</screenshot>
+			<screenshot>Fractal/Mandelbrot2</screenshot>
+		</screenshots>
+		<videos>
+			<video>2cNk0QT-AxM</video>
+		</videos>
+	</entry>
+	<entry>
+		<title>Book Galaxy</title>
+		<description>The winning entry of the JISC MOSAIC Developer Competition. It displays library usage data and library books in a new and interesting way.</description>
+		<languages>
+			<item>Java Applet</item>
+		</languages>
+		<tags>
+			<tag>competition</tag>
+		</tags>
+		<date>17/08/09</date>
+		<links>
+			<link>
+				<name>Book Galaxy Page</name>
+				<link>http://users.ecs.soton.ac.uk/ajp3g08/mosaicbookgalaxy/</link>
+				<description>The winning entry! Requires Java 6 Runtime to run.</description>
+			</link>
+			<link>
+				<name>Developer Competition Page</name>
+				<link>http://www.sero.co.uk/jisc-mosaic-competition.html</link>
+				<description>The page describing the Developer Competition</description>
+			</link>
+			<link>
+				<name>Library Stats made to sparkle</name>
+				<link>http://www.iwr.co.uk/information-world-review/books/2254857/library-stats-made-sparkle</link>
+				<description>Who'd have thought library statistics could be so much fun? Alex Parker's free Book Galaxy Applet creates a rivetting search universe out of bog-standard library data</description>
+			</link>
+			<link>
+				<name>Source Code</name>
+				<link>http://bookgalaxy.sourceforge.net/</link>
+				<description>The source code is available on SourceForge.</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>img/bookgalaxy/MosaicScreen1</screenshot>
+			<screenshot>img/bookgalaxy/MosaicScreen2</screenshot>
+			<screenshot>img/bookgalaxy/MosaicScreen3</screenshot>
+			<screenshot>img/bookgalaxy/MosaicScreen4</screenshot>
+		</screenshots>
+	</entry>
+	<entry>
+		<title>The Expanse</title>
+		<description>An XNA Game written for the DreamBuildPlay 2009 competition. It is a 2D space exploration game where you must mine resources, evade pirates and upgrade your ship!</description>
+		<languages>
+			<item>C#</item>
+			<item>XNA</item>
+			<item>HLSL</item>
+		</languages>
+		<tags>
+			<tag>game</tag>
+		</tags>
+		<date>16/07/09</date>
+		<links>
+			<link>
+				<name>Windows Executable</name>
+				<link>/TheExpanse/TheExpanseWindows.ccgame</link>
+				<description>Needs to have XNA Redistributable 3.0 installed. The package will then unpack itself and allow you to run it.</description>
+			</link>
+			<link>
+				<name>Xbox Executable</name>
+				<link>/TheExpanse/TheExpanseXbox.ccgame</link>
+				<description>Needs to have XNA installed, with a Creators Club membership to deploy to Xbox.</description>
+			</link>
+		</links>
+		<screenshots>
+			<screenshot>TheExpanse/Shot1</screenshot>
+			<screenshot>TheExpanse/Shot2</screenshot>
+			<screenshot>TheExpanse/Shot3</screenshot>
+		</screenshots>
+		<videos>
+			<video>HVWobyCYRw0</video>
+		</videos>
+	</entry>
+</document>

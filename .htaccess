@@ -1,0 +1,4 @@
+ErrorDocument 404 /
+RewriteEngine On
+RewriteBase /
+RewriteRule wikigalaxy$ wikigalaxy.html [NC]
