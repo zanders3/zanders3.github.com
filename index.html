@@ -47,14 +47,13 @@
 			<h2>Alex Parker's Portfolio</h2>
 			<p><a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a></p>
 		</div>
-		<div class="navbar">
-			<ul id="nav">
-				<li><a href="#home" class="first">Home</a></li>
-				<li ng-repeat="item in portfolio">
-					<a href="#{{formatLink(item.title)}}">{{pickTitle(item)}}</a>
-				</li>
-			</ul>
-		</div>
+		<div class="logo"></div>
+		<ul class="navbar clearfix">
+			<li><a href="#home" class="first">Home</a></li>
+			<li ng-repeat="item in portfolio">
+				<a href="#{{formatLink(item.title)}}">{{pickTitle(item)}}</a>
+			</li>
+		</ul>
 		<div id="content">
 			<section>
 				<h3>Hi there!</h3>

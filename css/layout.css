@@ -106,24 +106,28 @@ h1, h2 {
 	margin-top:10px;
 }
 
-.navbar {
+.logo {
 	position:fixed;
 	left: 50px;
 	top: 10px;
 	padding-top:130px;
+	width:200px;
+	height:100px;
 	background: url('../img/Logo.png') no-repeat 30px 0px;
 }
 
-.navbar ul {
-	margin-top:60px;
+.navbar {
+	position:fixed;
+	top:200px;
+	left:50px;
 	width: 200px;
 }
 
-.navbar ul li {
+.navbar li {
 	background: 0;
 }
 
-.navbar ul li a {
+.navbar li a {
 	display:block;
 	background-color:#F8F8F8;
 	text-decoration:none;
@@ -135,7 +139,7 @@ h1, h2 {
 	transition:background-color 0.5s linear;
 }
 
-.navbar ul li :hover {
+.navbar li :hover {
 	background-color:#EEEEEE;
 	-webkit-transition:background-color 0.5s linear;
 	-moz-transition:background-color 0.5s linear;
@@ -143,7 +147,7 @@ h1, h2 {
 	transition:background-color 0.5s linear;
 }
 
-.navbar ul :first-child a {
+.navbar :first-child a {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
 	-moz-border-radius-topleft: 10px;
@@ -152,7 +156,7 @@ h1, h2 {
 	border-top-right-radius: 10px;
 }
 
-.navbar ul :last-child a {
+.navbar :last-child a {
 	-webkit-border-bottom-right-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-bottomright: 10px;
@@ -335,29 +339,30 @@ hr {
 	.header p {
 		margin-left:210px;
 	}
-	.navbar {
+	.logo {
 		position:relative;
 		left:0px;
 		height:50px;
 	}
-	.navbar ul {
-		-webkit-border-top-left-radius: 10px;
-		-webkit-border-top-right-radius: 10px;
-		-moz-border-radius-topleft: 10px;
-		-moz-border-radius-topright: 10px;
-		border-top-left-radius: 10px;
-		border-top-right-radius: 10px;
-		margin-top:50px;
-		margin-left:20px;
-		width:155px;
+	.navbar {
+		position:inherit;
+		margin-top:10px;
+		margin-left:0px;
+		padding-left:20px;
+		width:100%;
 		display:block;
 		background:#F8F8F8;
 		text-decoration:none;
-		height:20px;
+		height:inherit;
 		border-bottom: 1px inset #EEE;
 	}
-	.navbar ul li {
-		display:none;
+	.navbar li {
+		float:left;
+	}
+	.navbar > :last-child a {
+		-webkit-border-radius: 0px;
+		-moz-border-radius: 0px;
+		border-radius: 0px;
 	}
 	#content {
 		margin-left:5px;
