@@ -119,15 +119,31 @@ h1, h2 {
 	width: 200px;
 }
 
+.navbar ul li {
+	background: 0;
+}
+
 .navbar ul li a {
 	display:block;
-	background:#F8F8F8;
+	background-color:#F8F8F8;
 	text-decoration:none;
 	padding: 10px 10px 10px 15px;
 	border-bottom: 1px inset #EEE;
+	-webkit-transition:background-color 0.5s linear;
+	-moz-transition:background-color 0.5s linear;
+	-o-transition:background-color 0.5s linear;
+	transition:background-color 0.5s linear;
 }
 
-.navbar ul li a.first {
+.navbar ul li :hover {
+	background-color:#EEEEEE;
+	-webkit-transition:background-color 0.5s linear;
+	-moz-transition:background-color 0.5s linear;
+	-o-transition:background-color 0.5s linear;
+	transition:background-color 0.5s linear;
+}
+
+.navbar ul :first-child a {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
 	-moz-border-radius-topleft: 10px;
@@ -136,14 +152,13 @@ h1, h2 {
 	border-top-right-radius: 10px;
 }
 
-.navbar ul li a.last {
+.navbar ul :last-child a {
 	-webkit-border-bottom-right-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-bottomright: 10px;
 	-moz-border-radius-bottomleft: 10px;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
-	border-bottom:0;
 }
 
 #content {
@@ -223,15 +238,27 @@ section p {
 }
 
 .images a {
-	background:#EEE;
+	background-color:#EEE;
 	padding:10px;
 	display:block;
 	width:160px;
 	height:160px;
 	float:left;
+	-webkit-transition:background-color 0.5s linear;
+	-moz-transition:background-color 0.5s linear;
+	-o-transition:background-color 0.5s linear;
+	transition:background-color 0.5s linear;
 }
 
-.images a.first {
+.images :hover {
+	background-color:#DDD;
+	-webkit-transition:background-color 0.5s linear;
+	-moz-transition:background-color 0.5s linear;
+	-o-transition:background-color 0.5s linear;
+	transition:background-color 0.5s linear;
+}
+
+.images > :first-child {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-topleft: 10px;
@@ -240,7 +267,7 @@ section p {
 	border-bottom-left-radius: 10px;
 }
 
-.images a.last {
+.images > :last-child {
 	-webkit-border-top-right-radius: 10px;
 	-webkit-border-bottom-right-radius: 10px;
 	-moz-border-radius-topright: 10px;
@@ -249,7 +276,7 @@ section p {
 	border-bottom-right-radius: 10px;
 }
 
-.images a.first img {
+.images :first-child img {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-topleft: 10px;
@@ -258,7 +285,7 @@ section p {
 	border-bottom-left-radius: 10px;
 }
 
-.images a.last img {
+.images :last-child img {
 	-webkit-border-top-right-radius: 10px;
 	-webkit-border-bottom-right-radius: 10px;
 	-moz-border-radius-topright: 10px;
