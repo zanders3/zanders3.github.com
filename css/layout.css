@@ -148,6 +148,28 @@ h1, h2 {
 	transition:background-color 0.5s linear;
 }
 
+.navbar li .active {
+	background-color:#EEEEEE;
+	-webkit-transition:background-color 0.5s linear;
+	-moz-transition:background-color 0.5s linear;
+	-o-transition:background-color 0.5s linear;
+	transition:background-color 0.5s linear;
+}
+
+.navbar ul {
+	height:0px;
+	overflow: hidden;
+	-webkit-transition:height 1s linear;
+	-moz-transition:height 1s linear;
+	-o-transition:height 1s linear;
+	transition:height 1s linear;
+}
+
+.navbar ul li a {
+	background-color:#E6E6E6;
+	padding-left:30px;
+}
+
 .navbar > :first-child a {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
@@ -212,7 +234,8 @@ aside {
 	margin:5px;
 	font-family: 'VT323', cursive;
 	font-size:16pt;
-	background:#EEE;
+	background:#FAFAFA;
+	box-shadow: 1px 1px 5px #DDD;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;

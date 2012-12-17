@@ -49,9 +49,21 @@
 		</div>
 		<div class="logo"></div>
 		<ul class="navbar clearfix">
-			<li><a href="#home" class="first">Home</a></li>
-			<li ng-repeat="item in portfolio">
-				<a href="#{{formatLink(item.title)}}">{{pickTitle(item)}}</a>
+			<li><a>Home</a></li>
+			<li>
+				<a class="active">Blog</a>
+				<ul style="height:60px">
+					<li><a>Categories</a></li>
+					<li><a>Tags</a></li>
+				</ul>
+			</li>
+			<li>
+				<a>Portfolio</a>
+				<ul>
+					<li ng-repeat="item in portfolio">
+						<a href="#{{formatLink(item.title)}}">{{pickTitle(item)}}</a>
+					</li>
+				</ul>
 			</li>
 		</ul>
 		<div id="content">
