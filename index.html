@@ -23,7 +23,7 @@
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 
-			function PageController($scope, $http)
+			function PortfolioController($scope, $http)
 			{
 				$http.get('portfolio.json').success(function(portfolio)
 				{
@@ -40,7 +40,7 @@
 			}
 		</script>
 	</head>
-	<body ng-controller="PageController">
+	<body ng-controller="PortfolioController">
 		<a name="home"></a>
 		<div class="header">
 			<h1>3zanders</h1>

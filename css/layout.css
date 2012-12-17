@@ -137,6 +137,7 @@ h1, h2 {
 	-moz-transition:background-color 0.5s linear;
 	-o-transition:background-color 0.5s linear;
 	transition:background-color 0.5s linear;
+	box-shadow: 1px 1px 5px #DDD;
 }
 
 .navbar li :hover {
@@ -147,7 +148,7 @@ h1, h2 {
 	transition:background-color 0.5s linear;
 }
 
-.navbar :first-child a {
+.navbar > :first-child a {
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
 	-moz-border-radius-topleft: 10px;
@@ -156,7 +157,7 @@ h1, h2 {
 	border-top-right-radius: 10px;
 }
 
-.navbar :last-child a {
+.navbar > :last-child a {
 	-webkit-border-bottom-right-radius: 10px;
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-bottomright: 10px;
@@ -354,10 +355,13 @@ hr {
 		background:#F8F8F8;
 		text-decoration:none;
 		height:inherit;
-		border-bottom: 1px inset #EEE;
+		border-bottom: 2px inset #EEE;
 	}
 	.navbar li {
 		float:left;
+	}
+	.navbar li a {
+		box-shadow: inherit;
 	}
 	.navbar > :last-child a {
 		-webkit-border-radius: 0px;
