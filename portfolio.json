@@ -40,6 +40,29 @@
     ]
   },
   {
+    "title": "Detour",
+    "description": "An Indie game developed in XNA and C#. I wrote the entire graphics pipeline, and implemented the runtime graphics code and shader effects.",
+    "languages": [
+        "C#",
+        "XNA"
+    ],
+    "tags": { "tag": "game" },
+    "date": "12/08/10",
+    "links": [
+      {
+        "name": "Sandswept Studios",
+        "link": "http://www.sandswept.net/",
+        "description": "The Sandswept Studios website"
+      }
+    ],
+    "screenshots": [
+        "img/detour/detour1",
+        "img/detour/detour2",
+        "img/detour/detour3",
+        "img/detour/detour4"
+    ]
+  },
+  {
     "title": "WikiTime",
     "description": "My third year project which places all of the historical events mentioned on Wikipedia on a searchable Timeline interface. The main challenge with the project was processing the whole of Wikipedia so a backend processing system was written to distribute the extraction algorithm over multiple machines and multiple threads.",
     "languages": [
@@ -64,28 +87,6 @@
     ]
   },
   {
-    "title": "Space Demo",
-    "description": "A small graphics demo written in C++ using SDL and OpenGL which shows a collection of procedurally animated spaceships flying around a procedurally generated planet.",
-    "languages": [
-        "C++",
-        "SDL",
-        "OpenGL 3.0",
-        "GLSL"
-    ],
-    "date": "05/03/12",
-    "links": [
-      {
-        "name": "Space Demo Download",
-        "link": "http://www.3zanders.co.uk/spacedemo/SpaceDemo.zip",
-        "description": "The link containing the Space graphics demo"
-      }
-    ],
-    "screenshots": [
-        "spacedemo/space1",
-        "spacedemo/space2"
-    ]
-  },
-  {
     "title": "Trapped",
     "description": "A game entered into Ludum Dare 22 which had the theme 'Alone'. Ludum Dare is a 48 hour game development competition. You must escape from a lonely castle. All design, art and code was created by me within 48 hours.",
     "languages": [
@@ -107,6 +108,28 @@
         "trapped/Trapped3",
         "trapped/Trapped4",
         "trapped/Trapped5"
+    ]
+  },
+  {
+    "title": "Space Demo",
+    "description": "A small graphics demo written in C++ using SDL and OpenGL which shows a collection of procedurally animated spaceships flying around a procedurally generated planet.",
+    "languages": [
+        "C++",
+        "SDL",
+        "OpenGL 3.0",
+        "GLSL"
+    ],
+    "date": "05/03/12",
+    "links": [
+      {
+        "name": "Space Demo Download",
+        "link": "http://www.3zanders.co.uk/spacedemo/SpaceDemo.zip",
+        "description": "The link containing the Space graphics demo"
+      }
+    ],
+    "screenshots": [
+        "spacedemo/space1",
+        "spacedemo/space2"
     ]
   },
   {
@@ -144,29 +167,6 @@
     "screenshots": [
         "Timeline/screenshot",
         "Timeline/screenshot2"
-    ]
-  },
-  {
-    "title": "Detour",
-    "description": "An Indie game developed in XNA and C#. I wrote the entire graphics pipeline, and implemented the runtime graphics code and shader effects.",
-    "languages": [
-        "C#",
-        "XNA"
-    ],
-    "tags": { "tag": "game" },
-    "date": "12/08/10",
-    "links": [
-      {
-        "name": "Sandswept Studios",
-        "link": "http://www.sandswept.net/",
-        "description": "The Sandswept Studios website"
-      }
-    ],
-    "screenshots": [
-        "img/detour/detour1",
-        "img/detour/detour2",
-        "img/detour/detour3",
-        "img/detour/detour4"
     ]
   },
   {

@@ -103,6 +103,11 @@ h1, h2 {
 	width: 900px;
 }
 
+.headerlink {
+	height: inherit;
+	text-decoration: none;
+}
+
 .header h1 {
 	background: url('../img/logo.png') no-repeat;
 	padding-left: 130px;
@@ -145,6 +150,60 @@ h1, h2 {
 
 .nav .selected a {
 	color: #515F8E;
+}
+
+/** home page layout *************/
+
+.home h1 {
+	font-size: 26px;
+	margin-bottom: 10px;
+}
+
+.posts {
+	float:left;
+	width: 430px;
+	margin-right: 40px;
+}
+
+.posts dl {
+	background: #F8F8F8 url('../img/cream_dust.png');
+	box-shadow: 5px 5px 10px #b2b2b2;
+	padding: 10px;
+	border-radius: 10px;
+	box-shadow: 5px 5px 10px #b2b2b2;
+	margin-bottom: 20px;
+}
+
+.twitter {
+	float:left;
+	width: 430px;
+}
+
+.twitter li {
+	background: url('../img/twitter.png') no-repeat;
+	margin-bottom: 20px;
+}
+
+.twitter li p {
+	padding: 10px;
+	background: #F8F8F8 url('../img/cream_dust.png');
+	border-radius: 10px;
+	box-shadow: 5px 5px 10px #b2b2b2;
+	margin-left: 45px;
+}
+
+.portfolio {
+	
+}
+
+.portfolio a {
+	margin: 0px 35px 20px 0px;
+	padding: 10px;
+	display:block;
+	float:left;
+	background: #F8F8F8 url('../img/cream_dust.png');
+	border-radius: 10px;
+	box-shadow: 5px 5px 10px #b2b2b2;
 }
 
 /** left navbar ******************/
@@ -251,7 +310,8 @@ h1, h2 {
 
 section {
 	background: #F8F8F8 url('../img/cream_dust.png');
-	margin: 30px;
+	margin-top: 30px;
+	margin-bottom: 30px;
 	padding: 20px;
 	border-radius: 10px;
 	padding-top: 5px;
@@ -382,16 +442,6 @@ section p {
 	border-bottom-right-radius: 10px;
 }
 
-hr {
-	height:6px;
-	background: #EEE;
-	border:0;
-	margin-right:10px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-}
-
 .links {
 	padding:20px;
 	padding-left:30px;
@@ -406,53 +456,3 @@ hr {
 	display:block;
 	margin-bottom:5px;
 }
-
-/*@media only screen and (max-width: 800px) {
-	#content {
-		display: inline-block;
-	}
-	.header {
-		position:absolute;
-	}
-	.header h1 {
-		margin-left:175px;
-	}
-	.header h2 {
-		margin-left:195px;
-	}
-	.header p {
-		margin-left:210px;
-	}
-	.logo {
-		position:relative;
-		left:0px;
-		height:50px;
-	}
-	.navbar {
-		position:inherit;
-		margin-top:10px;
-		margin-left:0px;
-		padding-left:20px;
-		width:100%;
-		display:block;
-		background:#F8F8F8;
-		text-decoration:none;
-		height:inherit;
-		border-bottom: 2px inset #EEE;
-	}
-	.navbar li {
-		float:left;
-	}
-	.navbar li a {
-		box-shadow: inherit;
-	}
-	.navbar > :last-child a {
-		-webkit-border-radius: 0px;
-		-moz-border-radius: 0px;
-		border-radius: 0px;
-	}
-	#content {
-		margin-left:5px;
-		margin-top:40px;
-	}
-}*/

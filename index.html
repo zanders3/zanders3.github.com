@@ -31,31 +31,46 @@
 							  .when('/portfolio', {controller:PortfolioController, templateUrl:'portfolio.html'})
 							  .otherwise({redirectTo:'/home'});
 			}]);
-			app.run(function($rootScope, $location)
+			app.run(function($rootScope, $location, $http)
 			{
 				$rootScope.menu = 
 				[
 					{title:"Home", link:"/home"},
 					{title:"Portfolio", link:"/portfolio"},
-					{title:"Blog", link:"/blog"}
+					/*{title:"Blog", link:"/blog"}*/
 				];
 				$rootScope.formatSelected = function(item)
 				{
 					console.log(item.link + ", " + $location.path());
 					return item.link == $location.path() ? "selected" : "";
 				};
+				$http.get('portfolio.json').success(function(portfolio)
+				{
+					$rootScope.portfolio = portfolio;
+					$rootScope.portfolioImages = portfolio.slice(0,4).map(function(item)
+					{
+						return item.screenshots[0];
+					});
+				});
 			});
 
 			//callback from twitter API
-			var gTweets = [];
-			function SetTweets(tweets)
+			function replaceURLWithHTMLLinks(text) {
+			    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+			    return text.replace(exp,"<a href='$1'>$1</a>"); 
+			}
+
+			var tweets = [];
+			function SetTweets(response)
 			{
-				gTweets = tweets;
+				tweets = response.slice(0, 6);
+				for (var i in tweets)
+					tweets[i].text = replaceURLWithHTMLLinks(tweets[i].text);
 			}
 
 			function HomeController($scope, $http)
 			{
-				$scope.tweets = gTweets;
+				$scope.tweets = tweets;
 			}
 
 			function BlogController($scope)
@@ -64,10 +79,6 @@
 
 			function PortfolioController($scope, $rootScope, $http)
 			{
-				$http.get('portfolio.json').success(function(portfolio)
-				{
-					$scope.portfolio = portfolio;
-				});
 				$scope.formatLink = function(name)
 				{
 					return name.replace(/[ :]/g, '').toLowerCase();
@@ -79,8 +90,14 @@
 				$scope.scrollTo = function(item)
 				{
 					var itemId = $scope.formatLink(item.title);
-					$(window).scrollTop($("#" +itemId).offset().top);
+					$(window).scrollTop($("#" +itemId).offset().top - 10);
 				};
+
+				$(window).scroll(function()
+				{
+					var windowTop = $(window).scrollTop();
+					$(".navbar").css('top', Math.max(10, 170-windowTop));
+				});
 			}
 		</script>
 		<script src="http://api.twitter.com/1/statuses/user_timeline.json?screen_name=3zanders&exclude_replies=true&count=30&trim_user=true&callback=SetTweets"></script>
@@ -91,7 +108,7 @@
 				<ul class="nav">
 					<li ng-repeat="item in menu" class="{{formatSelected(item)}}"><a href="#{{item.link}}">{{item.title}}</a></li>
 				</ul>
-				<h1>3zanders.co.uk<br/><small>Alex Parker's Website</small></h1>
+				<a href="#/home" class="headerlink"><h1>3zanders.co.uk<br/><small>Alex Parker's Website</small></h1></a>
 			</div>
 		</div>
 		<div class="content" ng-view>
