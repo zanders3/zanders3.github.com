@@ -1,0 +1,10 @@
+<section>
+	<aside>
+		<ul class="code">
+			<li ng-repeat="tag in post.tags">{{tag}}</li>
+		</ul>
+		<p class="date">{{post.date}}</p>
+	</aside>
+	<h1>{{post.title}}</h1>
+	<p>{{formatPost(post.content)}}</p>
+</section>

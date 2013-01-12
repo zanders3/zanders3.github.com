@@ -1,30 +1,54 @@
 ﻿<!DOCTYPE html>
-<html lang="en-GB" ng-app>
+<html lang="en-GB" ng-app="Project">
 	<head>
-		<title>Alex Parker's Portfolio</title>
+		<title>3zanders.co.uk</title>
 		<meta name="description" lang="en" content="Alex Parker's Portfolio Website">
 		<meta name="author" content="Alex Parker">
 		<meta name="viewport" content="width=device-width">
 		<meta name="google-site-verification" content="Yr8oU2NcJafDzSE2plpewVXULngT82aPufJse2FdUk0" />
 		<link rel="shortcut icon" type="image/ico" href="img/logo.ico">
 		<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen">
-		<link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen">
 		<link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
 		<script>
-			var _gaq = _gaq || [];
+			/*var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-29723143-1']);
 			_gaq.push(['_trackPageview']);
 			(function() {
 				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
+			})();*/
 
-			function PortfolioController($scope, $http)
+			angular.module('Project', []).config(['$routeProvider', function($routeProvider)
 			{
+				$routeProvider.when('/', {controller:HomeController, templateUrl:'home.html'})
+							  .when('/blog', {controller:BlogController, templateUrl:'blog.html'})
+							  .when('/portfolio', {controller:PortfolioController, templateUrl:'portfolio.html'})
+							  .otherwise({redirectTo:'/'});
+			}]);
+
+			var gTweets = [];
+			function tweets(tweets)
+			{
+				gTweets = tweets;
+			}
+
+			function HomeController($scope, $http)
+			{
+				$scope.tweets = gTweets;
+			}
+
+			function BlogController($scope)
+			{
+
+			}
+
+			function PortfolioController($scope, $rootScope, $http)
+			{
+				$rootScope.footer = "Kinect Sports: Season Two &copy; Microsoft Corporation. Detour &copy; Sandswept Studios LLC.";
 				$http.get('portfolio.json').success(function(portfolio)
 				{
 					$scope.portfolio = portfolio;
@@ -39,64 +63,28 @@
 				}
 			}
 		</script>
+		<script src="http://api.twitter.com/1/statuses/user_timeline.json?screen_name=3zanders&exclude_replies=true&count=30&trim_user=true&callback=tweets"></script>
 	</head>
-	<body ng-controller="PortfolioController">
-		<a name="home"></a>
+	<body>
 		<div class="header">
-			<h1>3zanders</h1>
-			<h2>Alex Parker's Portfolio</h2>
-			<p><a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a></p>
+			<div class="headercontainer">
+				<ul class="nav">
+					<li><a href="#/">Home</a></li>
+					<li><a href="#/portfolio">Portfolio</a></li>
+					<li><a href="#/blog">Blog</a></li>
+				</ul>
+				<h1>3zanders.co.uk<br/><small>Alex Parker's Website</small></h1>
+			</div>
 		</div>
-		<div class="logo"></div>
-		<ul class="navbar clearfix">
-			<li><a>Home</a></li>
-			<li>
-				<a class="active">Blog</a>
-				<ul style="height:60px">
-					<li><a>Categories</a></li>
-					<li><a>Tags</a></li>
-				</ul>
-			</li>
-			<li>
-				<a>Portfolio</a>
-				<ul>
-					<li ng-repeat="item in portfolio">
-						<a href="#{{formatLink(item.title)}}">{{pickTitle(item)}}</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-		<div id="content">
-			<section>
-				<h3>Hi there!</h3>
-				<h3>I am a programmer/designer with a passion for creating new interactive experiences. I have industry experience doing AAA game development with completed projects using a wide variety of technologies such as C++, C#, DirectX, OpenGL, XNA, Unity, Flash and HTML 5. I hold a First Class degree in Computer Science from the University of Southampton.</h3>
-			</section>
-			<section ng-repeat="item in portfolio">
-				<hr/>
-				<a name="{{formatLink(item.title)}}"></a>
-				<aside>
-					<ul class="code">
-						<li ng-repeat="language in item.languages">{{language}}</li>
-					</ul>
-					<p class="date">{{item.date}}</p>
-				</aside>
-				<h1>{{item.title}}</h1>
-				<div class="images">
-					<a href="{{image}}.jpg" rel="lightbox[0]" ng-repeat="image in item.screenshots"><img src="{{image}}-t.jpg" /></a>
-				</div>
-				<p>{{item.description}}</p>
-				<h2>Links</h2>
-				<ul class="links">
-					<li ng-repeat="link in item.links">
-						<a href="{{link.link}}">{{link.name}}</a>
-						{{link.description}}
-					</li>
-				</ul>
-			</section>
+		<div class="content" ng-view>
 		</div>
-		<hr/>
-		<div id="footer">
-			&copy; Alex Parker 2009-2012. Kinect Sports: Season Two &copy; Microsoft Corporation. Detour &copy; Sandswept Studios LLC.
+		<div class="footer">
+			<div class="footercontainer">
+				<p><a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a> | <a href="http://www.github.com/zanders3">GitHub</a></p>
+				<p>
+					&copy; Alex Parker 2009-2013. <span ng-bind-html-unsafe="footer"></span>
+				</p>
+			</div>
 		</div>
 	</body>
 </html>
