@@ -1,16 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="en-GB" ng-app="Project">
 	<head>
-		<title>3zanders.co.uk</title>
-		<meta name="description" lang="en" content="Alex Parker's Portfolio Website">
+		<title>Alex Parker's Website</title>
+		<meta name="description" lang="en" content="Alex Parker's Website">
 		<meta name="author" content="Alex Parker">
-		<meta name="viewport" content="width=device-width">
 		<meta name="google-site-verification" content="Yr8oU2NcJafDzSE2plpewVXULngT82aPufJse2FdUk0" />
 		<link rel="shortcut icon" type="image/ico" href="img/logo.ico">
 		<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen">
 		<link href='http://fonts.googleapis.com/css?family=Chau+Philomene+One' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
 		<script>
 			/*var _gaq = _gaq || [];
@@ -22,16 +22,33 @@
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();*/
 
-			angular.module('Project', []).config(['$routeProvider', function($routeProvider)
+			var app = angular.module('Project', []);
+
+			app.config(['$routeProvider', function($routeProvider)
 			{
-				$routeProvider.when('/', {controller:HomeController, templateUrl:'home.html'})
+				$routeProvider.when('/home', {controller:HomeController, templateUrl:'home.html'})
 							  .when('/blog', {controller:BlogController, templateUrl:'blog.html'})
 							  .when('/portfolio', {controller:PortfolioController, templateUrl:'portfolio.html'})
-							  .otherwise({redirectTo:'/'});
+							  .otherwise({redirectTo:'/home'});
 			}]);
+			app.run(function($rootScope, $location)
+			{
+				$rootScope.menu = 
+				[
+					{title:"Home", link:"/home"},
+					{title:"Portfolio", link:"/portfolio"},
+					{title:"Blog", link:"/blog"}
+				];
+				$rootScope.formatSelected = function(item)
+				{
+					console.log(item.link + ", " + $location.path());
+					return item.link == $location.path() ? "selected" : "";
+				};
+			});
 
+			//callback from twitter API
 			var gTweets = [];
-			function tweets(tweets)
+			function SetTweets(tweets)
 			{
 				gTweets = tweets;
 			}
@@ -43,35 +60,36 @@
 
 			function BlogController($scope)
 			{
-
 			}
 
 			function PortfolioController($scope, $rootScope, $http)
 			{
-				$rootScope.footer = "Kinect Sports: Season Two &copy; Microsoft Corporation. Detour &copy; Sandswept Studios LLC.";
 				$http.get('portfolio.json').success(function(portfolio)
 				{
 					$scope.portfolio = portfolio;
 				});
 				$scope.formatLink = function(name)
 				{
-					return name.replace(/ /g, '').toLowerCase();
+					return name.replace(/[ :]/g, '').toLowerCase();
 				};
 				$scope.pickTitle = function(item)
 				{
 					return item.menutitle ? item.menutitle : item.title;
-				}
+				};
+				$scope.scrollTo = function(item)
+				{
+					var itemId = $scope.formatLink(item.title);
+					$(window).scrollTop($("#" +itemId).offset().top);
+				};
 			}
 		</script>
-		<script src="http://api.twitter.com/1/statuses/user_timeline.json?screen_name=3zanders&exclude_replies=true&count=30&trim_user=true&callback=tweets"></script>
+		<script src="http://api.twitter.com/1/statuses/user_timeline.json?screen_name=3zanders&exclude_replies=true&count=30&trim_user=true&callback=SetTweets"></script>
 	</head>
 	<body>
 		<div class="header">
 			<div class="headercontainer">
 				<ul class="nav">
-					<li><a href="#/">Home</a></li>
-					<li><a href="#/portfolio">Portfolio</a></li>
-					<li><a href="#/blog">Blog</a></li>
+					<li ng-repeat="item in menu" class="{{formatSelected(item)}}"><a href="#{{item.link}}">{{item.title}}</a></li>
 				</ul>
 				<h1>3zanders.co.uk<br/><small>Alex Parker's Website</small></h1>
 			</div>
@@ -82,7 +100,7 @@
 			<div class="footercontainer">
 				<p><a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a> | <a href="http://www.github.com/zanders3">GitHub</a></p>
 				<p>
-					&copy; Alex Parker 2009-2013. <span ng-bind-html-unsafe="footer"></span>
+					&copy; Alex Parker 2009-2013. Kinect Sports: Season Two &copy; Microsoft Corporation. Detour &copy; Sandswept Studios LLC.
 				</p>
 			</div>
 		</div>

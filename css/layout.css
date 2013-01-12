@@ -118,10 +118,33 @@ h1, h2 {
 
 .nav {
 	float: right;
+	margin-top: 70px;
 }
 
 .nav li {
 	float:left;
+	margin: 10px;
+	padding: 20px;
+	color: #2E354A;
+}
+
+.nav a {
+	font-family: 'Chau Philomene One', sans-serif;
+	font-size:22px;
+	
+	text-decoration: none;
+}
+
+.nav a:hover {
+	color: #515F8E;
+}
+
+.nav .selected {
+	margin-top: 0px;
+}
+
+.nav .selected a {
+	color: #515F8E;
 }
 
 /** left navbar ******************/
