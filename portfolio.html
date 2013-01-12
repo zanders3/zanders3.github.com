@@ -1,3 +1,7 @@
+<script>
+	if (document.URL.indexOf("#") == -1)
+		window.location = "http://www.3zanders.co.uk/#/portfolio";
+</script>
 <ul class="navbar clearfix">
 	<li ng-repeat="item in portfolio"><a ng-click="scrollTo(item)">{{pickTitle(item)}}</a></li>
 </ul>
