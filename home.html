@@ -9,16 +9,18 @@
 </section>
 <div class="clearfix home">
 	<div class="posts">
-		<!--<h1>Recent Posts</h1>
-		<dl>
-			<dt><a href="#">Crossing the Streams</a></dt>
-			<dd>We investigate crossing the streams..</dd>
-			<dt><a href="#">Something else</a></dt>
-			<dd>Something else is written here</dd>
-		</dl>-->
 		<h1>Portfolio</h1>
 		<div class="portfolio clearfix">
 			<a ng-repeat="item in portfolioImages" href="#/portfolio"><img src="{{item}}-t.jpg" class="clearfix" /></a>
+		</div>
+		<div ng-show="blogSummary.length > 0">
+			<h1>Recent Posts</h1>
+			<div class="postsbox">
+				<div ng-repeat="post in blogSummary">
+					<a href="{{post.link}}"><h2>{{post.title}}</h2></a>
+					<p>{{post.summary}}</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="twitter">

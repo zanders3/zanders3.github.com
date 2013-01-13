@@ -12,102 +12,20 @@
 		<link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+		<script src="js/marked.js"></script>
 		<script>
-			var _gaq = _gaq || [];
+			/*var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-29723143-1']);
 			_gaq.push(['_trackPageview']);
 			(function() {
 				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-
-			var app = angular.module('Project', []);
-
-			app.config(['$routeProvider', function($routeProvider)
-			{
-				$routeProvider.when('/home', {controller:HomeController, templateUrl:'home.html'})
-							  .when('/blog', {controller:BlogController, templateUrl:'blog.html'})
-							  .when('/portfolio', {controller:PortfolioController, templateUrl:'portfolio.html'})
-							  .otherwise({redirectTo:'/home'});
-			}]);
-			app.run(function($rootScope, $location, $http)
-			{
-				$rootScope.menu = 
-				[
-					{title:"Home", link:"/home"},
-					{title:"Portfolio", link:"/portfolio"},
-					/*{title:"Blog", link:"/blog"}*/
-				];
-				$rootScope.formatSelected = function(item)
-				{
-					return item.link == $location.path() ? "selected" : "";
-				};
-				$http.get('portfolio.json').success(function(portfolio)
-				{
-					$rootScope.portfolio = portfolio;
-					$rootScope.portfolioImages = portfolio.slice(0,4).map(function(item)
-					{
-						return item.screenshots[0];
-					});
-				});
-			});
-
-			//callback from twitter API
-			function replaceURLWithHTMLLinks(text) {
-			    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-			    return text.replace(exp,"<a href='$1'>$1</a>"); 
-			}
-
-			var tweets = [];
-			function SetTweets(response)
-			{
-				tweets = response.slice(0, 6);
-				for (var i in tweets)
-					tweets[i].text = replaceURLWithHTMLLinks(tweets[i].text);
-			}
-
-			function HomeController($scope, $http)
-			{
-				$scope.tweets = tweets;
-			}
-
-			function BlogController($scope)
-			{
-			}
-
-			function PortfolioController($scope, $rootScope, $http)
-			{
-				$scope.formatLink = function(name)
-				{
-					return name.replace(/[ :]/g, '').toLowerCase();
-				};
-				$scope.pickTitle = function(item)
-				{
-					return item.menutitle ? item.menutitle : item.title;
-				};
-				$scope.scrollTo = function(item)
-				{
-					var itemId = $scope.formatLink(item.title);
-					$(window).scrollTop($("#" +itemId).offset().top - 10);
-				};
-
-				var initialLeft = $(".headercontainer").offset().left;
-				$(window).resize(function()
-				{
-					initialLeft = $(".headercontainer").offset().left;
-					$(".navbar").css('left', initialLeft-$(window).scrollLeft());
-				});
-				console.log('initial left: ' + initialLeft);
-				$(window).scroll(function()
-				{
-					var windowTop = $(window).scrollTop();
-					$(".navbar").css('top', Math.max(10, 170-windowTop));
-					$(".navbar").css('left', initialLeft-$(window).scrollLeft());
-				});
-			}
+			})();*/
 		</script>
+		<script src="js/app.js"></script>
 		<script src="http://api.twitter.com/1/statuses/user_timeline.json?screen_name=3zanders&exclude_replies=true&count=30&trim_user=true&callback=SetTweets"></script>
+		<script src="https://api.github.com/repos/zanders3/zanders3.github.com/contents/blog?callback=SetBlogFiles"></script>
 	</head>
 	<body>
 		<div class="header">

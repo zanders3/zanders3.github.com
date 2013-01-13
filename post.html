@@ -1,10 +1,19 @@
 <section>
 	<aside>
-		<ul class="code">
-			<li ng-repeat="tag in post.tags">{{tag}}</li>
-		</ul>
-		<p class="date">{{post.date}}</p>
+		<p class="date">{{formatDate(post.date)}}</p>
 	</aside>
 	<h1>{{post.title}}</h1>
-	<p>{{formatPost(post.content)}}</p>
+	<p ng-bind-html-unsafe="post.html"></p>
+</section>
+<section>
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    var disqus_shortname = '3zanders';
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<a href="http://disqus.com" class="dsq-brlink">Comments powered by <span class="logo-disqus">Disqus</span></a>
 </section>
