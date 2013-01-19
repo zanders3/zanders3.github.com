@@ -29,10 +29,14 @@ So what's the solution? OpenGL Core Profile! This removes all of the old fixed p
 		float x, y, z;
 	};
 
-	GLuint vertexBuffer, indexBuffer;
+	GLuint vertexBuffer, indexBuffer, vertexLayout;
 
-	void Game::Setup()
+	bool Game::Setup(int argc, const char** argv)
 	{
+	    Window::Open(800, 600, false, "Hello World!");
+	    
+	    GL::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	    
 		Vertex verts[] =
 	    {
 	        { 0.0f, 0.75f, 0.0f },
@@ -61,6 +65,8 @@ So what's the solution? OpenGL Core Profile! This removes all of the old fixed p
 	    //The vertex layout has 3 floats for position
 	    GL::VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));
 	    GL::EnableVertexAttribArray(0);
+
+	    return true;
 	}
 
 	void Game::Draw(float deltaTime)
@@ -142,7 +148,7 @@ So we now have some GLSL code that will put the triangles onto the screen in a n
     GL::LinkProgram(shaderProgram);
     GL::UseProgram(shaderProgram);
 
-Putting this code into the Game::Setup() function will cause a nice blue triangle to draw on the screen. WOAH:
+Putting this code into the Game::Setup() function will cause a nice blue triangle to draw on the screen.
 
 ![A Blue Triangle drawn to the screen](blog/img/opengl.jpg "An incredible feat of programming. AMAZING.")
 

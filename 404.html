@@ -1,7 +1,6 @@
 <script>
 	if (document.URL.indexOf("#") == -1)
 	{
-		var baseURI = "http://www.3zanders.co.uk/";
-		window.location = baseURI + "#" + document.URL.slice(baseURI.length);
+		window.location = "http://3zanders.co.uk/#" + document.URL.replace("http://","").replace("3zanders.co.uk/#","");
 	}
 </script>
