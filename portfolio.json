@@ -1,5 +1,33 @@
 [
   {
+    "title": "CSR Racing",
+    "description": "I worked on the multiplayer update of CSR Racing working on gameplay, UI, build tools and game server code.",
+    "languages": [
+      "C#",
+      "Unity",
+      "iOS",
+      "OSX"
+    ],
+    "date": "13/12/12",
+    "links": [
+      {
+        "name": "Boss Alien",
+        "link": "http://bossalien.com/",
+        "description": "A link to the Boss Alien mothership"
+      },
+      {
+        "name": "CSR Multiplayer Announced",
+        "link": "http://bossalien.com/csr-multiplayer-announced/",
+        "description": "A Blog post about the game launch!"
+      }
+    ],
+    "screenshots": [
+      "img/csr/csr-1",
+      "img/csr/csr-2",
+      "img/csr/csr-3"
+    ]
+  },
+  {
     "title": "Kinect Sports: Season Two",
     "menutitle": "Kinect Sports 2",
     "description": "The BAFTA award winning game that I helped ship by implementing the 'Challenge Play' gameplay mode including the user interface and save system for local challenge play.",
@@ -264,34 +292,5 @@
         "img/bookgalaxy/MosaicScreen3",
         "img/bookgalaxy/MosaicScreen4"
     ]
-  },
-  {
-    "title": "The Expanse",
-    "description": "An XNA Game written for the DreamBuildPlay 2009 competition. It is a 2D space exploration game where you must mine resources, evade pirates and upgrade your ship!",
-    "languages": [
-      "C#",
-      "XNA",
-      "HLSL"
-    ],
-    "tags": { "tag": "game" },
-    "date": "16/07/09",
-    "links": [
-        {
-          "name": "Windows Executable",
-          "link": "/TheExpanse/TheExpanseWindows.ccgame",
-          "description": "Needs to have XNA Redistributable 3.0 installed. The package will then unpack itself and allow you to run it."
-        },
-        {
-          "name": "Xbox Executable",
-          "link": "/TheExpanse/TheExpanseXbox.ccgame",
-          "description": "Needs to have XNA installed, with a Creators Club membership to deploy to Xbox."
-        }
-    ],
-    "screenshots": [
-        "TheExpanse/Shot1",
-        "TheExpanse/Shot2",
-        "TheExpanse/Shot3"
-    ],
-    "videos": { "video": "HVWobyCYRw0" }
   }
 ]
