@@ -61,39 +61,36 @@ function SetTweets(response)
 }
 
 //callback from GitHub API
-var blog = [];
-function SetBlogFiles(files)
+var blog = GetBlog().map(function(post)
 {
-	blog = files.data.map(function(post)
+	var newPost = {};
+	newPost.path = 'blog/' + post.link + '.md';
+	newPost.title = post.title;
+	newPost.link = "#/post/" + post.link;
+	newPost.date = post.date;
+
+	newPost.html = "";
+	newPost.summary = "";
+	newPost.GetHTML = function($http, callback)
 	{
-		var parts = post.name.split(".");
-
-		var newPost = {};
-		newPost.path = post.path;
-		newPost.title = parts[3];
-		newPost.link = "#/post/" + parts[3].replace(/[ :]/g, '-').toLowerCase();
-		newPost.date = new Date(parts[0], parts[1], parts[2]);
-
-		newPost.html = "";
-		newPost.summary = "";
-		newPost.GetHTML = function($http, callback)
+		var thisPtr = this;
+		if (this.html.length == 0)
 		{
-			var thisPtr = this;
-			if (this.html.length == 0)
+			$http.get(this.path).success(function(text)
 			{
-				$http.get(this.path).success(function(text)
-				{
-					thisPtr.html = marked(text);
-					thisPtr.summary = text.slice(0, 100) + "...";
-					callback(thisPtr);
-				});
-			}
-			else callback(this);
-		};
+				thisPtr.html = marked(text);
+				thisPtr.summary = text.slice(0, 100) + "...";
+				thisPtr.bigsummary = thisPtr.html.slice(0,2000);
+				if (thisPtr.bigsummary.length < thisPtr.html.length)
+					thisPtr.bigsummary += "...";
+				callback(thisPtr);
+			});
+		}
+		else callback(this);
+	};
 
-		return newPost;
-	});
-}
+	return newPost;
+});
 
 //page controllers
 function HomeController($scope, $http)
