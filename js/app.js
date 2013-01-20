@@ -13,7 +13,7 @@ app.config(['$routeProvider', function($routeProvider)
 }]);
 app.config(['$locationProvider', function($locationProvider)
 {
-	$locationProvider.html5Mode(true);
+	//$locationProvider.html5Mode(true);
 	$locationProvider.hashProvider = '!';
 }]);
 app.run(function($rootScope, $location, $http)
