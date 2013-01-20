@@ -20,9 +20,9 @@ app.run(function($rootScope, $location, $http)
 {
 	$rootScope.menu = 
 	[
-		{title:"Home", link:"/home"},
-		{title:"Portfolio", link:"/portfolio"},
-		{title:"Blog", link:"/blog"},
+		{title:"Home", link:"/#/home"},
+		{title:"Portfolio", link:"/#/portfolio"},
+		{title:"Blog", link:"/#/blog"},
 	];
 	$rootScope.formatSelected = function(item)
 	{
