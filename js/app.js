@@ -8,13 +8,6 @@ app.config(['$routeProvider', function($routeProvider)
 				  .when('/post/:post', {controller:PostController, templateUrl:'post.html'})
 				  .when('/portfolio', {controller:PortfolioController, templateUrl:'portfolio.html'})
 				  .otherwise({redirectTo:'/home'});
-
-	
-}]);
-app.config(['$locationProvider', function($locationProvider)
-{
-	$locationProvider.html5Mode(true);
-	$locationProvider.hashProvider = '!';
 }]);
 app.run(function($rootScope, $location, $http)
 {
