@@ -1,7 +1,7 @@
 [
   {
     "title": "Dungeon Heart",
-    "description": "A game created with Alex Trowers and Leanne Bayley as part of Global Game Jam 2013! The theme was the sound of a heartbeat, so we made a dungeon keeper. In 48 hours. This is why Unity is awesome. This was also my first go at implementing an A* algorithm from scratch in 48 hours!",
+    "description": "A game created with Alex Trowers and Leanne Bayley as part of Global Game Jam 2013! The theme was the sound of a heartbeat, so we made a dungeon keeper clone. In 48 hours. This is why Unity is awesome, the fact that this worked at all. This was also my first go at implementing an A* algorithm from scratch in 48 hours!",
     "languages": [
       "C#",
       "Unity",
@@ -12,7 +12,7 @@
       {
         "name": "Play Game",
         "link": "http://3zanders.co.uk/dungeonheart/",
-        "description": "Play the game!"
+        "description": "Play the game! Highly recommended."
       }
     ],
     "screenshots": [
