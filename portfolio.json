@@ -1,5 +1,28 @@
 [
   {
+    "title": "Dungeon Heart",
+    "description": "A game created with Alex Trowers and Leanne Bayley as part of Global Game Jam 2013! The theme was the sound of a heartbeat, so we made a dungeon keeper. In 48 hours. This is why Unity is awesome. This was also my first go at implementing an A* algorithm from scratch in 48 hours!",
+    "languages": [
+      "C#",
+      "Unity",
+      "GameJam"
+    ],
+    "date": "27/1/13",
+    "links": [
+      {
+        "name": "Play Game",
+        "link": "http://3zanders.co.uk/dungeonheart/",
+        "description": "Play the game!"
+      }
+    ],
+    "screenshots": [
+      "dungeonheart/img-1",
+      "dungeonheart/img-2",
+      "dungeonheart/img-3",
+      "dungeonheart/img-4",
+    ]
+  },
+  {
     "title": "CSR Racing",
     "description": "I worked on the multiplayer update of CSR Racing working on gameplay, UI, build tools and game server code.",
     "languages": [
