@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Alex Parker's Website
-subtitle:
-description:
+title: 3zanders.co.uk
+subtitle: Alex Parker's Website
+description: Alex Parker's Blog and Portfolio Site
 author: Alex Parker
 email: 3zanders@gmail.com
 language: en-GB
@@ -79,7 +79,7 @@ disqus_shortname:
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: landscape
+theme: zanders3
 exclude_generator:
 
 # Deployment
