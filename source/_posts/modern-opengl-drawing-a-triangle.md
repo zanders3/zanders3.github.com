@@ -3,8 +3,6 @@ date: 2014/2/19
 tags:
 - OpenGL
 - C++
-categories:
-- Article
 ---
 So. Let's talk about OpenGL. What a mess when you compare it with how DirectX has evolved over the years. I first learnt the intricacies of the DirectX API with the [XNA](http://xbox.create.msdn.com/en-US/) framework which I used to create some simple games. This messing led me to start experimenting with shaders, ultimately leading to my work on [Detour](http://www.sandswept.net/games/detour) which had lots of fancy things like local point lights, realtime shadows, water reflection, particle systems and postprocessing effects.
 
@@ -158,7 +156,7 @@ So we now have some GLSL code that will put the triangles onto the screen in a n
 
 Putting this code into the Game::Setup() function will cause a nice blue triangle to draw on the screen.
 
-![A Blue Triangle drawn to the screen](opengl.jpg "An incredible feat of programming. AMAZING.")
+![A Blue Triangle drawn to the screen](blog/img/opengl.jpg "An incredible feat of programming. AMAZING.")
 
-So obviously this is a teeny tiny first step into the exciting world of graphics programming. Now that the low-level faffing is finished with we can get into more interesting stuff like lighting models, shadows and so on to get a more accurate image. I hope to cover this sort of stuff in future articles!
+So obviously this is a teeny tiny first step into the exciting world of graphics programming. Now that the low-level faffing is finished with we can get into more interesting stuff like lighting models, shadows and so on to get a more accurate image. I hope to cover this sort of stuff in future blog posts!
 
