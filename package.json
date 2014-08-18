@@ -6,6 +6,7 @@
     "hexo-livereload": "^0.1.0",
     "hexo-renderer-ejs": "*",
     "hexo-renderer-marked": "*",
-    "hexo-renderer-stylus": "*"
+    "hexo-renderer-stylus": "*",
+    "hexo-tag-asset-res": "^0.1.1"
   }
 }

@@ -158,7 +158,7 @@ So we now have some GLSL code that will put the triangles onto the screen in a n
 
 Putting this code into the Game::Setup() function will cause a nice blue triangle to draw on the screen.
 
-![A Blue Triangle drawn to the screen](opengl.jpg "An incredible feat of programming. AMAZING.")
+![A Blue Triangle drawn to the screen](/2014/02/19/modern-opengl-a-tutorial/opengl.jpg "An incredible feat of programming. AMAZING.")
 
 So obviously this is a teeny tiny first step into the exciting world of graphics programming. Now that the low-level faffing is finished with we can get into more interesting stuff like lighting models, shadows and so on to get a more accurate image. I hope to cover this sort of stuff in future articles!
 
