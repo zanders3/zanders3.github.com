@@ -26,8 +26,9 @@ The AI system also had a really simple animation system that made the characters
 
 There were 6 character types implemented in the game - 3 good and 3 evil. Naturally the good guys are sneaking into your dungeon and trying to smash up your Dungeon Heart whilst the evil player needs to defend the Dungeon by setting trapdoors (a last minute inclusion, but one of the best bits) and clicking on spawn points at the correct time. If you clicked the spawn point on the beat of the heartbeat three times in row then you would spawn the most powerful creature, two times for the second most powerful and once for the least. Mess up your timing and nothing would happen! The balancing and implementation of the spawn timing system was done by Trowers whilst I was sorting out the pathfinding and character AI system.
 
-By the end of the first night we were in a pretty good position - we had a basic pathfinding system with good creatures pathfinding to the Dungeon Heart but not doing any damage yet.
+By the end of the first night we were in a pretty good position - we had a basic pathfinding system with good creatures pathfinding to the Dungeon Heart but not doing any damage.
 
 Day 2
 -----
 
+So with the solid start from the previous day things were looking pretty good the following morning! 
