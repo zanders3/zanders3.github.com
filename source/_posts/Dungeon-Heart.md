@@ -31,4 +31,7 @@ By the end of the first night we were in a pretty good position - we had a basic
 Day 2
 -----
 
-So with the solid start from the previous day things were looking pretty good the following morning! 
+So with the solid start from the previous day things were looking pretty good the following morning! The final day was spent implementing the final gameplay design making the two different sides attack each other by introducing an attack system and hit points to each character. I also set up the victory and loss conditions, making the Dungeon Heart beat faster when you are about to lose, creating lots of tension in the final moments.
+
+The rest of the day was spent getting multiple levels with multiple waves of enemies working and fixing lots of bugs that had popped up over time. Trowers also got the sound effects plugged in and threw some quick designs for multiple levels together. Leanne had by this point finished all of the art so was making papercraft of the characters in the game.
+
