@@ -9,6 +9,8 @@ categories:
 
 Dungeon Heart was a game made in 48 hours with the [Alex Trowers](http://alextrowers.blogspot.co.uk/) and [Leanne Bayley](http://huhjustablog.blogspot.co.uk/) as part of the 2013 [http://globalgamejam.org/](Global Game Jam) game jamming competition. We even managed to get a good 7 hours sleep and got the game we planned to make finished on time!
 
+Since we used Unity you can [play the full game here](/dungeonheart)!
+
 ![The Title Screen](/2013/01/27/Dungeon-Heart/screen2.png)
 
 The theme was 'Heartbeats' so naturally as big fans (and for some of us ex-employees) of Bullfrog we made a Dungeon Keeper clone, since Dungeon Keeper has a heart in the middle. The game was built with the Unity Game Engine using C#. I find Unity one of the easiest game engines to use, and it is the perfect tool for prototyping and game jamming.
@@ -44,6 +46,8 @@ So with the solid start from the previous day things were looking pretty good th
 The rest of the day was spent getting multiple levels with multiple waves of enemies working and fixing lots of bugs that had popped up over time. Trowers also got the sound effects plugged in and threw some quick designs for multiple levels together as well as the coding for the spawn pads. Leanne had by this point finished all of the art so was making papercraft of the characters in the game.
 
 The final few hours were spent manically bug fixing, as a few hours before the end a load of really strange bugs reared their heads giving us an exciting dash for the finish! At the final deadline naturally the Global Game Jam servers got overloaded but we were allowed to put our entries on a Dropbox instead which we were assured would count.
+
+![A Good Defence!](/2013/01/27/Dungeon-Heart/screen5.png)
 
 A few hours later we had the judging, done by the very scientific method of whooping and arm waving, and we were positioned in second place. We were all quite happy with that as the competition was fierce! 
 
