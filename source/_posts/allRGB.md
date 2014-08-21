@@ -1,4 +1,4 @@
-title: allRGB
+title: allRGB Rainbow Fractal
 date: 2014-03-15
 tags:
 - C++
