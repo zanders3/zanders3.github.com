@@ -1,5 +1,6 @@
 title: New Shiny
 date: 2014/08/7
+category: Article
 ---
 Hi there!
 
