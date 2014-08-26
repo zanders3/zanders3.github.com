@@ -4,7 +4,6 @@ tags:
 - Unity
 - C#
 - iOS
-- OSX
 - Android
 categories:
 - Portfolio

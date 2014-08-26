@@ -1,5 +1,17 @@
-<% page.posts.each(function(item){ %>
-  <%- partial('_partial/article', {item: item, index: true}) %>
-<% }); %>
-
-<%- partial('_partial/pagination') %>
+<article class="post">
+	<div class="post-content">
+		<header>
+			<h1>Portfolio</h1>
+		</header>
+		<div class="entry">
+	<% site.categories.findOne({name:'Portfolio'}).posts.forEach(function(id){ %>
+	<% var item = site.posts.findOne({_id:id}); console.log(item); %>
+		<h2 class="title"><%- link_to(item.permalink, item.title) %></h2>
+		<img src="/screen1.jpg"/>
+	<% }); %>
+		</div>
+		<footer>
+			<div class="clearfix"></div>
+		</footer>
+	</div>
+</article>
