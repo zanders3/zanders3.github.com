@@ -4,11 +4,15 @@
 			<h1>Portfolio</h1>
 		</header>
 		<div class="entry">
-	<% site.categories.findOne({name:'Portfolio'}).posts.forEach(function(id){ %>
-	<% var item = site.posts.findOne({_id:id}); console.log(item); %>
-		<h2 class="title"><%- link_to(item.permalink, item.title) %></h2>
-		<img src="/screen1.jpg"/>
-	<% }); %>
+		<%  
+		var posts = site.categories.findOne({name:'Portfolio'}).posts
+			.map(function(id){ return site.posts.findOne({_id:id}); });
+		posts.sort(function(a,b){ return b.date.valueOf() - a.date.valueOf() });
+		posts.forEach(function(item){ %>
+			<h2 class="title"><%- link_to(item.permalink, item.title) %></h2>
+			<a href="<%- item.permalink %>"><img src="<%- item.thumbnail %>"/></a>
+			<p><%- item.description %></p>
+		<% }); %>
 		</div>
 		<footer>
 			<div class="clearfix"></div>

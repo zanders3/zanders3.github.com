@@ -5,6 +5,8 @@ tags:
 - C#
 - Actionscript
 - Xbox 360
+thumbnail: /2011/11/25/Kinect-Sports-Season-Two/logo.jpg
+description: Kinect Sports: Season Two was a Xbox 360 game developed by Rare and Big Park for the Kinect as a direct sequel to the BAFTA award winning Kinect Sports title.
 ---
 
 [Kinect Sports: Season Two](http://en.wikipedia.org/wiki/Kinect_Sports:_Season_Two) was a Xbox 360 game developed by [Rare](http://www.rare.co.uk/) and [Big Park](http://bigpark.com/) for the Kinect as a direct sequel to the BAFTA award winning [Kinect Sports](http://en.wikipedia.org/wiki/Kinect_Sports) title. I worked on the game at Rare as an intern software engineer between my second and third year of University.

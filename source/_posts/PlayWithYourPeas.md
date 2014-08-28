@@ -5,6 +5,8 @@ tags:
 - DirectX
 categories:
 - Portfolio
+thumbnail: /2009/06/10/PlayWithYourPeas/screen1.jpg
+description: PlayWithYourPeas was a game protoype design challenge posted by Daniel Cook on his Lost Garden blog.
 ---
 
 [PlayWithYourPeas](http://www.lostgarden.com/2008/02/play-with-your-peas-game-prototyping.html) was a game protoype design challenge posted by Daniel Cook on his [Lost Garden blog](http://www.lostgarden.com). He provided the design and art assets and all you had to do was implement it so I had a go! You can either [download the installer](/2009/06/10/PlayWithYourPeas/PlayWithYourPeasSetup.exe) (windows only) or take a look at the [source code](/2009/06/10/PlayWithYourPeas/NinjaPeasSource.zip).

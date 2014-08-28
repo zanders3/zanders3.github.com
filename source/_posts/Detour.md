@@ -6,9 +6,11 @@ tags:
 - HLSL
 categories:
 - Portfolio
+thumbnail: /2011/05/11/Detour/screen1.jpg
+description: Detour was an indie game developed in XNA and released on Steam in October 2011.
 ---
 
-Detour was an indie game developed in [XNA](http://en.wikipedia.org/wiki/Microsoft_XNA) and was released on [Steam](http://store.steampowered.com/app/92100/) in October 2011. It was made by [Sandswept Studios](http://www.sandswept.net/), a small team at the time mostly based in Utah - not counting myself of course who worked remotely! I worked on Detour part time during my first and second year at University.
+Detour was an indie game developed in [XNA](http://en.wikipedia.org/wiki/Microsoft_XNA) and released on [Steam](http://store.steampowered.com/app/92100/) in October 2011. It was made by [Sandswept Studios](http://www.sandswept.net/), a small team at the time mostly based in Utah - not counting myself of course who worked remotely! I worked on Detour part time during my first and second year at University.
 
 ![Trucks leaving the map in glorious victory](/2011/05/11/Detour/screen1.jpg)
 

@@ -6,6 +6,8 @@ tags:
 - Lucene
 categories:
 - Portfolio
+thumbnail: /2012/04/12/Wikitime/screen4.png
+description: Wikitime was my final year project of my BSc Computer Science degree at the University of Southampton.
 ---
 
 Wikitime was my final year project of my BSc Computer Science degree at the University of Southampton. The system took the full english text from the whole of the english wikipedia which is freely [available to download](http://en.wikipedia.org/wiki/Wikipedia:Database_download#English-language_Wikipedia) and attempted to position historical events on a timeline. [A demo](http://wikitime.herokuapp.com/) based on the [Simple English Wikipedia](http://simple.wikipedia.org/wiki/Main_Page) is available thanks to [Heroku](https://www.heroku.com/).

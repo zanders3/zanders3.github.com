@@ -5,6 +5,8 @@ tags:
 - C#
 categories:
 - Portfolio
+thumbnail: /2011/11/12/Trapped/screen1.jpg
+description: Trapped was my entry for Ludum Dare 22; a game making competition where you have 48 hours to make a game independently from Scratch!
 ---
 
 Trapped was my entry for [Ludum Dare 22](http://www.ludumdare.com/compo/); a game making competition where you have 48 hours to make a game independently from Scratch! You can [play the game here](/trapped). It was placed within the top 10 for graphics and in the top 50 overall, pretty good considering it was my first attempt at a game jam!

@@ -4,6 +4,8 @@ tags:
 - C++
 categories:
 - Portfolio
+thumbnail: /2014/03/15/allRGB/rainbowfractal.jpg
+description: The challenge was simple: create an image containing all 16777216 RGB colours in a single image with not one colour missing or duplicated!
 ---
 
 The challenge was simple: create an image containing all 16777216 RGB colours in a single image with not one colour missing or duplicated!
