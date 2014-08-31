@@ -5,7 +5,7 @@
 # Site
 title: 3zanders.co.uk
 subtitle: Alex Parker's Website
-description: Alex Parker's Blog and Portfolio Site
+description: Alex Parker's Portfolio and Articles
 author: Alex Parker
 email: 3zanders@gmail.com
 language: en-GB
@@ -74,7 +74,7 @@ per_page: 10
 pagination_dir: page
 
 # Disqus
-disqus_shortname:
+disqus_shortname: 3zanders
 
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
@@ -85,4 +85,6 @@ exclude_generator:
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: github
+  repo: https://github.com/zanders3/zanders3.github.com
+  branch: master
