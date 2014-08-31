@@ -1,10 +1,12 @@
 menu:
   Home: /
-  Archives: /archives
+  Portfolio: /portfolio
+  Articles: /articles
 
 widgets:
 - search
-- category
+- portfolio
+- articles
 - tag
 
 excerpt_link: Read More

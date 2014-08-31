@@ -1,21 +1,13 @@
 <article class="post">
 	<div class="post-content">
 		<header>
-			<h1>Portfolio</h1>
+			<h1>Hi there!</h1>
 		</header>
 		<div class="entry">
-		<%  
-		var posts = site.categories.findOne({name:'Portfolio'}).posts
-			.map(function(id){ return site.posts.findOne({_id:id}); });
-		posts.sort(function(a,b){ return b.date.valueOf() - a.date.valueOf() });
-		posts.forEach(function(item){ %>
-			<h2 class="title"><%- link_to(item.permalink, item.title) %></h2>
-			<a href="<%- item.permalink %>"><img src="<%- item.thumbnail %>"/></a>
-			<p><%- item.description %></p>
-		<% }); %>
+			<p>Alex is a software engineer at Boss Alien mainly working on graphics, tools and art pipelines for new and existing games and has worked in the games industry on a wide variety of titles since 2010.</p>
+			<p>He holds a First Class degree in Computer Science from the University of Southampton.</p>
 		</div>
-		<footer>
-			<div class="clearfix"></div>
-		</footer>
 	</div>
 </article>
+<%- partial('_partial/summary', {title:"Recent Articles", category:"Articles", maxPosts:2, readMore:"/articles"}) %>
+<%- partial('_partial/summary', {title:"Portfolio", category:"Portfolio", maxPosts:-1, readMore:"/portfolio"}) %>

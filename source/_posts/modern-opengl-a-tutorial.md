@@ -4,7 +4,9 @@ tags:
 - OpenGL
 - C++
 categories:
-- Article
+- Articles
+thumbnail: /2014/02/19/modern-opengl-a-tutorial/opengl.jpg
+description: A basic tutorial on creating a modern OpenGL context and getting a simple triangle drawn to the screen.
 ---
 So. Let's talk about OpenGL. What a mess when you compare it with how DirectX has evolved over the years. I first learnt the intricacies of the DirectX API with the [XNA](http://xbox.create.msdn.com/en-US/) framework which I used to create some simple games. This messing led me to start experimenting with shaders, ultimately leading to my work on [Detour](http://www.sandswept.net/games/detour) which had lots of fancy things like local point lights, realtime shadows, water reflection, particle systems and postprocessing effects.
 

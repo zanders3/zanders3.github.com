@@ -1,0 +1,32 @@
+<article class="post">
+	<div class="post-content">
+		<header>
+			<h1><%- title %></h1>
+		</header>
+		<div class="entry">
+		<%  
+		var posts = site.categories.findOne({name:category}).posts
+			.map(function(id){ return site.posts.findOne({_id:id}); });
+		posts.sort(function(a,b){ return b.date.valueOf() - a.date.valueOf() });
+		if (maxPosts != -1)
+			posts = posts.slice(0, maxPosts);
+		posts.forEach(function(item){ %>
+			<div class="imageitem">
+				<a href="<%- item.path %>"><img src="<%- item.thumbnail %>" class="nofancybox"/></a>
+				<h2 class="title">
+					<%- link_to(item.path, item.title) %>
+					<small style="float:right"><time datetime="<%= item.date.toDate().toISOString() %>"><%= item.date.format(config.date_format) %></time></small>
+				</h2>
+				<%- item.description %>
+			</div>
+			<div class="clearfix"></div>
+		<% }); %>
+		</div>
+		<footer>
+			<% if (typeof readMore !== "undefined") {%> 
+				<div style="float:right"><a href="<%- readMore %>">Read More</a></div>
+			<% } %>
+			<div class="clearfix"></div>
+		</footer>
+	</div>
+</article>
