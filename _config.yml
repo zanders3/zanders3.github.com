@@ -73,9 +73,6 @@ time_format: H:mm:ss
 per_page: 10
 pagination_dir: page
 
-# Disqus
-disqus_shortname: 3zanders
-
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
@@ -86,5 +83,5 @@ exclude_generator:
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
   type: github
-  repo: https://github.com/zanders3/zanders3.github.com.git
+  repo: git@github.com:zanders3/zanders3.github.com.git
   branch: master
