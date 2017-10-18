@@ -125,11 +125,12 @@ Let's run the thing!
 
 We finally have everything! Save the whole thing as a `boot2.asm` file ([source available here](/2017/10/13/writing-a-bootloader/boot2.asm)) then run it with `nasm -f bin boot2.asm && qemu-system-x86_64 -fda boot.bin`. You should get something like this!
 
+
 ![Protected Mode Hello World](/2017/10/13/writing-a-bootloader/boot2.png)
 
 Next Steps
 ----------
 
-Amazing! In **part 3** of this series we'll look at loading a C++ function that we've compiled into memory and then call it from our bootloader. Almost there!
+Amazing! In [part 3](/2017/10/18/writing-a-bootloader3/) of this series we'll look at loading a C++ function that we've compiled into memory and then call it from our bootloader. Almost there!
 
 

@@ -11,6 +11,8 @@ description: This post describes how to write a simple Hello world bootloader
 ---
 This article series explains how to write a tiny 32-bit x86 operating system kernel. We won't do very much other than print `Hello world!` to the screen in increasingly complicated ways! We'll start off in assembly and then build up to writing C++!
 
+A [presentation](/2017/10/13/writing-a-bootloader/writingabootloader.pdf) of this article series is also available.
+
 To follow along you're going to need the NASM assembler and [QEMU](https://www.qemu.org/) to emulate a virtual machine for us. QEMU is great because you don't have to worry about accidentally destroying your hardware with badly written OS code ;) You can install these on [Windows Subsystem for Linux](https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide) or Ubuntu with this command:
 
 	sudo apt-get install nasm qemu
