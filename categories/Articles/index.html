@@ -350,7 +350,10 @@ hello: db &quot;Hello world!&quot;,0
 <pre><code>sudo apt-get install nasm qemu
 </code></pre><p>On a mac you can use homebrew:</p>
 <pre><code>brew install nasm
-</code></pre><h2 id="A-Hello-World-Bootloader"><a href="#A-Hello-World-Bootloader" class="headerlink" title="A Hello World Bootloader"></a>A Hello World Bootloader</h2><p>When you press the power button the computer loads the BIOS from some flash memory stored on the motherboard. The BIOS initializes and self tests the hardware then loads the first 512 bytes into memory from the media device (i.e. the cdrom or floppy disk). If the last two bytes equal <code>0xAA55</code> then the BIOS will jump to location <code>0x7C00</code> effectively transferring control to the bootloader. </p>
+</code></pre><p>On Windows 10 you’ll also want to install <a href="https://sourceforge.net/projects/xming/" target="_blank" rel="external">an X Server</a> which allows QEMU to open a window from the linux subsystem.</p>
+<h2 id="A-Hello-World-Bootloader"><a href="#A-Hello-World-Bootloader" class="headerlink" title="A Hello World Bootloader"></a>A Hello World Bootloader</h2><p>We’re going to write a floppy disk bootloader because it doesn’t require us to mess about with file systems which helps keep things simple as possible.</p>
+<p><img src="/2017/10/13/writing-a-bootloader/floppy.jpg" alt="Cutting edge 1970s technology!"></p>
+<p>When you press the power button the computer loads the BIOS from some flash memory stored on the motherboard. The BIOS initializes and self tests the hardware then loads the first 512 bytes into memory from the media device (i.e. the cdrom or floppy disk). If the last two bytes equal <code>0xAA55</code> then the BIOS will jump to location <code>0x7C00</code> effectively transferring control to the bootloader. </p>
 <p>At this point the CPU is running in 16 bit mode, meaning only the 16 bit registers are available. Also since the BIOS only loads the first 512 bytes this means our bootloader code has to stay below that limit, otherwise we’ll hit uninitialised memory!</p>
 <p>Let’s get hello world printing to the screen. To do this we’re going to use the ‘Write Character in TTY mode’ <a href="https://en.wikipedia.org/wiki/BIOS_interrupt_call" target="_blank" rel="external">BIOS Interrupt Call</a> and the load string byte instruction <code>lobsb</code> which loads byte at address <code>ds:si</code> into <code>al</code>. Here goes:</p>
 <pre><code>bits 16 ; tell NASM this is 16 bit code
@@ -603,7 +606,7 @@ GL::UseProgram(shaderProgram);
 
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:3zanders.co.uk">
   </form>
 </div>
