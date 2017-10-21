@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Writing a Bootloader Part 3 | Alex Parker&#39;s Website</title>
+  <meta name="author" content="Alex Parker">
+  
+  <meta name="description" content="This third post describes how to go beyond 512 bytes and how to compile and load a C++ function into memory">
+  
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  <meta property="og:title" content="Writing a Bootloader Part 3"/>
+  <meta property="og:site_name" content="3zanders.co.uk"/>
+
+  <link href="/css/images/logo.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="3zanders.co.uk" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body>
+  <header id="header"><div id="headerinner">
+	<div class="alignleft">
+	<a href="/"><h1>
+		  	3zanders.co.uk<br/>
+		  	<small>Alex Parker&#39;s Website</small>
+	</h1></a>
+	</div>
+	<nav id="main-nav" class="alignright">
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/portfolio">Portfolio</a></li>
+	    
+	      <li><a href="/articles">Articles</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+	<div class="clearfix"></div>
+</div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2017-10-17T23:00:00.000Z"><a href="/2017/10/18/writing-a-bootloader3/">Oct 18 2017</a></time>
+      
+      
+  
+    <h1 class="title">Writing a Bootloader Part 3</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>In our <a href="/2017/10/16/writing-a-bootloader2/">previous article</a> we got our CPU into 32-bit protected mode and printed the screen using the directly mapped VGA memory. This time we’re going to compile and load a C++ function into memory and call it!</p>
+<h2 id="Going-beyond-512-bytes"><a href="#Going-beyond-512-bytes" class="headerlink" title="Going beyond 512 bytes"></a>Going beyond 512 bytes</h2><p>The BIOS only loads the first 512 bytes of the bootsector. If we want to write programs larger than 512 bytes (maybe you don’t want to and like a challenge?) we’re going to have to load more off the disk. To do this we’re going to use the <code>int 0x13</code> <a href="https://en.wikipedia.org/wiki/INT_13H" target="_blank" rel="external">interrupts</a> which provide disk services.</p>
+<p>The <code>ah=0x2 int 0x13</code> command reads sectors from a drive to a target location, like this:</p>
+<pre><code>mov ah, 0x2    ;read sectors
+mov al, 1      ;sectors to read
+mov ch, 0      ;cylinder idx
+mov dh, 0      ;head idx
+mov cl, 2      ;sector idx
+mov dl, [disk] ;disk idx
+mov bx, copy_target;target pointer
+int 0x13
+</code></pre><p>The disk number is implicitly placed into <code>dl</code> by the BIOS on startup. Earlier on we stashed it into memory with <code>mov [disk], dl</code>.</p>
+<p>So we can now load 512 bytes from the second sector into memory! Let’s make use of that and move the hello world printing code from <a href="/2017/10/13/writing-a-bootloader/boot2.asm">last time</a> beyond the first 512 bytes of disk. Like this:</p>
+<pre><code>times 510 - ($-$$) db 0
+dw 0xaa55
+copy_target:
+bits 32
+    hello: db &quot;Hello more than 512 bytes world!!&quot;,0
+boot2:
+    mov esi,hello
+    mov ebx,0xb8000
+.loop:
+    lodsb
+    or al,al
+    jz halt
+    or eax,0x0F00
+    mov word [ebx], ax
+    add ebx,2
+    jmp .loop
+halt:
+    cli
+    hlt
+times 1024 - ($-$$) db 0
+</code></pre><p>The last line pads our bootloader to 1024 bytes so we’re not copying uninitialised bytes from disk. It’s probably easiest to download <a href="/2017/10/13/writing-a-bootloader/boot3.asm">boot3.asm</a> directly. You can compile and run it with <code>nasm -f bin boot3.asm -o boot.bin &amp;&amp; qemu-system-x86_64 -fda boot.bin</code> getting this result:</p>
+<p><img src="/2017/10/13/writing-a-bootloader/boot3.png" alt="Hello more than 512 bytes world"></p>
+<h2 id="Getting-to-C"><a href="#Getting-to-C" class="headerlink" title="Getting to C++"></a>Getting to C++</h2><p>Next we’re going to load a C++ function that prints Hello world into memory and then call it from the bootloader. Here is the C++ function we want to compile:</p>
+<pre><code>extern &quot;C&quot; void kmain()
+{
+    const short color = 0x0F00;
+    const char* hello = &quot;Hello cpp world!&quot;;
+    short* vga = (short*)0xb8000;
+    for (int i = 0; i&lt;16;++i)
+        vga[i+80] = color | hello[i];
+}
+</code></pre><p>I’ve intentionally kept the function as simple as possible - it does almost the same thing as the assembly code. The <code>extern &quot;C&quot;</code> prevents C++ from <a href="https://en.wikipedia.org/wiki/Name_mangling#C.2B.2B" target="_blank" rel="external">name mangling</a> the function allowing us to call it from assembly.</p>
+<h2 id="Compiling-and-Linking"><a href="#Compiling-and-Linking" class="headerlink" title="Compiling and Linking"></a>Compiling and Linking</h2><p>We now need to compile and link this function. To do this safely we need to create a <a href="https://en.wikipedia.org/wiki/Cross_compiler" target="_blank" rel="external">cross compiler</a> - this is safer than using your system’s C++ compiler since we can be certain about what instruction set and function call method the compiler uses. I also can’t for the life of me convince clang to use a linker script and stop adding loads of OSX specific stuff. Since we’re building a 32 bit operating system we also want the compiler to output 32 bit instructions - not 64 bit ones!</p>
+<p>Compiling a cross compiler is an absolute pain - but luckily I’ve hacked a <a href="https://github.com/zanders3/homebrew-gcc_cross_compilers" target="_blank" rel="external">homebrew tap</a> you can use:</p>
+<pre><code>brew tap zanders3/homebrew-gcc_cross_compilers
+brew install --debug i386-elf-gcc
+</code></pre><p>Interestingly upgrading Mac OSX can mess gcc and all sorts of things up so try these commands if things fall over.</p>
+<pre><code>xcode-select --install
+brew reinstall gcc
+</code></pre><p>This will install <code>i386-elf-_g++</code> on your path which will compile and link stuff for us! Installing takes a while - you might want to grab a cuppa whilst it compiles.</p>
+<h2 id="Linker-Script"><a href="#Linker-Script" class="headerlink" title="Linker Script"></a>Linker Script</h2><p>We need to tell gcc how to link our cpp file and asm files together. We want the <code>boot4.asm</code> code positioned at offset <code>0x7c00</code> so that the 510th bytes equal <code>0xAA55</code> which makes it a valid bootsector. We then want all of the C++ code placed after that in the file.</p>
+<pre><code>ENTRY(boot)
+OUTPUT_FORMAT(&quot;binary&quot;)
+SECTIONS {
+    . = 0x7c00;
+    .text :
+    {
+        *(.boot)
+        *(.text)
+    }
+    .rodata :
+    {
+        *(.rodata)
+    }
+    .data :
+    {
+        *(.data)
+    }
+    .bss :
+    {
+        *(.bss)
+    }
+}
+</code></pre><p>The <code>ENTRY(boot)</code> means the entry point of the program is the <code>boot</code> symbol. <code>OUTPUT_FORMAT(&quot;binary&quot;)</code> tells <code>gcc</code> to output raw assembly directly. It will otherwise output a binary file in <a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format" target="_blank" rel="external">ELF</a>. The <code>. = 0x7c00</code> tells it to start outputting code at that offset, similar to the <code>org 0x7c00</code> command.</p>
+<h2 id="Calling-C-from-Assembly"><a href="#Calling-C-from-Assembly" class="headerlink" title="Calling C++ from Assembly"></a>Calling C++ from Assembly</h2><p>Next we need to modify our assembly so it can be linked with <code>gcc</code>. First we’re going to put everything in the <code>.boot</code> section so it’s placed first as well as define a global <code>boot:</code> symbol so the linker knows about the entry point.</p>
+<pre><code>section .boot
+bits 16
+global boot
+boot:
+</code></pre><p>Next we’ll hack the disk reading function call to load more than one sector:</p>
+<pre><code>mov al, 6      ;sectors to read
+</code></pre><p>Finally we set up a call stack for C++ to use and call the actual function. We reserve 16 KB for a kernel call stack.</p>
+<pre><code>mov esp,kernel_stack_top
+extern kmain
+call kmain
+cli
+hlt
+section .bss
+align 4
+kernel_stack_bottom: equ $
+    resb 16384 ; 16 KB
+kernel_stack_top:
+</code></pre><p>That’s it. We’re ready to compile and run this thing! Here are my versions of <a href="/2017/10/13/writing-a-bootloader/linker.ld">the linker script</a>, <a href="/2017/10/13/writing-a-bootloader/kmain.cpp">cpp file</a> and <a href="/2017/10/13/writing-a-bootloader/boot4.asm">bootsector assembly</a>!</p>
+<h2 id="Compiling-and-Running"><a href="#Compiling-and-Running" class="headerlink" title="Compiling and Running"></a>Compiling and Running</h2><p>You want to compile the assembly, then link it all together.</p>
+<pre><code>nasm -f elf32 boot4.asm -o boot4.o
+i386-elf-_g++ x86_64-elf-g++ -m64 kmain.cpp boot4.o -o kernel.bin -nostdlib -ffreestanding -std=c++11 -mno-red-zone -fno-exceptions -nostdlib -fno-rtti -Wall -Wextra -Werror -T linker.ld
+</code></pre><p>We can run <code>hexdump kernel.bin</code> to check it did the right thing:</p>
+<pre><code>0000000 b8 01 24 cd 15 b8 03 00 cd 10 88 16 61 7c b4 02
+0000010 b0 06 b5 00 b6 00 b1 02 8a 16 61 7c bb 00 7e cd
+0000020 13 fa 0f 01 16 5b 7c 0f 20 c0 66 83 c8 01 0f 22
+0000030 c0 b8 10 00 8e d8 8e c0 8e e0 8e e8 8e d0 ea 22
+0000040 7e 08 00 00 00 00 00 00 00 00 00 ff ff 00 00 00
+0000050 9a cf 00 ff ff 00 00 00 92 cf 00 18 00 43 7c 00
+0000060 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+*
+00001f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 55 aa
+0000200 48 65 6c 6c 6f 20 6d 6f 72 65 20 74 68 61 6e 20
+0000210 35 31 32 20 62 79 74 65 73 20 77 6f 72 6c 64 21
+0000220 21 00 be 00 7e 00 00 bb 00 80 0b 00 ac 08 c0 74
+0000230 0d 0d 00 0f 00 00 66 89 03 83 c3 02 eb ee bc f8
+0000240 be 00 00 e8 02 00 00 00 fa f4 55 48 89 e5 48 83
+0000250 ec 20 c7 45 f8 00 0f 00 00 48 c7 45 f0 ad 7e 00
+0000260 00 48 c7 45 e8 00 80 0b 00 c7 45 fc 00 00 00 00
+0000270 83 7d fc 0f 7f 34 8b 45 fc 48 63 d0 48 8b 45 f0
+0000280 48 01 d0 0f b6 00 66 98 80 cc 0f 89 c2 8b 45 fc
+0000290 48 98 48 83 c0 50 48 8d 0c 00 48 8b 45 e8 48 01
+00002a0 c8 66 89 10 83 45 fc 01 eb c6 90 c9 c3 48 65 6c
+00002b0 6c 6f 20 63 70 70 20 77 6f 72 6c 64 21 00 00 00
+00002c0 14 00 00 00 00 00 00 00 01 7a 52 00 01 78 10 01
+00002d0 1b 0c 07 08 90 01 00 00 1c 00 00 00 1c 00 00 00
+00002e0 6a ff ff ff 63 00 00 00 00 41 0e 10 86 02 43 0d
+00002f0 06 02 5e c6 0c 07 08 00                        
+00002f8
+</code></pre><p>Note the <code>55 aa</code> there near offset <code>0x200</code>? That means it’s a valid bootsector! Let’s try running it with <code>qemu-system-x86_64 -fda kernel.bin</code> and you should get this result.</p>
+<p><img src="/2017/10/13/writing-a-bootloader/boot4.png" alt="Our Hello CPP world bootloader"></p>
+<h2 id="Wrapping-Up"><a href="#Wrapping-Up" class="headerlink" title="Wrapping Up"></a>Wrapping Up</h2><p>That concludes this tutorial series! I hope this was useful to you.</p>
+<p>There many more interesting low level things to explore such as setting up <a href="http://wiki.osdev.org/Paging" target="_blank" rel="external">virtual memory</a>, handling <a href="http://wiki.osdev.org/Interrupts" target="_blank" rel="external">interrupts</a> and writing your very own memory allocator! I hope to start exploring these in the future.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Articles/">Articles</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/C/">C</a>, <a href="/tags/OSdev/">OSdev</a>, <a href="/tags/asm/">asm</a>
+  </div>
+
+        <!---->
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:3zanders.co.uk">
+  </form>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Portfolio</h3>
+  <ul class="entry">
+  
+    <li><a href="/2009/06/10/PlayWithYourPeas/">PlayWithYourPeas</a></li>
+  
+    <li><a href="/2009/08/09/Book-Galaxy/">Book Galaxy</a></li>
+  
+    <li><a href="/2011/05/11/Detour/">Detour</a></li>
+  
+    <li><a href="/2011/11/12/Trapped/">Trapped</a></li>
+  
+    <li><a href="/2011/11/25/Kinect-Sports-Season-Two/">Kinect Sports: Season Two</a></li>
+  
+    <li><a href="/2012/04/12/Wikitime/">Wikitime</a></li>
+  
+    <li><a href="/2012/12/12/CSR-Racing/">CSR Racing</a></li>
+  
+    <li><a href="/2013/01/27/Dungeon-Heart/">Dungeon Heart</a></li>
+  
+    <li><a href="/2013/10/05/CSR-Classics/">CSR Classics</a></li>
+  
+    <li><a href="/2014/03/15/allRGB/">allRGB Rainbow Fractal</a></li>
+  
+    <li><a href="/2015/09/25/JSONParser/">C# JSON Parser</a></li>
+  
+    <li><a href="/2016/07/10/GLWT/">GLWT</a></li>
+  
+    <li><a href="/2017/08/03/GBemulator/">GB Emulator</a></li>
+  
+  </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Articles</h3>
+  <ul class="entry">
+  
+    <li><a href="/2014/02/19/modern-opengl-a-tutorial/">Modern Open GL Drawing a Triangle</a></li>
+  
+    <li><a href="/2014/08/31/new-beginnings/">New Shiny</a></li>
+  
+    <li><a href="/2017/10/13/writing-a-bootloader/">Writing a Bootloader Part 1</a></li>
+  
+    <li><a href="/2017/10/16/writing-a-bootloader2/">Writing a Bootloader Part 2</a></li>
+  
+    <li><a href="/2017/10/18/writing-a-bootloader3/">Writing a Bootloader Part 3</a></li>
+  
+  </ul>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Actionscript/">Actionscript</a><small>1</small></li>
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/C/">C</a><small>4</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>7</small></li>
+  
+    <li><a href="/tags/C/">C++</a><small>6</small></li>
+  
+    <li><a href="/tags/DirectX/">DirectX</a><small>1</small></li>
+  
+    <li><a href="/tags/HLSL/">HLSL</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Javascript/">Javascript</a><small>1</small></li>
+  
+    <li><a href="/tags/Lucene/">Lucene</a><small>1</small></li>
+  
+    <li><a href="/tags/OSX/">OSX</a><small>1</small></li>
+  
+    <li><a href="/tags/OSdev/">OSdev</a><small>3</small></li>
+  
+    <li><a href="/tags/Objective-C/">Objective-C</a><small>1</small></li>
+  
+    <li><a href="/tags/OpenGL/">OpenGL</a><small>1</small></li>
+  
+    <li><a href="/tags/Unity/">Unity</a><small>4</small></li>
+  
+    <li><a href="/tags/XNA/">XNA</a><small>1</small></li>
+  
+    <li><a href="/tags/Xbox-360/">Xbox 360</a><small>1</small></li>
+  
+    <li><a href="/tags/asm/">asm</a><small>3</small></li>
+  
+    <li><a href="/tags/iOS/">iOS</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer"><div id="footerinner">
+	<p style="float:right">
+		Built with <a href="http://hexo.io/">Hexo</a><br/>
+		Hosted on <a href="https://github.com/zanders3/zanders3.github.com">GitHub Pages</a>
+	</p>
+	<p>
+		<a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a> | <a href="http://www.github.com/zanders3">GitHub</a>
+	</p>
+	<p>&copy; 2017 Alex Parker</p>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

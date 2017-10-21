@@ -1,0 +1,738 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Articles | Alex Parker&#39;s Website</title>
+  <meta name="author" content="Alex Parker">
+  
+  <meta name="description" content="Alex Parker&#39;s Portfolio and Articles">
+  
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  
+  <meta property="og:site_name" content="3zanders.co.uk"/>
+
+  <link href="/css/images/logo.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="3zanders.co.uk" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body>
+  <header id="header"><div id="headerinner">
+	<div class="alignleft">
+	<a href="/"><h1>
+		  	3zanders.co.uk<br/>
+		  	<small>Alex Parker&#39;s Website</small>
+	</h1></a>
+	</div>
+	<nav id="main-nav" class="alignright">
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/portfolio">Portfolio</a></li>
+	    
+	      <li><a href="/articles">Articles</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+	<div class="clearfix"></div>
+</div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title category">Articles</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2017-10-17T23:00:00.000Z"><a href="/2017/10/18/writing-a-bootloader3/">Oct 18 2017</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2017/10/18/writing-a-bootloader3/">Writing a Bootloader Part 3</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>In our <a href="/2017/10/16/writing-a-bootloader2/">previous article</a> we got our CPU into 32-bit protected mode and printed the screen using the directly mapped VGA memory. This time we’re going to compile and load a C++ function into memory and call it!</p>
+<h2 id="Going-beyond-512-bytes"><a href="#Going-beyond-512-bytes" class="headerlink" title="Going beyond 512 bytes"></a>Going beyond 512 bytes</h2><p>The BIOS only loads the first 512 bytes of the bootsector. If we want to write programs larger than 512 bytes (maybe you don’t want to and like a challenge?) we’re going to have to load more off the disk. To do this we’re going to use the <code>int 0x13</code> <a href="https://en.wikipedia.org/wiki/INT_13H" target="_blank" rel="external">interrupts</a> which provide disk services.</p>
+<p>The <code>ah=0x2 int 0x13</code> command reads sectors from a drive to a target location, like this:</p>
+<pre><code>mov ah, 0x2    ;read sectors
+mov al, 1      ;sectors to read
+mov ch, 0      ;cylinder idx
+mov dh, 0      ;head idx
+mov cl, 2      ;sector idx
+mov dl, [disk] ;disk idx
+mov bx, copy_target;target pointer
+int 0x13
+</code></pre><p>The disk number is implicitly placed into <code>dl</code> by the BIOS on startup. Earlier on we stashed it into memory with <code>mov [disk], dl</code>.</p>
+<p>So we can now load 512 bytes from the second sector into memory! Let’s make use of that and move the hello world printing code from <a href="/2017/10/13/writing-a-bootloader/boot2.asm">last time</a> beyond the first 512 bytes of disk. Like this:</p>
+<pre><code>times 510 - ($-$$) db 0
+dw 0xaa55
+copy_target:
+bits 32
+    hello: db &quot;Hello more than 512 bytes world!!&quot;,0
+boot2:
+    mov esi,hello
+    mov ebx,0xb8000
+.loop:
+    lodsb
+    or al,al
+    jz halt
+    or eax,0x0F00
+    mov word [ebx], ax
+    add ebx,2
+    jmp .loop
+halt:
+    cli
+    hlt
+times 1024 - ($-$$) db 0
+</code></pre><p>The last line pads our bootloader to 1024 bytes so we’re not copying uninitialised bytes from disk. It’s probably easiest to download <a href="/2017/10/13/writing-a-bootloader/boot3.asm">boot3.asm</a> directly. You can compile and run it with <code>nasm -f bin boot3.asm -o boot.bin &amp;&amp; qemu-system-x86_64 -fda boot.bin</code> getting this result:</p>
+<p><img src="/2017/10/13/writing-a-bootloader/boot3.png" alt="Hello more than 512 bytes world"></p>
+<h2 id="Getting-to-C"><a href="#Getting-to-C" class="headerlink" title="Getting to C++"></a>Getting to C++</h2><p>Next we’re going to load a C++ function that prints Hello world into memory and then call it from the bootloader. Here is the C++ function we want to compile:</p>
+<pre><code>extern &quot;C&quot; void kmain()
+{
+    const short color = 0x0F00;
+    const char* hello = &quot;Hello cpp world!&quot;;
+    short* vga = (short*)0xb8000;
+    for (int i = 0; i&lt;16;++i)
+        vga[i+80] = color | hello[i];
+}
+</code></pre><p>I’ve intentionally kept the function as simple as possible - it does almost the same thing as the assembly code. The <code>extern &quot;C&quot;</code> prevents C++ from <a href="https://en.wikipedia.org/wiki/Name_mangling#C.2B.2B" target="_blank" rel="external">name mangling</a> the function allowing us to call it from assembly.</p>
+<h2 id="Compiling-and-Linking"><a href="#Compiling-and-Linking" class="headerlink" title="Compiling and Linking"></a>Compiling and Linking</h2><p>We now need to compile and link this function. To do this safely we need to create a <a href="https://en.wikipedia.org/wiki/Cross_compiler" target="_blank" rel="external">cross compiler</a> - this is safer than using your system’s C++ compiler since we can be certain about what instruction set and function call method the compiler uses. I also can’t for the life of me convince clang to use a linker script and stop adding loads of OSX specific stuff. Since we’re building a 32 bit operating system we also want the compiler to output 32 bit instructions - not 64 bit ones!</p>
+<p>Compiling a cross compiler is an absolute pain - but luckily I’ve hacked a <a href="https://github.com/zanders3/homebrew-gcc_cross_compilers" target="_blank" rel="external">homebrew tap</a> you can use:</p>
+<pre><code>brew tap zanders3/homebrew-gcc_cross_compilers
+brew install --debug i386-elf-gcc
+</code></pre><p>Interestingly upgrading Mac OSX can mess gcc and all sorts of things up so try these commands if things fall over.</p>
+<pre><code>xcode-select --install
+brew reinstall gcc
+</code></pre><p>This will install <code>i386-elf-_g++</code> on your path which will compile and link stuff for us! Installing takes a while - you might want to grab a cuppa whilst it compiles.</p>
+<h2 id="Linker-Script"><a href="#Linker-Script" class="headerlink" title="Linker Script"></a>Linker Script</h2><p>We need to tell gcc how to link our cpp file and asm files together. We want the <code>boot4.asm</code> code positioned at offset <code>0x7c00</code> so that the 510th bytes equal <code>0xAA55</code> which makes it a valid bootsector. We then want all of the C++ code placed after that in the file.</p>
+<pre><code>ENTRY(boot)
+OUTPUT_FORMAT(&quot;binary&quot;)
+SECTIONS {
+    . = 0x7c00;
+    .text :
+    {
+        *(.boot)
+        *(.text)
+    }
+    .rodata :
+    {
+        *(.rodata)
+    }
+    .data :
+    {
+        *(.data)
+    }
+    .bss :
+    {
+        *(.bss)
+    }
+}
+</code></pre><p>The <code>ENTRY(boot)</code> means the entry point of the program is the <code>boot</code> symbol. <code>OUTPUT_FORMAT(&quot;binary&quot;)</code> tells <code>gcc</code> to output raw assembly directly. It will otherwise output a binary file in <a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format" target="_blank" rel="external">ELF</a>. The <code>. = 0x7c00</code> tells it to start outputting code at that offset, similar to the <code>org 0x7c00</code> command.</p>
+<h2 id="Calling-C-from-Assembly"><a href="#Calling-C-from-Assembly" class="headerlink" title="Calling C++ from Assembly"></a>Calling C++ from Assembly</h2><p>Next we need to modify our assembly so it can be linked with <code>gcc</code>. First we’re going to put everything in the <code>.boot</code> section so it’s placed first as well as define a global <code>boot:</code> symbol so the linker knows about the entry point.</p>
+<pre><code>section .boot
+bits 16
+global boot
+boot:
+</code></pre><p>Next we’ll hack the disk reading function call to load more than one sector:</p>
+<pre><code>mov al, 6      ;sectors to read
+</code></pre><p>Finally we set up a call stack for C++ to use and call the actual function. We reserve 16 KB for a kernel call stack.</p>
+<pre><code>mov esp,kernel_stack_top
+extern kmain
+call kmain
+cli
+hlt
+section .bss
+align 4
+kernel_stack_bottom: equ $
+    resb 16384 ; 16 KB
+kernel_stack_top:
+</code></pre><p>That’s it. We’re ready to compile and run this thing! Here are my versions of <a href="/2017/10/13/writing-a-bootloader/linker.ld">the linker script</a>, <a href="/2017/10/13/writing-a-bootloader/kmain.cpp">cpp file</a> and <a href="/2017/10/13/writing-a-bootloader/boot4.asm">bootsector assembly</a>!</p>
+<h2 id="Compiling-and-Running"><a href="#Compiling-and-Running" class="headerlink" title="Compiling and Running"></a>Compiling and Running</h2><p>You want to compile the assembly, then link it all together.</p>
+<pre><code>nasm -f elf32 boot4.asm -o boot4.o
+i386-elf-_g++ x86_64-elf-g++ -m64 kmain.cpp boot4.o -o kernel.bin -nostdlib -ffreestanding -std=c++11 -mno-red-zone -fno-exceptions -nostdlib -fno-rtti -Wall -Wextra -Werror -T linker.ld
+</code></pre><p>We can run <code>hexdump kernel.bin</code> to check it did the right thing:</p>
+<pre><code>0000000 b8 01 24 cd 15 b8 03 00 cd 10 88 16 61 7c b4 02
+0000010 b0 06 b5 00 b6 00 b1 02 8a 16 61 7c bb 00 7e cd
+0000020 13 fa 0f 01 16 5b 7c 0f 20 c0 66 83 c8 01 0f 22
+0000030 c0 b8 10 00 8e d8 8e c0 8e e0 8e e8 8e d0 ea 22
+0000040 7e 08 00 00 00 00 00 00 00 00 00 ff ff 00 00 00
+0000050 9a cf 00 ff ff 00 00 00 92 cf 00 18 00 43 7c 00
+0000060 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+*
+00001f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 55 aa
+0000200 48 65 6c 6c 6f 20 6d 6f 72 65 20 74 68 61 6e 20
+0000210 35 31 32 20 62 79 74 65 73 20 77 6f 72 6c 64 21
+0000220 21 00 be 00 7e 00 00 bb 00 80 0b 00 ac 08 c0 74
+0000230 0d 0d 00 0f 00 00 66 89 03 83 c3 02 eb ee bc f8
+0000240 be 00 00 e8 02 00 00 00 fa f4 55 48 89 e5 48 83
+0000250 ec 20 c7 45 f8 00 0f 00 00 48 c7 45 f0 ad 7e 00
+0000260 00 48 c7 45 e8 00 80 0b 00 c7 45 fc 00 00 00 00
+0000270 83 7d fc 0f 7f 34 8b 45 fc 48 63 d0 48 8b 45 f0
+0000280 48 01 d0 0f b6 00 66 98 80 cc 0f 89 c2 8b 45 fc
+0000290 48 98 48 83 c0 50 48 8d 0c 00 48 8b 45 e8 48 01
+00002a0 c8 66 89 10 83 45 fc 01 eb c6 90 c9 c3 48 65 6c
+00002b0 6c 6f 20 63 70 70 20 77 6f 72 6c 64 21 00 00 00
+00002c0 14 00 00 00 00 00 00 00 01 7a 52 00 01 78 10 01
+00002d0 1b 0c 07 08 90 01 00 00 1c 00 00 00 1c 00 00 00
+00002e0 6a ff ff ff 63 00 00 00 00 41 0e 10 86 02 43 0d
+00002f0 06 02 5e c6 0c 07 08 00                        
+00002f8
+</code></pre><p>Note the <code>55 aa</code> there near offset <code>0x200</code>? That means it’s a valid bootsector! Let’s try running it with <code>qemu-system-x86_64 -fda kernel.bin</code> and you should get this result.</p>
+<p><img src="/2017/10/13/writing-a-bootloader/boot4.png" alt="Our Hello CPP world bootloader"></p>
+<h2 id="Wrapping-Up"><a href="#Wrapping-Up" class="headerlink" title="Wrapping Up"></a>Wrapping Up</h2><p>That concludes this tutorial series! I hope this was useful to you.</p>
+<p>There many more interesting low level things to explore such as setting up <a href="http://wiki.osdev.org/Paging" target="_blank" rel="external">virtual memory</a>, handling <a href="http://wiki.osdev.org/Interrupts" target="_blank" rel="external">interrupts</a> and writing your very own memory allocator! I hope to start exploring these in the future.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2017-10-15T23:00:00.000Z"><a href="/2017/10/16/writing-a-bootloader2/">Oct 16 2017</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2017/10/16/writing-a-bootloader2/">Writing a Bootloader Part 2</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>In our <a href="/2017/10/13/writing-a-bootloader/">previous article</a> we described how to write a bootloader that prints ‘Hello World!’ to the screen in 16bit Real Mode. We’re now going to one up ourselves and print ‘Hello World!’ from 32 bit Protected Mode!</p>
+<h2 id="Entering-32-bit-Mode"><a href="#Entering-32-bit-Mode" class="headerlink" title="Entering 32-bit Mode"></a>Entering 32-bit Mode</h2><p>In our previous article the CPU was still in Real Mode - this means you can call BIOS functions via interrupts, use 16 bit instructions and address up to 1 megabyte of memory (unless you use segment addressing). To access more than 1MB of memory we’re going to enable the <a href="http://wiki.osdev.org/A20_Line" target="_blank" rel="external">A20 line</a> by calling the ‘A20-Gate activate’ function. To do this we’ll create a new file called <code>boot2.asm</code> and put this in there:</p>
+<pre><code>bits 16
+org 0x7c00
+
+boot:
+    mov ax, 0x2401
+    int 0x15 ; enable A20 bit
+</code></pre><p>Whilst we’re here we’ll also set the VGA text mode to a known value to be safe. Who knows what the BIOS set it to!</p>
+<pre><code>mov ax, 0x3
+int 0x10 ; set vga text mode 3
+</code></pre><p>Next we’ll enable 32 bit instructions and access to the full bit 32 registers by entering Protected Mode. To do this we need to set up a <a href="http://wiki.osdev.org/GDT" target="_blank" rel="external">Global Descriptor Table</a> which will define a 32 bit code segment, load it with the <code>lgdt</code> instruction then do a long jump to that code segment.</p>
+<pre><code>lgdt [gdt_pointer] ; load the gdt table
+mov eax, cr0 
+or eax,0x1 ; set the protected mode bit on special CPU reg cr0
+mov cr0, eax
+jmp CODE_SEG:boot2 ; long jump to the code segment
+</code></pre><h2 id="Global-Descriptor-Table"><a href="#Global-Descriptor-Table" class="headerlink" title="Global Descriptor Table"></a>Global Descriptor Table</h2><p>The GDT we’re going to set up involves 3 parts: a null segment, a code segment and a data segment. The structure of each GDT entry looks like this:</p>
+<p><img src="/2017/10/13/writing-a-bootloader/gdt.png" alt="GDT Entry Layout"></p>
+<p>Here’s what the fields mean:</p>
+<ul>
+<li><strong>base</strong> a 32 bit value describing where the segment begins</li>
+<li><strong>limit</strong> a 20 bit value describing where the segment ends, can be multiplied by 4096 if <strong>granularity</strong> = 1</li>
+<li><strong>present</strong> must be 1 for the entry to be valid</li>
+<li><strong>ring level</strong> an int between 0-3 indicating the kernel <a href="http://wiki.osdev.org/Security#Rings" target="_blank" rel="external">Ring Level</a></li>
+<li><strong>direction</strong> <ul>
+<li>0 = segment grows up from base, 1 = segment grows down for a data segment</li>
+<li>0 = can only execute from ring level, 1 = prevent jumping to higher ring levels</li>
+</ul>
+</li>
+<li><strong>read/write</strong> if you can read/write to this segment</li>
+<li><strong>accessed</strong> if the CPU has accessed this segment</li>
+<li><strong>granularity</strong> 0 = limit is in 1 byte blocks, 1 = limit is multiples of 4KB blocks</li>
+<li><strong>size</strong> 0 = 16 bit mode, 1 = 32 bit protected mode</li>
+</ul>
+<p>We’ll define this directly in assembly:</p>
+<pre><code>gdt_start:
+    dq 0x0
+gdt_code:
+    dw 0xFFFF
+    dw 0x0
+    db 0x0
+    db 10011010b
+    db 11001111b
+    db 0x0
+gdt_data:
+    dw 0xFFFF
+    dw 0x0
+    db 0x0
+    db 10010010b
+    db 11001111b
+    db 0x0
+gdt_end:
+</code></pre><p>To actually load this we also need a gdt pointer structure. This is a 16 bit field containing the GDT size followed by a 32 bit pointer to the structure itself. We’ll also define the <code>CODE_SEG</code> and <code>DATA_SEG</code> value which are offsets into the gdt for use later:</p>
+<pre><code>gdt_pointer:
+    dw gdt_end - gdt_start
+    dd gdt_start
+CODE_SEG equ gdt_code - gdt_start
+DATA_SEG equ gdt_data - gdt_start
+</code></pre><p>At this point we have enough to get into 32-bit mode! Let’s tell nasm to output 32 bit now. We’ll also set the remaining segments to point at the data segment.</p>
+<pre><code>bits 32
+boot2:
+    mov ax, DATA_SEG
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+</code></pre><h2 id="Writing-to-the-VGA-Text-Buffer"><a href="#Writing-to-the-VGA-Text-Buffer" class="headerlink" title="Writing to the VGA Text Buffer"></a>Writing to the VGA Text Buffer</h2><p>Finally let’s write ‘Hello world!’ to the screen from Protected Mode! We can’t call the BIOS any more but we can write to the <a href="https://en.wikipedia.org/wiki/VGA-compatible_text_mode" target="_blank" rel="external">VGA text buffer</a> directly. This is memory mapped to location <code>0xb8000</code>. Each character on screen has this layout:</p>
+<p><img src="/2017/10/13/writing-a-bootloader/vga.png" alt="VGA Character Layout"></p>
+<p>The top byte defines the <a href="https://en.wikipedia.org/wiki/Video_Graphics_Array#Color_palette" target="_blank" rel="external">character colour</a> in the buffer as an int value from 0-15 with 0 = black, 1 = blue and 15 = white. The bottom byte defines an <a href="http://www.asciitable.com/" target="_blank" rel="external">ASCII</a> code point. Using this information we can write some assembly that writes ‘Hello World’ in blue text:</p>
+<pre><code>    mov esi,hello
+    mov ebx,0xb8000
+.loop:
+    lodsb
+    or al,al
+    jz halt
+    or eax,0x0100
+    mov word [ebx], ax
+    add ebx,2
+    jmp .loop
+halt:
+    cli
+    hlt
+hello: db &quot;Hello world!&quot;,0
+</code></pre><h2 id="Let’s-run-the-thing"><a href="#Let’s-run-the-thing" class="headerlink" title="Let’s run the thing!"></a>Let’s run the thing!</h2><p>We finally have everything! Save the whole thing as a <code>boot2.asm</code> file (<a href="/2017/10/13/writing-a-bootloader/boot2.asm">source available here</a>) then run it with <code>nasm -f bin boot2.asm &amp;&amp; qemu-system-x86_64 -fda boot.bin</code>. You should get something like this!</p>
+<p><img src="/2017/10/13/writing-a-bootloader/boot2.png" alt="Protected Mode Hello World"></p>
+<h2 id="Next-Steps"><a href="#Next-Steps" class="headerlink" title="Next Steps"></a>Next Steps</h2><p>Amazing! In <a href="/2017/10/18/writing-a-bootloader3/">part 3</a> of this series we’ll look at loading a C++ function that we’ve compiled into memory and then call it from our bootloader. Almost there!</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2017-10-12T23:00:00.000Z"><a href="/2017/10/13/writing-a-bootloader/">Oct 13 2017</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2017/10/13/writing-a-bootloader/">Writing a Bootloader Part 1</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>This article series explains how to write a tiny 32-bit x86 operating system kernel. We won’t do very much other than print <code>Hello world!</code> to the screen in increasingly complicated ways! We’ll start off in assembly and then build up to writing C++!</p>
+<p>A <a href="/2017/10/13/writing-a-bootloader/writingabootloader.pdf">presentation</a> of this article series is also available.</p>
+<p>To follow along you’re going to need the NASM assembler and <a href="https://www.qemu.org/" target="_blank" rel="external">QEMU</a> to emulate a virtual machine for us. QEMU is great because you don’t have to worry about accidentally destroying your hardware with badly written OS code ;) You can install these on <a href="https://msdn.microsoft.com/en-gb/commandline/wsl/install_guide" target="_blank" rel="external">Windows Subsystem for Linux</a> or Ubuntu with this command:</p>
+<pre><code>sudo apt-get install nasm qemu
+</code></pre><p>On a mac you can use homebrew:</p>
+<pre><code>brew install nasm
+</code></pre><h2 id="A-Hello-World-Bootloader"><a href="#A-Hello-World-Bootloader" class="headerlink" title="A Hello World Bootloader"></a>A Hello World Bootloader</h2><p>When you press the power button the computer loads the BIOS from some flash memory stored on the motherboard. The BIOS initializes and self tests the hardware then loads the first 512 bytes into memory from the media device (i.e. the cdrom or floppy disk). If the last two bytes equal <code>0xAA55</code> then the BIOS will jump to location <code>0x7C00</code> effectively transferring control to the bootloader. </p>
+<p>At this point the CPU is running in 16 bit mode, meaning only the 16 bit registers are available. Also since the BIOS only loads the first 512 bytes this means our bootloader code has to stay below that limit, otherwise we’ll hit uninitialised memory!</p>
+<p>Let’s get hello world printing to the screen. To do this we’re going to use the ‘Write Character in TTY mode’ <a href="https://en.wikipedia.org/wiki/BIOS_interrupt_call" target="_blank" rel="external">BIOS Interrupt Call</a> and the load string byte instruction <code>lobsb</code> which loads byte at address <code>ds:si</code> into <code>al</code>. Here goes:</p>
+<pre><code>bits 16 ; tell NASM this is 16 bit code
+org 0x7c00 ; tell NASM to start outputting stuff at offset 0x7c00
+boot:
+    mov si,hello ; point si register to hello label memory location
+    mov ah,0x0e ; 0x0e means &apos;Write Character in TTY mode&apos;
+.loop:
+    lodsb
+    or al,al ; is al == 0 ?
+    jz halt  ; if (al == 0) jump to halt label
+    int 0x10 ; runs BIOS interrupt 0x10 - Video Services
+    jmp .loop
+halt:
+    cli ; clear interrupt flag
+    hlt ; halt execution
+hello: db &quot;Hello world!&quot;,0
+
+times 510 - ($-$$) db 0 ; pad remaining 510 bytes with zeroes
+dw 0xaa55 ; magic bootloader magic - marks this 512 byte sector bootable!
+</code></pre><p>If you save this file as <code>boot1.asm</code> (or <a href="/2017/10/13/writing-a-bootloader/boot1.asm">download it here</a>) we can now use <code>nasm</code> to compile it:</p>
+<pre><code>nasm -f bin boot1.asm -o boot1.bin
+</code></pre><p>If we run <code>hexdump boot1.bin</code> we can see that NASM created some code, padded some zeros then set the final two bytes to the magic number.</p>
+<pre><code>0000000 be 10 7c b4 0e ac 08 c0 74 04 cd 10 eb f7 fa f4
+0000010 48 65 6c 6c 6f 20 77 6f 72 6c 64 21 00 00 00 00
+0000020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+*
+00001f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 55 aa
+0000200
+</code></pre><p>We can now run this thing! You can tell QEMU to boot off a floppy disk using <code>qemu-system-x86_64 -fda boot1.bin</code> on Windows 10 you might need to stick <code>DISPLAY=:0</code> in front to open the window from WSL. You should get something like this!</p>
+<p><img src="/2017/10/13/writing-a-bootloader/boot1.png" alt="Our Hello World bootloader"></p>
+<h2 id="Next-Steps"><a href="#Next-Steps" class="headerlink" title="Next Steps"></a>Next Steps</h2><p>Next we can start investigating getting into Protected Mode in <a href="/2017/10/16/writing-a-bootloader2/">Part 2</a>!</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2014-08-30T23:00:00.000Z"><a href="/2014/08/31/new-beginnings/">Aug 31 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/08/31/new-beginnings/">New Shiny</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><img src="/2014/08/31/new-beginnings/giphy.gif" alt=""></p>
+<p>Hi there!</p>
+<p>I’ve taken the time to update my website again. This time I’ve kept the theme the same (so hopefully you won’t notice that too much has changed) but I’ve moved away from an <a href="https://angularjs.org/" target="_blank" rel="external">Angular JS</a> based site to a static one built using <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>. This should make adding new articles and portfolio bits much easier!</p>
+<p>I’ve gone through all of my old portfolio stuff and cleaned it up and tidied everything up a bit. Have a look around!</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2014-02-19T00:00:00.000Z"><a href="/2014/02/19/modern-opengl-a-tutorial/">Feb 19 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/02/19/modern-opengl-a-tutorial/">Modern Open GL Drawing a Triangle</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>So. Let’s talk about OpenGL. What a mess when you compare it with how DirectX has evolved over the years. I first learnt the intricacies of the DirectX API with the <a href="http://xbox.create.msdn.com/en-US/" target="_blank" rel="external">XNA</a> framework which I used to create some simple games. This messing led me to start experimenting with shaders, ultimately leading to my work on <a href="http://www.sandswept.net/games/detour" target="_blank" rel="external">Detour</a> which had lots of fancy things like local point lights, realtime shadows, water reflection, particle systems and postprocessing effects.</p>
+<p>One of the major problems with the DirectX API is that it only works on Windows. Microsoft no longer has the massive monopoly that it used to have and people expect games these days to run on every flavour of platform (Windows, Linux, OSX to name a few). So in practical terms this means you have to use OpenGL; an API that is supposed to work on every platform. What a brilliant idea! So.. how hard can it be to use OpenGL?</p>
+<h2 id="Drawing-a-Triangle-to-the-Screen"><a href="#Drawing-a-Triangle-to-the-Screen" class="headerlink" title="Drawing a Triangle to the Screen"></a>Drawing a Triangle to the Screen</h2><p>Lets try something simple, like drawing a triangle to the screen. Sounds good!</p>
+<p>First we need to open a window. This part is platform specific, and people usually resort to a libraries like <a href="http://www.glfw.org/" target="_blank" rel="external">GLFW</a>, <a href="http://glew.sourceforge.net/" target="_blank" rel="external">GLEW</a> and <a href="http://www.opengl.org/resources/libraries/glut/" target="_blank" rel="external">GLUT</a> to handle things like creating a window, loading the OpenGL functions and handling mouse and keyboard input. For this post I’ll be using my own library I’ve cooked up called <a href="https://github.com/zanders3/glwt" target="_blank" rel="external">GLWT</a>, the OpenGL Window Toolkit! The toolkit is very much a work in progress but enough stuff is working for me to be able to write this post. It only works for Macs at the moment, but I plan to make it work on Windows and Linux eventually.</p>
+<p>Next we need to think about which version of the OpenGL API to use. OpenGL has a long history and a lot of old applications use the old, immediate mode API. These are the functions that pop up everywhere whenever you type ‘OpenGL tutorial’ into Google. For example, this is the old way of drawing a triangle to a screen:</p>
+<pre><code>void Draw()
+{
+    glBegin(GL_TRIANGLE_STRIP);
+    glVertex2f(0.0f, 0.75f);
+    glVertex2f(-0.5f, 0.25f);
+    glVertex2f(0.5f, 0.25f);
+    glEnd();
+}
+</code></pre><p>The code above, whilst simple, is innefficient since you have to copy the triangles from the CPU to GPU every single frame. You also get loads of function calls and User -&gt; Kernel mode switches. You can’t do cool things with this setup like vertex and pixel/fragment shaders, or geometry shaders, or render to a texture, or add realtime shadows, etc. Ouch.</p>
+<p>So what’s the solution? OpenGL Core Profile! This removes all of the old fixed pipeline calls and replaces them with buffer objects which you only update when you need to. It is a <em>lot</em> more complicated, but you can do way more cool stuff. Here’s how you draw a triangle to the screen:</p>
+<pre><code>struct Vertex
+{
+    float x, y, z;
+};
+
+GLuint vertexBuffer, indexBuffer, vertexLayout;
+
+bool Game::Setup(int argc, const char** argv)
+{
+    Window::Open(800, 600, false, &quot;Hello World!&quot;);
+
+    GL::ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    Vertex verts[] =
+    {
+        { 0.0f, 0.75f, 0.0f },
+        { -0.5f, 0.25f, 0.0f },
+        { 0.5f, 0.25f, 0.0f }
+    };
+    unsigned short inds[] =
+    {
+        0, 1, 2
+    };
+
+    //Create the vertex buffer object, then set it as the current buffer, then copy the vertex data onto it.
+    GL::GenBuffers(1, &amp;vertexBuffer);
+    GL::BindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    GL::BufferData(GL_ARRAY_BUFFER, sizeof(verts), &amp;verts, GL_STATIC_DRAW);
+
+    //Create the index buffer object, set it as the current index buffer, then copy index data to it.
+    GL::GenBuffers(1, &amp;indexBuffer);
+    GL::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    GL::BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(inds), &amp;inds, GL_STATIC_DRAW);
+
+    //Create the vertex layout
+    GL::GenVertexArrays(1, &amp;vertexLayout);
+    GL::BindVertexArray(vertexLayout);
+
+    //The vertex layout has 3 floats for position
+    GL::VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(0));
+    GL::EnableVertexAttribArray(0);
+
+    return true;
+}
+
+void Game::Draw(float deltaTime)
+{
+    GL::Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    GL::BindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    GL::BindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    GL::DrawRangeElements(GL_TRIANGLES, 0, 3, 3, GL_UNSIGNED_SHORT, NULL);
+}
+</code></pre><p>As you can see this is much more complicated, however the code above is not enough for the triangle to appear on the screen. We need to write a vertex shader and a fragment shader first. Blimey. Lets see how to do that.</p>
+<h2 id="Shaders"><a href="#Shaders" class="headerlink" title="Shaders!"></a>Shaders!</h2><p>OpenGL shaders are written in a language called GLSL, the OpenGL Shading Language.</p>
+<p>Vertex shaders are basically a function that gets executed by your graphics card for every vertex, and it is usually where you do things like multiply it by a world view projection matrix to get the 2D position on the screen. Here is an example which just returns the vertex position without doing any processing:</p>
+<pre><code>in vec3 inVertex;
+void main()
+{
+    gl_Position = vec4(inVertex, 1.0);
+}
+</code></pre><p>Fragment shaders are a function that gives the colour for each pixel in the triangle being drawn. The example shown here gives the triangle a nice blue colour. Yum:</p>
+<pre><code>out vec4 FragColor;
+void main()
+{
+    FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+}
+</code></pre><h2 id="Putting-it-all-Together"><a href="#Putting-it-all-Together" class="headerlink" title="Putting it all Together"></a>Putting it all Together</h2><p>So we now have some GLSL code that will put the triangles onto the screen in a nice blue colour. We now need to tell OpenGL to load all of that shader code, turn it into a single shader object and apply it to the triangle we will draw to the screen. This code will load and compile the vertex and fragment shader, then put them into a shader program object:</p>
+<pre><code>//Create the shader program
+shaderProgram = GL::CreateProgram();
+
+//Create the vertex and fragment shader
+vertexShader = GL::CreateShader(GL_VERTEX_SHADER);
+fragmentShader = GL::CreateShader(GL_FRAGMENT_SHADER);
+int vertexCodeLen = (int)strlen(vertexShaderCode);
+int fragmentCodeLen = (int)strlen(fragmentShaderCode);
+
+//Load the shader source code and compile it
+GL::ShaderSource(vertexShader, 1, &amp;vertexShaderCode, &amp;vertexCodeLen);
+GL::ShaderSource(fragmentShader, 1, &amp;fragmentShaderCode, &amp;fragmentCodeLen);
+GL::CompileShader(vertexShader);
+GL::CompileShader(fragmentShader);
+
+char log[255];
+int len;
+bool hadError = false;
+GL::GetShaderInfoLog(vertexShader, 255, &amp;len, (char*)&amp;log);
+if (len &gt; 0) {
+    std::cout &lt;&lt; &quot;Vertex Compile error:&quot; &lt;&lt; std::endl &lt;&lt; log &lt;&lt; std::endl;
+    hadError = true;
+}
+GL::GetShaderInfoLog(fragmentShader, 255, &amp;len, (char*)&amp;log);
+if (len &gt; 0) {
+    std::cout &lt;&lt; &quot;Fragment Compile error:&quot; &lt;&lt; std::endl &lt;&lt; log &lt;&lt; std::endl;
+    hadError = true;
+}
+
+if (hadError)
+    return false;
+
+GL::AttachShader(shaderProgram, fragmentShader);
+GL::AttachShader(shaderProgram, vertexShader);
+
+//Bind the vertex position to the inVertex variable in the vertex shader
+GL::BindAttribLocation(shaderProgram, 0, &quot;inVertex&quot;);
+
+//Link the shader program
+GL::LinkProgram(shaderProgram);
+GL::UseProgram(shaderProgram);
+</code></pre><p>Putting this code into the Game::Setup() function will cause a nice blue triangle to draw on the screen.</p>
+<p><img src="/2014/02/19/modern-opengl-a-tutorial/opengl.jpg" alt="A Blue Triangle drawn to the screen" title="An incredible feat of programming. AMAZING."></p>
+<p>So obviously this is a teeny tiny first step into the exciting world of graphics programming. Now that the low-level faffing is finished with we can get into more interesting stuff like lighting models, shadows and so on to get a more accurate image. I hope to cover this sort of stuff in future articles!</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:3zanders.co.uk">
+  </form>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Portfolio</h3>
+  <ul class="entry">
+  
+    <li><a href="/2009/06/10/PlayWithYourPeas/">PlayWithYourPeas</a></li>
+  
+    <li><a href="/2009/08/09/Book-Galaxy/">Book Galaxy</a></li>
+  
+    <li><a href="/2011/05/11/Detour/">Detour</a></li>
+  
+    <li><a href="/2011/11/12/Trapped/">Trapped</a></li>
+  
+    <li><a href="/2011/11/25/Kinect-Sports-Season-Two/">Kinect Sports: Season Two</a></li>
+  
+    <li><a href="/2012/04/12/Wikitime/">Wikitime</a></li>
+  
+    <li><a href="/2012/12/12/CSR-Racing/">CSR Racing</a></li>
+  
+    <li><a href="/2013/01/27/Dungeon-Heart/">Dungeon Heart</a></li>
+  
+    <li><a href="/2013/10/05/CSR-Classics/">CSR Classics</a></li>
+  
+    <li><a href="/2014/03/15/allRGB/">allRGB Rainbow Fractal</a></li>
+  
+    <li><a href="/2015/09/25/JSONParser/">C# JSON Parser</a></li>
+  
+    <li><a href="/2016/07/10/GLWT/">GLWT</a></li>
+  
+    <li><a href="/2017/08/03/GBemulator/">GB Emulator</a></li>
+  
+  </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Articles</h3>
+  <ul class="entry">
+  
+    <li><a href="/2014/02/19/modern-opengl-a-tutorial/">Modern Open GL Drawing a Triangle</a></li>
+  
+    <li><a href="/2014/08/31/new-beginnings/">New Shiny</a></li>
+  
+    <li><a href="/2017/10/13/writing-a-bootloader/">Writing a Bootloader Part 1</a></li>
+  
+    <li><a href="/2017/10/16/writing-a-bootloader2/">Writing a Bootloader Part 2</a></li>
+  
+    <li><a href="/2017/10/18/writing-a-bootloader3/">Writing a Bootloader Part 3</a></li>
+  
+  </ul>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Actionscript/">Actionscript</a><small>1</small></li>
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/C/">C</a><small>4</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>7</small></li>
+  
+    <li><a href="/tags/C/">C++</a><small>6</small></li>
+  
+    <li><a href="/tags/DirectX/">DirectX</a><small>1</small></li>
+  
+    <li><a href="/tags/HLSL/">HLSL</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Javascript/">Javascript</a><small>1</small></li>
+  
+    <li><a href="/tags/Lucene/">Lucene</a><small>1</small></li>
+  
+    <li><a href="/tags/OSX/">OSX</a><small>1</small></li>
+  
+    <li><a href="/tags/OSdev/">OSdev</a><small>3</small></li>
+  
+    <li><a href="/tags/Objective-C/">Objective-C</a><small>1</small></li>
+  
+    <li><a href="/tags/OpenGL/">OpenGL</a><small>1</small></li>
+  
+    <li><a href="/tags/Unity/">Unity</a><small>4</small></li>
+  
+    <li><a href="/tags/XNA/">XNA</a><small>1</small></li>
+  
+    <li><a href="/tags/Xbox-360/">Xbox 360</a><small>1</small></li>
+  
+    <li><a href="/tags/asm/">asm</a><small>3</small></li>
+  
+    <li><a href="/tags/iOS/">iOS</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer"><div id="footerinner">
+	<p style="float:right">
+		Built with <a href="http://hexo.io/">Hexo</a><br/>
+		Hosted on <a href="https://github.com/zanders3/zanders3.github.com">GitHub Pages</a>
+	</p>
+	<p>
+		<a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a> | <a href="http://www.github.com/zanders3">GitHub</a>
+	</p>
+	<p>&copy; 2017 Alex Parker</p>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

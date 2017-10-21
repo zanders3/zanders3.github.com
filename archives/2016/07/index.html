@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Archiv: 2016/7 | Alex Parker&#39;s Website</title>
+  <meta name="author" content="Alex Parker">
+  
+  <meta name="description" content="Alex Parker&#39;s Portfolio and Articles">
+  
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  
+  <meta property="og:site_name" content="3zanders.co.uk"/>
+
+  <link href="/css/images/logo.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="3zanders.co.uk" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body>
+  <header id="header"><div id="headerinner">
+	<div class="alignleft">
+	<a href="/"><h1>
+		  	3zanders.co.uk<br/>
+		  	<small>Alex Parker&#39;s Website</small>
+	</h1></a>
+	</div>
+	<nav id="main-nav" class="alignright">
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/portfolio">Portfolio</a></li>
+	    
+	      <li><a href="/articles">Articles</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+	<div class="clearfix"></div>
+</div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title">2016/7</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2016-07-09T23:00:00.000Z"><a href="/2016/07/10/GLWT/">Jul 10 2016</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/07/10/GLWT/">GLWT</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Inspired by the <a href="https://github.com/nothings/stb" target="_blank" rel="external">fantastic stb libraries</a> by Sean Barrett I got tired of spending hours messing about trying to get an OpenGL context up and running. Libraries such as <a href="https://www.libsdl.org/" target="_blank" rel="external">SDL</a> can manage this for you very well but feel overkill when you’re starting out.</p>
+<p>So I’ve decided to write my own window and platform abstraction library which will grow over time as I develop my other personal projects. The whole thing is pretty bare bones at the moment so I wouldn’t recommend you actually use it right now. Take a look!</p>
+<p><a href="https://github.com/zanders3/glwt2" target="_blank" rel="external">https://github.com/zanders3/glwt2</a></p>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><p>This main.c will get you started:</p>
+<pre><code>#include &quot;glwt.h&quot;
+
+void glwt_setup()
+{
+}
+
+void glwt_draw(float time)
+{
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+int main(int argc, char *argv[])
+{
+    return glwt_init(&quot;Hello, GLWT!&quot;, 800, 600, false);
+}
+</code></pre><h2 id="Compiling"><a href="#Compiling" class="headerlink" title="Compiling"></a>Compiling</h2><p>Simply create a new empty XCode/Visual Studio project and add glwt.(cpp/mm) and glwt.h to the project.</p>
+<p>On Mac you will need to go to the ‘Build Phases’ XCode project settings tab and add the Cocoa.framework and OpenGL.framework for the project to link. Also ensure the glwt.mm file is an mm file <em>not</em> a cpp file.</p>
+<h2 id="Input"><a href="#Input" class="headerlink" title="Input"></a>Input</h2><p>Pressed keys are stored in the global <code>bool glwt_keydown[255];</code> structure as ascii keycodes. e.g. <code>glwt_keydown[&#39;a&#39;]</code>. This will work for a-z and 0-9 keys. There are additional keys defined in the Keys enum at the top of the header file. This currently only works on windows - I’ll be adding Mac support later!</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:3zanders.co.uk">
+  </form>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Portfolio</h3>
+  <ul class="entry">
+  
+    <li><a href="/2009/06/10/PlayWithYourPeas/">PlayWithYourPeas</a></li>
+  
+    <li><a href="/2009/08/09/Book-Galaxy/">Book Galaxy</a></li>
+  
+    <li><a href="/2011/05/11/Detour/">Detour</a></li>
+  
+    <li><a href="/2011/11/12/Trapped/">Trapped</a></li>
+  
+    <li><a href="/2011/11/25/Kinect-Sports-Season-Two/">Kinect Sports: Season Two</a></li>
+  
+    <li><a href="/2012/04/12/Wikitime/">Wikitime</a></li>
+  
+    <li><a href="/2012/12/12/CSR-Racing/">CSR Racing</a></li>
+  
+    <li><a href="/2013/01/27/Dungeon-Heart/">Dungeon Heart</a></li>
+  
+    <li><a href="/2013/10/05/CSR-Classics/">CSR Classics</a></li>
+  
+    <li><a href="/2014/03/15/allRGB/">allRGB Rainbow Fractal</a></li>
+  
+    <li><a href="/2015/09/25/JSONParser/">C# JSON Parser</a></li>
+  
+    <li><a href="/2016/07/10/GLWT/">GLWT</a></li>
+  
+    <li><a href="/2017/08/03/GBemulator/">GB Emulator</a></li>
+  
+  </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Articles</h3>
+  <ul class="entry">
+  
+    <li><a href="/2014/02/19/modern-opengl-a-tutorial/">Modern Open GL Drawing a Triangle</a></li>
+  
+    <li><a href="/2014/08/31/new-beginnings/">New Shiny</a></li>
+  
+    <li><a href="/2017/10/13/writing-a-bootloader/">Writing a Bootloader Part 1</a></li>
+  
+    <li><a href="/2017/10/16/writing-a-bootloader2/">Writing a Bootloader Part 2</a></li>
+  
+    <li><a href="/2017/10/18/writing-a-bootloader3/">Writing a Bootloader Part 3</a></li>
+  
+  </ul>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Actionscript/">Actionscript</a><small>1</small></li>
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/C/">C</a><small>4</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>7</small></li>
+  
+    <li><a href="/tags/C/">C++</a><small>6</small></li>
+  
+    <li><a href="/tags/DirectX/">DirectX</a><small>1</small></li>
+  
+    <li><a href="/tags/HLSL/">HLSL</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Javascript/">Javascript</a><small>1</small></li>
+  
+    <li><a href="/tags/Lucene/">Lucene</a><small>1</small></li>
+  
+    <li><a href="/tags/OSX/">OSX</a><small>1</small></li>
+  
+    <li><a href="/tags/OSdev/">OSdev</a><small>3</small></li>
+  
+    <li><a href="/tags/Objective-C/">Objective-C</a><small>1</small></li>
+  
+    <li><a href="/tags/OpenGL/">OpenGL</a><small>1</small></li>
+  
+    <li><a href="/tags/Unity/">Unity</a><small>4</small></li>
+  
+    <li><a href="/tags/XNA/">XNA</a><small>1</small></li>
+  
+    <li><a href="/tags/Xbox-360/">Xbox 360</a><small>1</small></li>
+  
+    <li><a href="/tags/asm/">asm</a><small>3</small></li>
+  
+    <li><a href="/tags/iOS/">iOS</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer"><div id="footerinner">
+	<p style="float:right">
+		Built with <a href="http://hexo.io/">Hexo</a><br/>
+		Hosted on <a href="https://github.com/zanders3/zanders3.github.com">GitHub Pages</a>
+	</p>
+	<p>
+		<a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a> | <a href="http://www.github.com/zanders3">GitHub</a>
+	</p>
+	<p>&copy; 2017 Alex Parker</p>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Seite 2 | Archiv | Alex Parker&#39;s Website</title>
+  <meta name="author" content="Alex Parker">
+  
+  <meta name="description" content="Alex Parker&#39;s Portfolio and Articles">
+  
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+  
+  <meta property="og:site_name" content="3zanders.co.uk"/>
+
+  <link href="/css/images/logo.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="3zanders.co.uk" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+
+<body>
+  <header id="header"><div id="headerinner">
+	<div class="alignleft">
+	<a href="/"><h1>
+		  	3zanders.co.uk<br/>
+		  	<small>Alex Parker&#39;s Website</small>
+	</h1></a>
+	</div>
+	<nav id="main-nav" class="alignright">
+	  <ul>
+	    
+	      <li><a href="/">Home</a></li>
+	    
+	      <li><a href="/portfolio">Portfolio</a></li>
+	    
+	      <li><a href="/articles">Articles</a></li>
+	    
+	  </ul>
+	  <div class="clearfix"></div>
+	</nav>
+	<div class="clearfix"></div>
+</div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<h2 class="archive-title">Archiv</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2013-01-27T00:00:00.000Z"><a href="/2013/01/27/Dungeon-Heart/">Jan 27 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/01/27/Dungeon-Heart/">Dungeon Heart</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Dungeon Heart was a game made in 48 hours with <a href="http://alextrowers.blogspot.co.uk/" target="_blank" rel="external">Alex Trowers</a> and <a href="http://huhjustablog.blogspot.co.uk/" target="_blank" rel="external">Leanne Bayley</a> as part of the 2013 <a href="http://globalgamejam.org/" target="_blank" rel="external">Global Game Jam</a> game jamming competition. We even managed to get a good 7 hours sleep and got the game we planned to make finished on time!</p>
+<p>Since we used Unity you can <a href="/dungeonheart">play the full game here</a>!</p>
+<p><img src="/2013/01/27/Dungeon-Heart/screen2.png" alt="The Title Screen"></p>
+<p>The theme was ‘Heartbeats’ so naturally as big fans (and for some of us ex-employees) of Bullfrog we made a Dungeon Keeper clone, since Dungeon Keeper has a heart in the middle. The game was built with the Unity Game Engine using C#. I find Unity one of the easiest game engines to use, and it is the perfect tool for prototyping and game jamming.</p>
+<p>At first we decided how to best split up the work. It was decided that I would focus on the code, Leanne on the Art and Trowers would handle the game design and jump into the other two disciplines where needed. </p>
+<h2 id="Day-1"><a href="#Day-1" class="headerlink" title="Day 1"></a>Day 1</h2><p>To start with I focused on getting a basic tile based map engine going, and we made a decision to go 3D. Leanne started cranking out some monsters whilst Trowers searched for sound effects and started throwing some particle effects together. Each level used a really simple text file to define each level layout, with each different character in the text file representing a tile in the map in the level. This allowed us to create a whole bunch of levels really quickly.</p>
+<p>So I got that all up and running and then started to focus on the biggest, scariest task - AI Pathfinding! Whilst I knew about the A* pathfinding algorithm and how it worked, I had never attempted to write one from scratch during a game jam before. Luckily thanks to <a href="http://www.policyalmanac.org/games/aStarTutorial.htm" target="_blank" rel="external">this fantastic explanation</a> and some fixing of a few off by one errors I managed to get a basic pathfinding system working.</p>
+<p><img src="/2013/01/27/Dungeon-Heart/screen1.jpg" alt="Attack and Defence of your Dungeon Heart"></p>
+<p>I then spent the next few hours setting up a basic AI system. None of the characters in the game were controlled directly and instead needed to decide for themselves where they needed to go. This was done using <a href="Dijkstra&#39;s_algorithm">Dijkstra’s algorithm</a>, a variant of A* to find the nearest target. For good characters their targets involved other creatures as a first priority, followed by the Dungeon Heart itself. For the evil creatures they simply targeted the nearest (in map steps) good creature.</p>
+<p>The AI system also had a really simple animation system that made the characters jump and move between tiles to the time of the Dungeon’s Heartbeat.</p>
+<p><img src="/2013/01/27/Dungeon-Heart/screen3.png" alt="We &lt;3 Dragons Team Logo"></p>
+<p>There were 6 character types implemented in the game - 3 good and 3 evil. Naturally the good guys are sneaking into your dungeon and trying to smash up your Dungeon Heart whilst the evil player needs to defend the Dungeon by setting trapdoors (a last minute inclusion, but one of the best bits) and clicking on spawn points at the correct time. If you clicked the spawn point on the beat of the heartbeat three times in row then you would spawn the most powerful creature, two times for the second most powerful and once for the least. Mess up your timing and nothing would happen! The balancing and implementation of the spawn timing system was done by Trowers whilst I was sorting out the pathfinding and character AI system.</p>
+<p>By the end of the first night we were in a pretty good position - we had a basic pathfinding system with good creatures pathfinding to the Dungeon Heart but not doing any damage.</p>
+<h2 id="Day-2"><a href="#Day-2" class="headerlink" title="Day 2"></a>Day 2</h2><p>So with the solid start from the previous day things were looking pretty good the following morning! The final day was spent implementing the final gameplay design making the two different sides attack each other by introducing an attack system and hit points to each character. I also set up the victory and loss conditions, making the Dungeon Heart beat faster when you are about to lose, creating lots of tension in the final moments.</p>
+<p><img src="/2013/01/27/Dungeon-Heart/screen4.png" alt="Outnumbered by Knights"></p>
+<p>The rest of the day was spent getting multiple levels with multiple waves of enemies working and fixing lots of bugs that had popped up over time. Trowers also got the sound effects plugged in and threw some quick designs for multiple levels together as well as the coding for the spawn pads. Leanne had by this point finished all of the art so was making papercraft of the characters in the game.</p>
+<p>The final few hours were spent manically bug fixing, as a few hours before the end a load of really strange bugs reared their heads giving us an exciting dash for the finish! At the final deadline naturally the Global Game Jam servers got overloaded but we were allowed to put our entries on a Dropbox instead which we were assured would count.</p>
+<p><img src="/2013/01/27/Dungeon-Heart/screen5.png" alt="A Good Defence!"></p>
+<p>A few hours later we had the judging, done by the very scientific method of whooping and arm waving, and we were positioned in second place. We were all quite happy with that as the competition was fierce! </p>
+<p>In summary the global game jam was great fun and opened my eyes to how much fun a game jam can be! It is a nice change of pace from what sometimes feels like the snails pace of normal game development during your day job, since in your job the software you write has to actually work and not have some really nasty bugs lurking in there! ;)</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2012-12-12T00:00:00.000Z"><a href="/2012/12/12/CSR-Racing/">Dec 12 2012</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2012/12/12/CSR-Racing/">CSR Racing</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><a href="https://itunes.apple.com/gb/app/csr-racing/id469369175?mt=8" target="_blank" rel="external">CSR Racing</a> is a free to play mobile game by <a href="http://bossalien.com" target="_blank" rel="external">Boss Alien</a> for iOS and Android devices. You purchase, upgrade and then drag race your own car against your friends list, the world and crews across a fictional city in modern, fast cars.</p>
+<p><img src="/2012/12/12/CSR-Racing/screen1.jpg" alt=""></p>
+<p><img src="/2012/12/12/CSR-Racing/screen2.jpg" alt=""></p>
+<p><img src="/2012/12/12/CSR-Racing/screen3.jpg" alt=""></p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2012-04-11T23:00:00.000Z"><a href="/2012/04/12/Wikitime/">Apr 12 2012</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2012/04/12/Wikitime/">Wikitime</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Wikitime was my final year project of my BSc Computer Science degree at the University of Southampton. The system took the full english text from the whole of the english wikipedia which is freely <a href="http://en.wikipedia.org/wiki/Wikipedia:Database_download#English-language_Wikipedia" target="_blank" rel="external">available to download</a> and attempted to position historical events on a timeline. <a href="http://wikitime.herokuapp.com/" target="_blank" rel="external">A demo</a> based on the <a href="http://simple.wikipedia.org/wiki/Main_Page" target="_blank" rel="external">Simple English Wikipedia</a> is available thanks to <a href="https://www.heroku.com/" target="_blank" rel="external">Heroku</a>.</p>
+<p><img src="/2012/04/12/Wikitime/screen1.jpg" alt="Famous Scottish Scientists"></p>
+<h2 id="Historical-Event-Extraction"><a href="#Historical-Event-Extraction" class="headerlink" title="Historical Event Extraction"></a>Historical Event Extraction</h2><p><img src="/2012/04/12/Wikitime/diagram1.png" alt="Extraction Overview"></p>
+<p>To generate a timeline of every event in history the processing system first removed all syntax and formatting from the text. Since the raw text contains wikimedia formatting which is an undocumented and messy format with no official documentation this was achieved through use of lots of regular expressions. Next the text was split into sentences with the <a href="http://nlp.stanford.edu/ner/" target="_blank" rel="external">Stanford Named Entity Recogniser</a> which also pulls out named entities giving additional information useful for later.</p>
+<p>At this point we could start looking at the sentences in detail. The final algorithm ran a regular expression over each sentence searching for four consecutive numbers, e.g. 1990. It would then attempt to parse the date in the location around the number looking for months and days.</p>
+<p><img src="/2012/04/12/Wikitime/diagram2.png" alt="Event Extraction and Indexing"></p>
+<p>This system is clearly not foolproof and was very easily confused by pretty much all of the Maths pages in Wikipedia. This issue was resolved by doing a statistical analysis of the dates extracted from the page. If a date fell outside of two standard deviations of all of the dates of the page it would be discarded. In addition any events set more than 50 years in the future (e.g. 2050) or with negative years would be discarded. This really helped to clean things up.</p>
+<p><img src="/2012/04/12/Wikitime/screen2.jpg" alt="The Life of Christopher Columbus"></p>
+<p>Finally all of these events were indexed into a <a href="http://lucene.apache.org/" target="_blank" rel="external">Lucene</a> index which could happily search over and retrieve the millions of events produced. A <a href="http://en.wikipedia.org/wiki/PageRank" target="_blank" rel="external">page rank algorithm</a> based upon each wikipedia page ranking was applied to each event to bring the important events to the top and duplicate detection and removal was applied based upon the <a href="http://doi.acm.org/10.1145/1390334.1390431" target="_blank" rel="external">spot signatures</a> algorithm.</p>
+<p><img src="/2012/04/12/Wikitime/diagram3.png" alt="Page Rank Algorithm"></p>
+<p>Processing the entire text of the english wikipedia was quite a challenge, since the file was around 44 GB uncompressed. To make the time to process this sane a threaded pipeline was written that splits the work over multiple threads, with queues between them. This allowed the whole wiki to be processed in around 12 hours on a reasonably powerful 12 core server my university left lying around ;)</p>
+<h2 id="The-Website"><a href="#The-Website" class="headerlink" title="The Website"></a>The Website</h2><p>The next challenge was the website needed to display the events in a web browser in an understandable way. I ended up using the <a href="http://simile-widgets.org/timeline/" target="_blank" rel="external">Simile Timeline</a> Web Widget to visualise the events which I then glued to the lucene index using a bit of JQuery and Javascript. This resulted in a nice and reasonably easy to use interface.</p>
+<p><img src="/2012/04/12/Wikitime/screen3.jpg" alt="Website Homepage"></p>
+<p>So in conclusion it was a fun final year project for my degree which pushed my interests far beyond the graphics and game design which I had being doing in my free time up until that point. In case you missed the link above I highly recommend <a href="http://wikitime.herokuapp.com/" target="_blank" rel="external">checking out the demo</a> which uses the simple english wikipedia. If you are still interested in how the whole thing works, you can read <a href="/2012/04/12/Wikitime/finalreport.pdf">my project report</a>.</p>
+<p><img src="/2012/04/12/Wikitime/screen4.png" alt="Pixar"></p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2011-11-25T00:00:00.000Z"><a href="/2011/11/25/Kinect-Sports-Season-Two/">Nov 25 2011</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2011/11/25/Kinect-Sports-Season-Two/">Kinect Sports: Season Two</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><a href="http://en.wikipedia.org/wiki/Kinect_Sports:_Season_Two" target="_blank" rel="external">Kinect Sports: Season Two</a> was a Xbox 360 game developed by <a href="http://www.rare.co.uk/" target="_blank" rel="external">Rare</a> and <a href="http://bigpark.com/" target="_blank" rel="external">Big Park</a> for the Kinect as a direct sequel to the BAFTA award winning <a href="http://en.wikipedia.org/wiki/Kinect_Sports" target="_blank" rel="external">Kinect Sports</a> title. I worked on the game at Rare as an intern software engineer between my second and third year of University.</p>
+<p><img src="/2011/11/25/Kinect-Sports-Season-Two/logo.jpg" alt="Kinect Sports: Season Two Logo"></p>
+<p>I arrived at the studio during the final few weeks of Kinect Sports bug testing before release, so I was pulled in to assist with some of the servers that would support the final game when launched. After that I was put onto the pre production tools team helping to prepare Kinect Sports: Season Two for production. This involved fixing bugs and improving the art content, localisation and performance metrics reporting pipelines working mainly in C++ and C#.</p>
+<p><img src="/2011/11/25/Kinect-Sports-Season-Two/screen1.jpg" alt="Golf"></p>
+<p>After this the game moved into production and I was moved onto the core engine team working in C++ where I wrote a new GPU and CPU profiler for the internal game engine. I was then put on the multiplayer team where I worked directly with Artists and Designers on the ‘Challenge Play’ gameplay mode. This mode glued all of the various game modes together into a new mode which allowed you to challenge your Xbox Live friends and local profiles on the same Xbox asynchronously.</p>
+<p><img src="/2011/11/25/Kinect-Sports-Season-Two/challengemode.jpg" alt="Challenge Gameplay Mode"></p>
+<div class="video-container"><iframe src="//www.youtube.com/embed/rehYmXTp9yU" frameborder="0" allowfullscreen></iframe></div>
+<p>Implementing this feature involved modifying the game code for each game to support async challenges and implementing the user interface using a combination of C++ and Actionscript since Scaleform was used for the UI. Each game mode was implemented differently and in some cases by a team working from a remote office so this presented a challenge at times. There was also an online server component that  delivered notifications of a challenge from an Xbox Live friend directly from the main menu screen.</p>
+<p><img src="/2011/11/25/Kinect-Sports-Season-Two/screen2.jpg" alt="Tennis"></p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2011-11-12T00:00:00.000Z"><a href="/2011/11/12/Trapped/">Nov 12 2011</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2011/11/12/Trapped/">Trapped</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Trapped was my entry for <a href="http://www.ludumdare.com/compo/" target="_blank" rel="external">Ludum Dare 22</a>; a game making competition where you have 48 hours to make a game independently from Scratch! You can <a href="/trapped">play the game here</a>. It was placed within the top 10 for graphics and in the top 50 overall, pretty good considering it was my first attempt at a game jam!</p>
+<p><img src="/2011/11/12/Trapped/screen1.jpg" alt=""></p>
+<p>The competition theme was ‘Alone’ - a tough one for sure! I ended up trying to create a spooky first person castle exploring game where you had to escape from a Castle. This was my first time using Unity game engine so it was quite a learning curve. I decided to focus mainly on graphics and art over gameplay quality for this jam.</p>
+<p><img src="/2011/11/12/Trapped/screen2.jpg" alt=""></p>
+<p>To start with I set about creating a basic tileset for the Castle, the plan being that I would snap all of the different castle assets together in different ways to form a much bigger and more complicated building. I created a castle wall, floor, ceiling, carpet, door, light, portcullis and some crates to throw around.</p>
+<p>Next I got all of these lovely art assets imported into Unity and I started placing and combining them into a large Castle scene. This seemed to work quite well when combined with some point lights and some linear fog in the distance to make the Castle all dark and spooky. I wish I had known about Unity’s Lightbaking tools at the time as this would have made the graphics look a lot better! Creating all of these assets and getting them imported correctly took me most of the first day.</p>
+<p><img src="/2011/11/12/Trapped/screen3.jpg" alt=""></p>
+<p>The final day was spent getting some basic gameplay working. This involved setting up a basic first person camera and a mouse drag system that would let you drag objects in the world realistically to allow the player to look and move around the world.</p>
+<p>I also set up the door levers and the portcullis animations along with some tutorial text and a simple trigger to reset the level at the end of the game.</p>
+<p><img src="/2011/11/12/Trapped/screen4.jpg" alt=""></p>
+<p>In summary I think I hit the target I aimed for which was to create a nice looking game within such a short timeframe, however due to a massively over sensitive first person camera the controls left a lot to be desired! I plan to focus much more on gameplay in future game jams.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2011-05-10T23:00:00.000Z"><a href="/2011/05/11/Detour/">May 11 2011</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2011/05/11/Detour/">Detour</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Detour was an indie game developed in <a href="http://en.wikipedia.org/wiki/Microsoft_XNA" target="_blank" rel="external">XNA</a> and released on <a href="http://store.steampowered.com/app/92100/" target="_blank" rel="external">Steam</a> in October 2011. It was made by <a href="http://www.sandswept.net/" target="_blank" rel="external">Sandswept Studios</a>, a small team at the time mostly based in Utah - not counting myself of course who worked remotely! I worked on Detour part time during my first and second year at University.</p>
+<p><img src="/2011/05/11/Detour/screen1.jpg" alt="Trucks leaving the map in glorious victory"></p>
+<p>The game involves you delivering trucks from your factory to the other side of the map by building roads. You must deliver the trucks before your competitors do, so to get a monopoly on the truck delivery market you sabotage your opponents roads with nails, dynamite and bombs. It is often described as a chess game with bombs. There is also a infinite runner mode where you need to keep your truck on the map as it scrolls down the screen. It sure was a weird game design.</p>
+<p><img src="/2011/05/11/Detour/screen2.jpg" alt="Expanding over the river"></p>
+<p>I was completely responsible for the graphics and wrote all of the content pipelines, shaders and special effects from scratch. I also helped out with some of the in game UI. The shaders were written in HLSL and the graphics pipeline used the DirectX 9.0 SDK provided by XNA.</p>
+<p><img src="/2011/05/11/Detour/screen3.jpg" alt="Nighttime truck chaos"></p>
+<p>The renderer batched draw calls into buckets and used static mesh instancing to draw the tiles quickly. It had support for multiple geometry passes and the final game had some sweet effects implemented such as realtime reflections on the water, realtime soft shadows, local lighting, model recolouring, smoke particles, grass billboards, lasers, shield distortion, fog of war desaturation, bloom, tone mapping and a fullscreen explosion blur. I learned a lot about graphics programming in the process.</p>
+<p><img src="/2011/05/11/Detour/screen4.jpg" alt="Crossing another river"></p>
+<p>Looking back I wish I had known more of the tricks to speed things up such as combining meshes dynamically to reduce the total number of draw calls and state switches. I did know some of the tricks such as doing a Z-buffer pre-pass to allow hidden fragments to be discarded. All in all it was a fun project to work on.</p>
+<div class="video-container"><iframe src="//www.youtube.com/embed/AAcREayEcv0" frameborder="0" allowfullscreen></iframe></div>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2009-08-08T23:00:00.000Z"><a href="/2009/08/09/Book-Galaxy/">Aug 9 2009</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2009/08/09/Book-Galaxy/">Book Galaxy</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Book Galaxy was my winning entry in the <a href="http://www.sero.co.uk/jisc-mosaic-competition.html" target="_blank" rel="external">JISC MOSIAC Developer Competition</a> which challenged entrants to visualise library usage data and library books in an interesting new way. You can view <a href="/bookgalaxy">a demo of it here</a> and the <a href="http://bookgalaxy.sourceforge.net/" target="_blank" rel="external">source code</a> is available on source forge.</p>
+<p><img src="/2009/08/09/Book-Galaxy/screen1.jpg" alt="Galaxy View"></p>
+<p><img src="/2009/08/09/Book-Galaxy/screen2.jpg" alt="Book View"></p>
+<p><img src="/2009/08/09/Book-Galaxy/screen3.jpg" alt="Course View"></p>
+<p><img src="/2009/08/09/Book-Galaxy/screen4.jpg" alt="Search Results View"></p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2009-06-09T23:00:00.000Z"><a href="/2009/06/10/PlayWithYourPeas/">Jun 10 2009</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2009/06/10/PlayWithYourPeas/">PlayWithYourPeas</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><a href="http://www.lostgarden.com/2008/02/play-with-your-peas-game-prototyping.html" target="_blank" rel="external">PlayWithYourPeas</a> was a game protoype design challenge posted by Daniel Cook on his <a href="http://www.lostgarden.com" target="_blank" rel="external">Lost Garden blog</a>. He provided the design and art assets and all you had to do was implement it so I had a go! You can either <a href="/2009/06/10/PlayWithYourPeas/PlayWithYourPeasSetup.exe">download the installer</a> (windows only) or take a look at the <a href="/2009/06/10/PlayWithYourPeas/NinjaPeasSource.zip">source code</a>.</p>
+<p><img src="/2009/06/10/PlayWithYourPeas/screen1.jpg" alt=""></p>
+<p>The design is pretty awesome - you place peas who are convinced they are ninjas on a dinner plate assualt course of your own design. The ninja peas will climb to the top of your towers and jump. The longer they jump and the higher they fall (without squishing themselves) the bigger the score. Score the most points to win!</p>
+<p>I implemented the design in C++ using the DirectX 9.0 and Win32 APIs for Window and Mouse Input as well as the <a href="http://box2d.org/" target="_blank" rel="external">Box2D library</a> to do physics collisions and response and the <a href="http://www.ambiera.com/irrklang/" target="_blank" rel="external">irrKlang library</a> to play the sound effects and music. The sounds effect were recorded and processed by myself using <a href="http://audacity.sourceforge.net/" target="_blank" rel="external">Audacity</a> and the music was from <a href="http://incompetech.com/" target="_blank" rel="external">incompetech</a> - a fantastic source of gameplay music.</p>
+<p><img src="/2009/06/10/PlayWithYourPeas/screen2.jpg" alt=""><br><img src="/2009/06/10/PlayWithYourPeas/screen3.jpg" alt=""><br><img src="/2009/06/10/PlayWithYourPeas/screen4.jpg" alt=""></p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+
+  <nav id="pagination">
+  
+    <a href="/archives/" class="alignleft prev">Vorherige Seite</a>
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:3zanders.co.uk">
+  </form>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Portfolio</h3>
+  <ul class="entry">
+  
+    <li><a href="/2009/06/10/PlayWithYourPeas/">PlayWithYourPeas</a></li>
+  
+    <li><a href="/2009/08/09/Book-Galaxy/">Book Galaxy</a></li>
+  
+    <li><a href="/2011/05/11/Detour/">Detour</a></li>
+  
+    <li><a href="/2011/11/12/Trapped/">Trapped</a></li>
+  
+    <li><a href="/2011/11/25/Kinect-Sports-Season-Two/">Kinect Sports: Season Two</a></li>
+  
+    <li><a href="/2012/04/12/Wikitime/">Wikitime</a></li>
+  
+    <li><a href="/2012/12/12/CSR-Racing/">CSR Racing</a></li>
+  
+    <li><a href="/2013/01/27/Dungeon-Heart/">Dungeon Heart</a></li>
+  
+    <li><a href="/2013/10/05/CSR-Classics/">CSR Classics</a></li>
+  
+    <li><a href="/2014/03/15/allRGB/">allRGB Rainbow Fractal</a></li>
+  
+    <li><a href="/2015/09/25/JSONParser/">C# JSON Parser</a></li>
+  
+    <li><a href="/2016/07/10/GLWT/">GLWT</a></li>
+  
+    <li><a href="/2017/08/03/GBemulator/">GB Emulator</a></li>
+  
+  </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">Articles</h3>
+  <ul class="entry">
+  
+    <li><a href="/2014/02/19/modern-opengl-a-tutorial/">Modern Open GL Drawing a Triangle</a></li>
+  
+    <li><a href="/2014/08/31/new-beginnings/">New Shiny</a></li>
+  
+    <li><a href="/2017/10/13/writing-a-bootloader/">Writing a Bootloader Part 1</a></li>
+  
+    <li><a href="/2017/10/16/writing-a-bootloader2/">Writing a Bootloader Part 2</a></li>
+  
+    <li><a href="/2017/10/18/writing-a-bootloader3/">Writing a Bootloader Part 3</a></li>
+  
+  </ul>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Actionscript/">Actionscript</a><small>1</small></li>
+  
+    <li><a href="/tags/Android/">Android</a><small>2</small></li>
+  
+    <li><a href="/tags/C/">C</a><small>4</small></li>
+  
+    <li><a href="/tags/C/">C#</a><small>7</small></li>
+  
+    <li><a href="/tags/C/">C++</a><small>6</small></li>
+  
+    <li><a href="/tags/DirectX/">DirectX</a><small>1</small></li>
+  
+    <li><a href="/tags/HLSL/">HLSL</a><small>1</small></li>
+  
+    <li><a href="/tags/Java/">Java</a><small>2</small></li>
+  
+    <li><a href="/tags/Javascript/">Javascript</a><small>1</small></li>
+  
+    <li><a href="/tags/Lucene/">Lucene</a><small>1</small></li>
+  
+    <li><a href="/tags/OSX/">OSX</a><small>1</small></li>
+  
+    <li><a href="/tags/OSdev/">OSdev</a><small>3</small></li>
+  
+    <li><a href="/tags/Objective-C/">Objective-C</a><small>1</small></li>
+  
+    <li><a href="/tags/OpenGL/">OpenGL</a><small>1</small></li>
+  
+    <li><a href="/tags/Unity/">Unity</a><small>4</small></li>
+  
+    <li><a href="/tags/XNA/">XNA</a><small>1</small></li>
+  
+    <li><a href="/tags/Xbox-360/">Xbox 360</a><small>1</small></li>
+  
+    <li><a href="/tags/asm/">asm</a><small>3</small></li>
+  
+    <li><a href="/tags/iOS/">iOS</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer"><div id="footerinner">
+	<p style="float:right">
+		Built with <a href="http://hexo.io/">Hexo</a><br/>
+		Hosted on <a href="https://github.com/zanders3/zanders3.github.com">GitHub Pages</a>
+	</p>
+	<p>
+		<a href="http://www.twitter.com/3zanders">Twitter</a> | <a href="http://uk.linkedin.com/pub/alex-parker/3a/44/9">Linked In</a> | <a href="http://www.github.com/zanders3">GitHub</a>
+	</p>
+	<p>&copy; 2017 Alex Parker</p>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
