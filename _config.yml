@@ -8,7 +8,7 @@ subtitle: Alex Parker's Website
 description: Alex Parker's Portfolio and Articles
 author: Alex Parker
 email: 3zanders@gmail.com
-language: en-GB
+language: default
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -82,6 +82,6 @@ exclude_generator:
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type: github
+  type: git
   repo: git@github.com:zanders3/zanders3.github.com.git
   branch: master

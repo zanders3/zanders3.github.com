@@ -1,12 +1,12 @@
-categories: Kategorien
-search: Suche
+categories: Categories
+search: Search
 tags: Tags
 tagcloud: Tag-Cloud
 tweets: Tweets
-prev: Vorherige Seite
-next: Nächste Seite
-comment: Kommentare
-archive_a: Archiv
-archive_b: "Archiv: %s"
-page: Seite %d
-recent_posts: Neueste Artikel
+prev: Previous
+next: Next
+comment: Comments
+archive_a: Archive
+archive_b: "Archive: %s"
+page: Page %d
+recent_posts: Recent Posts

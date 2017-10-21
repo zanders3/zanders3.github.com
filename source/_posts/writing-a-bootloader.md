@@ -21,8 +21,14 @@ On a mac you can use homebrew:
 
 	brew install nasm
 
+On Windows 10 you'll also want to install [an X Server](https://sourceforge.net/projects/xming/) which allows QEMU to open a window from the linux subsystem.
+
 A Hello World Bootloader
 ------------------------
+
+We're going to write a floppy disk bootloader because it doesn't require us to mess about with file systems which helps keep things simple as possible.
+
+![Cutting edge 1970s technology!](/2017/10/13/writing-a-bootloader/floppy.jpg)
 
 When you press the power button the computer loads the BIOS from some flash memory stored on the motherboard. The BIOS initializes and self tests the hardware then loads the first 512 bytes into memory from the media device (i.e. the cdrom or floppy disk). If the last two bytes equal `0xAA55` then the BIOS will jump to location `0x7C00` effectively transferring control to the bootloader. 
 
