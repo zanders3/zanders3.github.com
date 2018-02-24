@@ -6,7 +6,7 @@ tags:
 - asm
 categories:
 - Articles
-thumbnail: /2017/10/13/writing-a-bootloader/boot3.png
+thumbnail: /2017/10/13/writing-a-bootloader/floppy.jpg
 description: This third post describes how to go beyond 512 bytes and how to compile and load a C++ function into memory
 ---
 
