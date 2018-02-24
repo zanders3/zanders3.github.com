@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>The SLAB Memory Allocator | Alex Parker&#39;s Website</title>
+  <title>The SLUB Memory Allocator | Alex Parker&#39;s Website</title>
   <meta name="author" content="Alex Parker">
   
-  <meta name="description" content="How to write your very own SLAB memory allocator!">
+  <meta name="description" content="How to write your very own SLUB memory allocator!">
   
   
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <meta property="og:title" content="The SLAB Memory Allocator"/>
+  <meta property="og:title" content="The SLUB Memory Allocator"/>
   <meta property="og:site_name" content="3zanders.co.uk"/>
 
   <link href="/css/images/logo.ico" rel="icon">
@@ -49,19 +49,19 @@
   <div class="post-content">
     <header>
       
-        <time datetime="2018-02-24T00:00:00.000Z"><a href="/2018/02/24/the-slab-allocator/">Feb 24 2018</a></time>
+        <time datetime="2018-02-24T00:00:00.000Z"><a href="/2018/02/24/the-slub-allocator/">Feb 24 2018</a></time>
       
       
   
-    <h1 class="title">The SLAB Memory Allocator</h1>
+    <h1 class="title">The SLUB Memory Allocator</h1>
   
 
     </header>
     <div class="entry">
       
         <p>One of the primary things an operating system does is allocate memory. In this tutorial we’re going to write our very own memory allocator for the rest of the kernel to use to allocate memory. This will allow us to more safely use and allocate strings and implement more complicated data structures which will come in useful later!</p>
-<p><img src="/2018/02/24/the-slab-allocator/computer-memory-chips.jpg" alt="Allocate this thing!"></p>
-<p>In this tutorial I’m going to focus on the <a href="https://en.wikipedia.org/wiki/Slab_allocation" target="_blank" rel="external">SLAB Memory Allocator</a> used in the Linux operating system which eliminates memory fragmentation caused by allocations and deallocations. In an operating system this is usually built on top of the <a href="https://en.wikipedia.org/wiki/Virtual_memory" target="_blank" rel="external">Virtual Memory</a> system which maps 4KB blocks of memory. This means the goal of the allocator is to chop those 4KB blocks up into more manageable pieces.</p>
+<p><img src="/2018/02/24/the-slub-allocator/computer-memory-chips.jpg" alt="Allocate this thing!"></p>
+<p>In this tutorial I’m going to focus on the <a href="https://en.wikipedia.org/wiki/SLUB_(Software" target="_blank" rel="external">SLUB Memory Allocator</a>) used in the Linux operating system which eliminates memory fragmentation caused by allocations and deallocations. In an operating system this is usually built on top of the <a href="https://en.wikipedia.org/wiki/Virtual_memory" target="_blank" rel="external">Virtual Memory</a> system which maps 4KB blocks of memory. This means the goal of the allocator is to chop those 4KB blocks up into more manageable pieces.</p>
 <p>The virtual memory system provides an API where you can map a 4K block of memory to a specific memory address. In my kernel it looks like this:</p>
 <pre><code>void map_page(u32 virtualAddr);
 </code></pre><p>If you fail to call <code>map_page</code> and attempt to read/write from a memory location that isn’t mapped then you get a page fault. I plan to talk in more detail about the virtual memory system in a future tutorial.</p>
@@ -73,10 +73,10 @@ void kalloc_init(u32 memStart, u32 memSize);
 void* kalloc(u32 size);
 void kfree(void* ptr);
 </code></pre><p><code>kalloc_init</code> allocates a range of memory and sets everything up. We would call this from our kernel setup routine after we’ve initialised the virtual memory system.</p>
-<h2 id="Slab-Algorithm"><a href="#Slab-Algorithm" class="headerlink" title="Slab Algorithm"></a>Slab Algorithm</h2><p>The core idea of the SLAB allocator is that you split each 4K block (from now on a <code>Slab</code>) into an array of blocks of the same size. For example a 4K slab can hold exactly 4 x 1024 byte objects and 32 x 128 byte objects. To avoid wasting space the object size must be a power of 2.</p>
+<h2 id="Slab-Algorithm"><a href="#Slab-Algorithm" class="headerlink" title="Slab Algorithm"></a>Slab Algorithm</h2><p>The core idea of the SLUB allocator is that you split each 4K block (from now on a <code>Slab</code>) into an array of blocks of the same size. For example a 4K slab can hold exactly 4 x 1024 byte objects and 32 x 128 byte objects. To avoid wasting space the object size must be a power of 2.</p>
 <p>When you request a block of memory of a specific size the allocator finds a slab with objects that are the next power of 2 of that size and hands you a free block from it. If there are no free blocks left then a new slab is mapped from virtual memory.</p>
 <p>Free memory inside a slab is tracked via a linked list where the pointer to the next free element is stored inside the free memory location itself! This constrains us to a minimum allocation size of 32 bits so we can store the pointer.</p>
-<h2 id="Allocation-within-a-Slab"><a href="#Allocation-within-a-Slab" class="headerlink" title="Allocation within a Slab"></a>Allocation within a Slab</h2><p><img src="/2018/02/24/the-slab-allocator/slab_steps.png" alt="Allocation within a Slab"></p>
+<h2 id="Allocation-within-a-Slab"><a href="#Allocation-within-a-Slab" class="headerlink" title="Allocation within a Slab"></a>Allocation within a Slab</h2><p><img src="/2018/02/24/the-slub-allocator/slab_steps.png" alt="Allocation within a Slab"></p>
 <p>This diagram shows what’s going on for a single Slab as you allocate and free memory. In this example you start with a single 4KB Slab containing 4 x 1KB objects which has been allocated at location 10000 in memory. An unaligned low memory location like this is a bad idea in the real world but this makes it easier to understand ;)</p>
 <p>Initially the free list is pointing at the first block, which is pointing to the second block and so on until we hit the null pointer at the end.</p>
 <p>The first <code>kalloc</code> allocates 1KB of memory and writes <code>0xF00D</code> to it which updates the free list pointer to point at the second block of memory. The second writes <code>0xBEEF</code> and points the free list at the third block.</p>
@@ -217,11 +217,10 @@ int main(int argc, char** argv)
 {
     kalloc_init(&amp;g_memory[0], sizeof(g_memory));
 }
-</code></pre><p>You can <a href="/2018/02/24/the-slab-allocator/kalloc.cpp">download the whole file here</a> and then compile and run it like this:</p>
+</code></pre><p>You can <a href="http://todolololol" target="_blank" rel="external">download the whole file here</a> and then compile and run it like this:</p>
 <pre><code>gcc kalloc.cpp --std=c++11 -m32 -o kalloc &amp;&amp; ./kalloc
-</code></pre><p>This also includes a couple of simple test routines. Note there are almost certainly bugs - please don’t use this in code you care about ;)</p>
-<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>So that’s how the slab allocator works which concludes this tutorial!</p>
-<p>In a future tutorial series I’m going to talk about setting up <a href="http://wiki.osdev.org/Paging" target="_blank" rel="external">virtual memory</a> and <a href="http://wiki.osdev.org/Interrupts" target="_blank" rel="external">interrupts</a>. You might also be interested in the previous tutorial series I wrote on <a href="/2017/10/13/writing-a-bootloader/">how to write a bootloader!</a>.</p>
+</code></pre><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>So that’s how the slab allocator works which concludes this mini tutorial!</p>
+<p>In future tutorial series I’m going to talk about setting up <a href="http://wiki.osdev.org/Paging" target="_blank" rel="external">virtual memory</a> and <a href="http://wiki.osdev.org/Interrupts" target="_blank" rel="external">interrupts</a>. You might also be interested in the previous tutorial series on <a href="/2017/10/13/writing-a-bootloader/">how to write a bootloader!</a>.</p>
 
       
     </div>

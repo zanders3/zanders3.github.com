@@ -222,6 +222,200 @@ int main(int argc, char** argv)
 {
     kalloc_init(&amp;g_memory[0], sizeof(g_memory));
 }
+</code></pre><p>You can <a href="/2018/02/24/the-slab-allocator/kalloc.cpp">download the whole file here</a> and then compile and run it like this:</p>
+<pre><code>gcc kalloc.cpp --std=c++11 -m32 -o kalloc &amp;&amp; ./kalloc
+</code></pre><p>This also includes a couple of simple test routines. Note there are almost certainly bugs - please don’t use this in code you care about ;)</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>So that’s how the slab allocator works which concludes this tutorial!</p>
+<p>In a future tutorial series I’m going to talk about setting up <a href="http://wiki.osdev.org/Paging" target="_blank" rel="external">virtual memory</a> and <a href="http://wiki.osdev.org/Interrupts" target="_blank" rel="external">interrupts</a>. You might also be interested in the previous tutorial series I wrote on <a href="/2017/10/13/writing-a-bootloader/">how to write a bootloader!</a>.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+<script data-isso="//box.3zanders.co.uk/" src="//box.3zanders.co.uk/js/embed.min.js"></script>
+<section id="isso-thread"></section>
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <time datetime="2018-02-24T00:00:00.000Z"><a href="/2018/02/24/the-slub-allocator/">Feb 24 2018</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2018/02/24/the-slub-allocator/">The SLUB Memory Allocator</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>One of the primary things an operating system does is allocate memory. In this tutorial we’re going to write our very own memory allocator for the rest of the kernel to use to allocate memory. This will allow us to more safely use and allocate strings and implement more complicated data structures which will come in useful later!</p>
+<p><img src="/2018/02/24/the-slub-allocator/computer-memory-chips.jpg" alt="Allocate this thing!"></p>
+<p>In this tutorial I’m going to focus on the <a href="https://en.wikipedia.org/wiki/SLUB_(Software" target="_blank" rel="external">SLUB Memory Allocator</a>) used in the Linux operating system which eliminates memory fragmentation caused by allocations and deallocations. In an operating system this is usually built on top of the <a href="https://en.wikipedia.org/wiki/Virtual_memory" target="_blank" rel="external">Virtual Memory</a> system which maps 4KB blocks of memory. This means the goal of the allocator is to chop those 4KB blocks up into more manageable pieces.</p>
+<p>The virtual memory system provides an API where you can map a 4K block of memory to a specific memory address. In my kernel it looks like this:</p>
+<pre><code>void map_page(u32 virtualAddr);
+</code></pre><p>If you fail to call <code>map_page</code> and attempt to read/write from a memory location that isn’t mapped then you get a page fault. I plan to talk in more detail about the virtual memory system in a future tutorial.</p>
+<h2 id="Allocator-API"><a href="#Allocator-API" class="headerlink" title="Allocator API"></a>Allocator API</h2><p>First off let’s define the interface to our memory allocator. We don’t want to confuse it with <code>malloc</code> so I’ve gone with <code>kalloc</code>. I also like to avoid sprinkling <code>unsigned</code> everywhere so let’s add some typedefs.</p>
+<pre><code>typedef unsigned int u32;
+typedef unsigned short u16;
+
+void kalloc_init(u32 memStart, u32 memSize);
+void* kalloc(u32 size);
+void kfree(void* ptr);
+</code></pre><p><code>kalloc_init</code> allocates a range of memory and sets everything up. We would call this from our kernel setup routine after we’ve initialised the virtual memory system.</p>
+<h2 id="Slab-Algorithm"><a href="#Slab-Algorithm" class="headerlink" title="Slab Algorithm"></a>Slab Algorithm</h2><p>The core idea of the SLUB allocator is that you split each 4K block (from now on a <code>Slab</code>) into an array of blocks of the same size. For example a 4K slab can hold exactly 4 x 1024 byte objects and 32 x 128 byte objects. To avoid wasting space the object size must be a power of 2.</p>
+<p>When you request a block of memory of a specific size the allocator finds a slab with objects that are the next power of 2 of that size and hands you a free block from it. If there are no free blocks left then a new slab is mapped from virtual memory.</p>
+<p>Free memory inside a slab is tracked via a linked list where the pointer to the next free element is stored inside the free memory location itself! This constrains us to a minimum allocation size of 32 bits so we can store the pointer.</p>
+<h2 id="Allocation-within-a-Slab"><a href="#Allocation-within-a-Slab" class="headerlink" title="Allocation within a Slab"></a>Allocation within a Slab</h2><p><img src="/2018/02/24/the-slub-allocator/slab_steps.png" alt="Allocation within a Slab"></p>
+<p>This diagram shows what’s going on for a single Slab as you allocate and free memory. In this example you start with a single 4KB Slab containing 4 x 1KB objects which has been allocated at location 10000 in memory. An unaligned low memory location like this is a bad idea in the real world but this makes it easier to understand ;)</p>
+<p>Initially the free list is pointing at the first block, which is pointing to the second block and so on until we hit the null pointer at the end.</p>
+<p>The first <code>kalloc</code> allocates 1KB of memory and writes <code>0xF00D</code> to it which updates the free list pointer to point at the second block of memory. The second writes <code>0xBEEF</code> and points the free list at the third block.</p>
+<p>When the memory is freed we simply write the free list location into the freed memory location and update the free list to point at our freed block.</p>
+<p>Let’s go ahead and write some code for this!</p>
+<pre><code>struct SlabEntry
+{
+    SlabEntry* next;
+};
+
+struct Slab
+{
+    Slab* m_nextSlab;
+    SlabEntry* m_freeList;
+    u32 m_slabStart;
+    u16 m_size;
+
+    void Init(u32 slabStart, u16 size);
+    bool Alloc(u32 size, u32&amp; newLoc);
+    bool Free(u32 location);
+};
+</code></pre><p>First we need to initialise the memory for a single slab by setting up the free list to point to each block of free memory. Initially this will be every block of memory in the slab, like this:</p>
+<pre><code>void Slab::Init(u32 slabStart, u16 size)
+{
+    m_nextSlab = nullptr;
+    m_slabStart = slabStart;
+    m_size = size;
+
+    map_page(slabStart);
+    memset((void*)slabStart, 0, 0x1000);
+
+    u32 numEntries = (0x1000 / size) - 1;
+    m_freelist = (SlabEntry*)slabStart;
+    SlabEntry* current = m_freelist;
+    for (u32 i = 1; i&lt;numEntries; i++)
+    {
+        current-&gt;next = (SlabEntry*)(slabStart + (i * size));
+        current = current-&gt;next;
+    }
+}
+</code></pre><p>This function takes a virtual memory location which we will ask to be managed by this slab and the size of each object we’ll be allocating. We ask the virtual memory paging system to map this page for us and make it writeable.</p>
+<p>Next the alloc function pops a free object off the free list!</p>
+<pre><code>bool Slab::Alloc(u32 size, u32&amp; newLoc)
+{
+    if (m_size != size || m_freelist == nullptr)
+        return false;
+    newLoc = (u32)m_freelist;
+    m_freelist = m_freelist-&gt;next;
+    return true;
+}
+</code></pre><p>The free function adds an object back on the free list, after checking that the memory location being freed is within the slab:</p>
+<pre><code>bool Slab::Free(u32 location)
+{
+    if (location &lt; m_slabStart || location &gt;= m_slabStart + 0x1000)
+        return false;
+    SlabEntry* newEntry = (SlabEntry*)location;
+    newEntry-&gt;next = m_freelist;
+    m_freelist = newEntry;
+    return true;
+}
+</code></pre><p>There is a whole bunch of extra checks you can do here which I’ve left out to make the code simpler.</p>
+<h2 id="Allocating-Slab-Metadata"><a href="#Allocating-Slab-Metadata" class="headerlink" title="Allocating Slab Metadata"></a>Allocating Slab Metadata</h2><p>So at this point we have a way of allocating memory for a single 4KB block of memory for a single allocation size. How do we build on this? </p>
+<p>We want to support multiple slabs of memory! The simplest option is to have a linked list of them, like this:</p>
+<pre><code>Slab* g_slabList;
+</code></pre><p>This brings up another problem. Where do we store the members inside each <code>Slab</code> struct? The answer is to store the Slab structs inside a special list of Slabs set aside just for this purpose - a ‘metadata’ slab.</p>
+<pre><code>Slab* g_slabMetaData;
+</code></pre><p>Here is helper function <code>alloc_slab_meta</code> that will set one of these up. The trick here is to use the first object in the slab to store the fields of the metadata slab itself. It’s <a href="https://xkcd.com/1416/" target="_blank" rel="external">turtles all the way down</a>!</p>
+<pre><code>static Slab* alloc_slab_meta(u32 slabStart)
+{
+    Slab slabMetadata;
+    slabMetadata.Init(slabStart, sizeof(Slab), true);
+    u32 slabLoc;
+    bool didAlloc = slabMetadata.Alloc(sizeof(Slab), slabLoc);
+    assert(didAlloc &amp;&amp; slabStart == slabLoc);
+
+    Slab* newSlabMeta = (Slab*)slabLoc;
+    *newSlabMeta = slabMetadata;
+    return newSlabMeta;
+}
+</code></pre><h2 id="Putting-it-all-together"><a href="#Putting-it-all-together" class="headerlink" title="Putting it all together"></a>Putting it all together</h2><p>We need to know where our heap needs to start from in virtual memory:</p>
+<pre><code>u32 g_memStart;
+</code></pre><p>We’re ready to write our <code>kalloc</code> function! First we loop through the existing slab lists to see if we can allocate memory from those:</p>
+<pre><code>void* kalloc(u32 size)
+{
+    u32 newLoc;
+    Slab* slab = g_slabList;
+    for (; slab; slab = slab-&gt;m_nextSlab) {
+        if (slab-&gt;Alloc(size, newLoc)) {
+            return (void*)newLoc;
+        }
+    }
+</code></pre><p>If that fails then we need to allocate a new slab, and hand over the first block of memory from there. The memory for slabs is held by the <code>g_slabMetaData</code> which we can now allocate from:</p>
+<pre><code>u32 slabLoc;
+bool didAlloc = g_slabMetaData-&gt;Alloc(sizeof(Slab), slabLoc);
+</code></pre><p>If the metadata is full then we need to allocate a new metadata slab! Since this allocator never throws away allocated slabs we don’t need to keep a reference to previous metadata slabs.</p>
+<pre><code>if (!didAlloc) {
+    g_slabMetaData = alloc_slab_meta(g_memStart);
+    g_memStart += 0x1000;
+    g_slabMetaData-&gt;Alloc(sizeof(Slab), slabLoc);
+}
+</code></pre><p>Now we have somewhere to put the metadata we can allocate a new slab and add it to the slab list!</p>
+<pre><code>Slab* newSlab = (Slab*)slabLoc;
+newSlab-&gt;Init(g_memStart, size, false);
+g_memStart += 0x1000;
+newSlab-&gt;m_nextSlab = g_slabList;
+g_slabList = newSlab;
+</code></pre><p>Now we can allocate the block of memory inside the slab.</p>
+<pre><code>    newSlab-&gt;Alloc(size, newLoc);
+    return (void*)newLoc;
+}
+</code></pre><p>I have intentionally kept the code here simple meaning there is a lot of room here for optimisation. For example you could maintain multiple slab linked lists allowing you to skip over slabs that are full or find a slab with the correct allocation size more quickly.</p>
+<p>I’ve also missed out some asserts and other safety checks. I’ve included those in the full version below.</p>
+<h2 id="Freeing-memory"><a href="#Freeing-memory" class="headerlink" title="Freeing memory"></a>Freeing memory</h2><p>To keep things simple we’re only going to free memory inside each slab - once a slab has been allocated it is alive forever! A more fancy version would throw away everything that’s been allocated.</p>
+<p>The free function simply asks each slab if it wants to free the block. Again you could be much cleverer and have multiple lists so you can find the slab much more quickly.</p>
+<pre><code>void kfree(void* ptr)
+{
+    if (!ptr) 
+        return;
+
+    u32 loc = (u32)ptr;
+    for (Slab* slab = g_slabList; slab; slab = slab-&gt;m_nextSlab)
+        if (slab-&gt;Free(loc))
+            return;
+}
+</code></pre><h2 id="Final-bits"><a href="#Final-bits" class="headerlink" title="Final bits"></a>Final bits</h2><p>That’s the core stuff! All we need now is an init function and a main function to test this thing. The init function allocates the first metadata block and sets up the globals.</p>
+<pre><code>void kalloc_init(u32 memStart, u32 memSize)
+{
+    g_memStart = memStart;
+    g_slabList = nullptr;
+
+    g_slabMetaData = alloc_slab_meta(g_memStart);
+    g_memStart += 0x1000;
+}
+</code></pre><p>You don’t need your very own operating system to test this! We can point this code at a block of memory, like this:</p>
+<pre><code>char g_memory[1024*1024];// 1 MB!
+
+int main(int argc, char** argv)
+{
+    kalloc_init(&amp;g_memory[0], sizeof(g_memory));
+}
 </code></pre><p>You can <a href="http://todolololol" target="_blank" rel="external">download the whole file here</a> and then compile and run it like this:</p>
 <pre><code>gcc kalloc.cpp --std=c++11 -m32 -o kalloc &amp;&amp; ./kalloc
 </code></pre><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>So that’s how the slab allocator works which concludes this mini tutorial!</p>
@@ -845,13 +1039,15 @@ GL::UseProgram(shaderProgram);
   
     <li><a href="/2014/08/31/new-beginnings/">New Shiny</a></li>
   
-    <li><a href="/2017/10/18/writing-a-bootloader3/">Writing a Bootloader Part 3</a></li>
+    <li><a href="/2018/02/24/the-slab-allocator/">The SLAB Memory Allocator</a></li>
+  
+    <li><a href="/2018/02/24/the-slub-allocator/">The SLUB Memory Allocator</a></li>
   
     <li><a href="/2017/10/13/writing-a-bootloader/">Writing a Bootloader Part 1</a></li>
   
     <li><a href="/2017/10/16/writing-a-bootloader2/">Writing a Bootloader Part 2</a></li>
   
-    <li><a href="/2018/02/24/the-slab-allocator/">The SLAB Memory Allocator</a></li>
+    <li><a href="/2017/10/18/writing-a-bootloader3/">Writing a Bootloader Part 3</a></li>
   
   </ul>
 </div>
@@ -869,7 +1065,7 @@ GL::UseProgram(shaderProgram);
   
     <li><a href="/tags/C/">C#</a><small>7</small></li>
   
-    <li><a href="/tags/C/">C++</a><small>7</small></li>
+    <li><a href="/tags/C/">C++</a><small>8</small></li>
   
     <li><a href="/tags/DirectX/">DirectX</a><small>1</small></li>
   
@@ -883,7 +1079,7 @@ GL::UseProgram(shaderProgram);
   
     <li><a href="/tags/OSX/">OSX</a><small>1</small></li>
   
-    <li><a href="/tags/OSdev/">OSdev</a><small>4</small></li>
+    <li><a href="/tags/OSdev/">OSdev</a><small>5</small></li>
   
     <li><a href="/tags/Objective-C/">Objective-C</a><small>1</small></li>
   
