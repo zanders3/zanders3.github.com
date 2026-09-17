@@ -23,7 +23,7 @@ title = "My post"
 date = 2026-09-17
 categories = ["Articles"]
 tags = ["Python"]
-thumbnail = "/2026/09/17/my-post/photo.jpg"
+thumbnail = "/2026/09/17/my-post/photo.png"
 description = "A short description for the listing pages."
 +++
 

@@ -3,7 +3,7 @@ title = "Book Galaxy"
 date = 2009-08-09
 tags = ["Java"]
 categories = ["Portfolio"]
-thumbnail = "/2009/08/09/Book-Galaxy/screen1.jpg"
+thumbnail = "/2009/08/09/Book-Galaxy/screen1.png"
 description = "Book Galaxy was my winning entry in the JISC MOSIAC Developer Competition which challenged entrants to visualise library usage data and library books in an interesting new way."
 +++
 

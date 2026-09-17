@@ -1,6 +1,7 @@
 """Build the site with Python 3.11+; no installation or network required."""
 import datetime as dt
 from html import escape, unescape
+from io import BytesIO
 import os
 from pathlib import Path
 import posixpath
@@ -12,6 +13,7 @@ from urllib.parse import urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
 
 from vendor import markdown2
+from image import thumbnail
 
 ROOT = Path(__file__).resolve().parent
 SOURCE, OUTPUT = ROOT / 'source', ROOT / 'public'
@@ -91,7 +93,9 @@ def summary(title, posts, more=''):
     rows = []
     for page in posts:
         title_text, url = escape(page['title']), page['url']
-        rows.append(f'<div class="imageitem"><a href="{url}"><img src="{escape(page["thumbnail"])}" class="nofancybox" alt="" /></a>'
+        dimensions = page.get('thumbnail_dimensions')
+        size = f' width="{dimensions[0]}" height="{dimensions[1]}"' if dimensions else ''
+        rows.append(f'<div class="imageitem"><a href="{url}"><img src="{escape(page["thumbnail"])}"{size} class="nofancybox" alt="" /></a>'
                     f'<h2 class="title"><a href="{url}">{title_text}</a><small style="float:right">{date_html(page)}</small></h2>'
                     f'{escape(page["description"])}</div><div class="clearfix"></div>')
     footer = f'<div style="float:right"><a href="{more}">Read More</a></div>' if more else ''
@@ -117,6 +121,34 @@ def build():
             raise ValueError(f'duplicate output: {path}')
         outputs[path] = content
 
+    # Collect assets before rendering so thumbnail URLs resolve through the same
+    # mapping as published files, including images shared by several posts.
+    for page in posts:
+        if page['source'].with_suffix('').is_dir():
+            for asset in sorted(page['source'].with_suffix('').rglob('*')):
+                if asset.is_file():
+                    add(page['url'].lstrip('/') + asset.relative_to(page['source'].with_suffix('')).as_posix(), asset)
+    for folder in (ROOT / 'assets', SOURCE):
+        for asset in sorted(folder.rglob('*')):
+            if asset.is_file() and asset.suffix != '.md' and '_posts' not in asset.relative_to(folder).parts:
+                add(asset.relative_to(folder).as_posix(), asset)
+
+    thumbnails = {}
+    for page in posts:
+        url = page['thumbnail']
+        if not url.lower().endswith('.png'):
+            continue  # Keep the existing animated GIF as-is.
+        if url not in thumbnails:
+            source = outputs.get(url.lstrip('/'))
+            if not url.startswith('/') or not isinstance(source, Path):
+                raise ValueError(f'{page["source"]}: thumbnail must reference a local PNG asset: {url}')
+            output = BytesIO()
+            dimensions = thumbnail(source, output)
+            path = 'thumbnails/' + url.lstrip('/')
+            add(path, output.getvalue())
+            thumbnails[url] = ('/' + path, dimensions)
+        page['thumbnail'], page['thumbnail_dimensions'] = thumbnails[url]
+
     def render(url, title, body, description=DESCRIPTION, is_page=False):
         html = template.substitute(title=escape(title + ' | ' + SUBTITLE if title else SUBTITLE),
                                    site_title=escape(TITLE), subtitle=escape(SUBTITLE), author=escape(AUTHOR),
@@ -140,16 +172,7 @@ def build():
                            'post' if page['post'] else 'page', 'title')
         render(page['url'], '' if layout == 'home' else page['title'], body,
                page.get('description', DESCRIPTION), not page['post'] and not layout)
-        if page['post'] and page['source'].with_suffix('').is_dir():
-            for asset in sorted(page['source'].with_suffix('').rglob('*')):
-                if asset.is_file():
-                    add(page['url'].lstrip('/') + asset.relative_to(page['source'].with_suffix('')).as_posix(), asset)
-
     render('/archives/', 'All posts', summary('All posts', posts))
-    for folder, prefix in ((ROOT / 'assets', ''), (SOURCE, '')):
-        for asset in sorted(folder.rglob('*')):
-            if asset.is_file() and asset.suffix != '.md' and '_posts' not in asset.relative_to(folder).parts:
-                add(prefix + asset.relative_to(folder).as_posix(), asset)
 
     feed = ET.Element('feed', xmlns='http://www.w3.org/2005/Atom')
     for tag, value in [('title', TITLE), ('id', SITE_URL + '/'), ('updated', posts[0]['date'].isoformat() + 'T00:00:00Z')]:
@@ -180,6 +203,8 @@ def build():
         target.parent.mkdir(parents=True, exist_ok=True)
         if isinstance(content, Path):
             shutil.copyfile(content, target)
+        elif isinstance(content, bytes):
+            target.write_bytes(content)
         else:
             target.write_text(content, encoding='utf-8')
     print(f'Built {len(pages) + 1} pages, {len(posts)} posts, {len(outputs)} files in public/')

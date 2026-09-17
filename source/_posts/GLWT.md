@@ -3,7 +3,7 @@ title = "GLWT"
 date = 2016-07-10
 tags = ["C", "C++", "Objective-C"]
 categories = ["Portfolio"]
-thumbnail = "/2016/07/10/GLWT/glwt.jpg"
+thumbnail = "/2016/07/10/GLWT/glwt.png"
 description = "The OpenGL window toolkit is a single file C++ library that creates an OpenGL context on Windows/OSX"
 +++
 

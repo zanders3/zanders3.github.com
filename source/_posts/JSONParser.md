@@ -3,7 +3,7 @@ title = "C# JSON Parser"
 date = 2015-09-25
 tags = ["C#"]
 categories = ["Portfolio"]
-thumbnail = "/2015/09/25/JSONParser/json.jpg"
+thumbnail = "/2015/09/25/JSONParser/json.png"
 description = "A really simple C# JSON Parser in 300 lines"
 +++
 

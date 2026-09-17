@@ -3,7 +3,7 @@ title = "Writing a Bootloader Part 3"
 date = 2017-10-18
 tags = ["OSdev", "C", "asm"]
 categories = ["Articles"]
-thumbnail = "/2017/10/13/writing-a-bootloader/floppy.jpg"
+thumbnail = "/2017/10/13/writing-a-bootloader/floppy.png"
 description = "This third post describes how to go beyond 512 bytes and how to compile and load a C++ function into memory"
 +++
 

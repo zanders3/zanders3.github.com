@@ -3,7 +3,7 @@ title = "PlayWithYourPeas"
 date = 2009-06-10
 tags = ["C++", "DirectX"]
 categories = ["Portfolio"]
-thumbnail = "/2009/06/10/PlayWithYourPeas/screen1.jpg"
+thumbnail = "/2009/06/10/PlayWithYourPeas/screen1.png"
 description = "PlayWithYourPeas was a game protoype design challenge posted by Daniel Cook on his Lost Garden blog."
 +++
 

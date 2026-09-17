@@ -3,7 +3,7 @@ title = "Writing a Bootloader Part 1"
 date = 2017-10-13
 tags = ["OSdev", "C", "asm"]
 categories = ["Articles"]
-thumbnail = "/2017/10/13/writing-a-bootloader/floppy.jpg"
+thumbnail = "/2017/10/13/writing-a-bootloader/floppy.png"
 description = "This post describes how to write a simple Hello world bootloader"
 +++
 This article series explains how to write a tiny 32-bit x86 operating system kernel. We won't do very much other than print `Hello world!` to the screen in increasingly complicated ways! We'll start off in assembly and then build up to writing C++!
