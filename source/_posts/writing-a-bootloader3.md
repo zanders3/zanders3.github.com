@@ -1,14 +1,11 @@
-title: Writing a Bootloader Part 3
-date: 2017/10/18
-tags:
-- OSdev
-- C
-- asm
-categories:
-- Articles
-thumbnail: /2017/10/13/writing-a-bootloader/floppy.jpg
-description: This third post describes how to go beyond 512 bytes and how to compile and load a C++ function into memory
----
++++
+title = "Writing a Bootloader Part 3"
+date = 2017-10-18
+tags = ["OSdev", "C", "asm"]
+categories = ["Articles"]
+thumbnail = "/2017/10/13/writing-a-bootloader/floppy.jpg"
+description = "This third post describes how to go beyond 512 bytes and how to compile and load a C++ function into memory"
++++
 
 In our [previous article](/2017/10/16/writing-a-bootloader2/) we got our CPU into 32-bit protected mode and printed the screen using the directly mapped VGA memory. This time we're going to compile and load a C++ function into memory and call it!
 

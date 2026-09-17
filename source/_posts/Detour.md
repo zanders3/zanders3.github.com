@@ -1,14 +1,11 @@
-title: Detour
-date: 2011-05-11
-tags:
-- C#
-- XNA
-- HLSL
-categories:
-- Portfolio
-thumbnail: /2011/05/11/Detour/screen1.jpg
-description: Detour was an indie game developed in XNA and released on Steam in October 2011.
----
++++
+title = "Detour"
+date = 2011-05-11
+tags = ["C#", "XNA", "HLSL"]
+categories = ["Portfolio"]
+thumbnail = "/2011/05/11/Detour/screen1.jpg"
+description = "Detour was an indie game developed in XNA and released on Steam in October 2011."
++++
 
 Detour was an indie game developed in [XNA](http://en.wikipedia.org/wiki/Microsoft_XNA) and released on [Steam](http://store.steampowered.com/app/92100/) in October 2011. It was made by [Sandswept Studios](http://www.sandswept.net/), a small team at the time mostly based in Utah - not counting myself of course who worked remotely! I worked on Detour part time during my first and second year at University.
 
@@ -28,4 +25,4 @@ The renderer batched draw calls into buckets and used static mesh instancing to 
 
 Looking back I wish I had known more of the tricks to speed things up such as combining meshes dynamically to reduce the total number of draw calls and state switches. I did know some of the tricks such as doing a Z-buffer pre-pass to allow hidden fragments to be discarded. All in all it was a fun project to work on.
 
-{% youtube AAcREayEcv0 %}
+<div class="video-container"><iframe src="https://www.youtube.com/embed/AAcREayEcv0" title="YouTube video" allowfullscreen></iframe></div>

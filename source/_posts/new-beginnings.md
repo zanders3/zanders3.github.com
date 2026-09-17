@@ -1,10 +1,10 @@
-title: New Shiny
-date: 2014/08/31
-category: 
-- Articles
-thumbnail: /2014/08/31/new-beginnings/giphy.gif
-description: I've taken the time to update my website again. This time I've kept the theme the same but I've moved away from an Angular JS based to a new one using Hexo. Take a look around!
----
++++
+title = "New Shiny"
+date = 2014-08-31
+categories = ["Articles"]
+thumbnail = "/2014/08/31/new-beginnings/giphy.gif"
+description = "I've taken the time to update my website again. This time I've kept the theme the same but I've moved away from an Angular JS based to a new one using Hexo. Take a look around!"
++++
 ![](/2014/08/31/new-beginnings/giphy.gif)
 
 Hi there!

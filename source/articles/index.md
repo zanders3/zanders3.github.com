@@ -1,3 +1,4 @@
-title: Articles
-layout: articles
----
++++
+title = "Articles"
+layout = "articles"
++++

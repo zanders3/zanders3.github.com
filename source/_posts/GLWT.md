@@ -1,14 +1,11 @@
-title: GLWT
-date: 2016-07-10
-tags:
-- C
-- C++
-- Objective-C
-categories:
-- Portfolio
-thumbnail: /2016/07/10/GLWT/glwt.jpg
-description: The OpenGL window toolkit is a single file C++ library that creates an OpenGL context on Windows/OSX
----
++++
+title = "GLWT"
+date = 2016-07-10
+tags = ["C", "C++", "Objective-C"]
+categories = ["Portfolio"]
+thumbnail = "/2016/07/10/GLWT/glwt.jpg"
+description = "The OpenGL window toolkit is a single file C++ library that creates an OpenGL context on Windows/OSX"
++++
 
 Inspired by the [fantastic stb libraries](https://github.com/nothings/stb) by Sean Barrett I got tired of spending hours messing about trying to get an OpenGL context up and running. Libraries such as [SDL](https://www.libsdl.org/) can manage this for you very well but feel overkill when you're starting out.
 

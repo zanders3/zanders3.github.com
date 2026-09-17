@@ -1,12 +1,11 @@
-title: GB Emulator
-date: 2017-08-03
-tags:
-- C++
-categories:
-- Portfolio
-thumbnail: /2017/08/03/GBemulator/tetris.png
-description: A gameboy hardware emulator that uses GLWT and imgui for rendering.
----
++++
+title = "GB Emulator"
+date = 2017-08-03
+tags = ["C++"]
+categories = ["Portfolio"]
+thumbnail = "/2017/08/03/GBemulator/tetris.png"
+description = "A gameboy hardware emulator that uses GLWT and imgui for rendering."
++++
 
 ![My emulator playing Tetris in Demo Mode](/2017/08/03/GBemulator/tetris.png)
 

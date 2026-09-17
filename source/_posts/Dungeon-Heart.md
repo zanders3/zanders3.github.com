@@ -1,13 +1,11 @@
-title: Dungeon Heart
-date: 2013-1-27
-tags:
-- Unity
-- C#
-categories:
-- Portfolio
-thumbnail: /2013/01/27/Dungeon-Heart/screen1.jpg
-description: Dungeon Heart was a game made in 48 hours with Alex Trowers and Leanne Bayley as part of the 2013 Global Game Jam game jamming competition.
----
++++
+title = "Dungeon Heart"
+date = 2013-01-27
+tags = ["Unity", "C#"]
+categories = ["Portfolio"]
+thumbnail = "/2013/01/27/Dungeon-Heart/screen1.jpg"
+description = "Dungeon Heart was a game made in 48 hours with Alex Trowers and Leanne Bayley as part of the 2013 Global Game Jam game jamming competition."
++++
 
 Dungeon Heart was a game made in 48 hours with [Alex Trowers](http://alextrowers.blogspot.co.uk/) and [Leanne Bayley](http://huhjustablog.blogspot.co.uk/) as part of the 2013 [Global Game Jam](http://globalgamejam.org/) game jamming competition. We even managed to get a good 7 hours sleep and got the game we planned to make finished on time!
 

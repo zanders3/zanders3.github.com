@@ -1,42 +1,57 @@
+# 3zanders.co.uk
 
-## zanders3.github.com
+Python 3.11+ is the only build requirement.
 
-My personal site, built with [Hexo](https://hexo.io/)
+## Build and preview
 
-## Setup
+```sh
+python -S build.py
+python -m http.server --directory public
+```
 
-[Hexo docs has info](https://hexo.io/docs/index.html). You need [npm](http://nodejs.org/) installed. Next install the command line:
+Open http://localhost:8000. The builder replaces `public/` on every run;
+keep original files in `source/` or `assets/`, never in `public/`.
+`-S` disables installed site packages and is optional.
 
-	$ npm install -g hexo-cli
-	$ hexo version
-	hexo: 2.8.2
-	os: Darwin 16.7.0 darwin x64
-	http_parser: 1.0
-	node: 0.10.29
-	v8: 3.14.5.9
-	ares: 1.9.0-DEV
-	uv: 0.10.27
-	zlib: 1.2.3
-	modules: 11
-	openssl: 1.0.1h
+## Write a post
 
-Next grab the site source:
+Create `source/_posts/my-post.md`:
 
-	$ git clone -b new_site https://github.com/zanders3/zanders3.github.com
+```markdown
++++
+title = "My post"
+date = 2026-09-17
+categories = ["Articles"]
+tags = ["Python"]
+thumbnail = "/2026/09/17/my-post/photo.jpg"
+description = "A short description for the listing pages."
++++
 
-## Local Testing
+Write ordinary Markdown here.
 
-Add new stuff to source/\_posts/\*.md written in markdown. Test with this:
+![A caption](/2026/09/17/my-post/photo.jpg)
+```
 
-	hexo server
+The `+++` block is TOML. Dates are unquoted; strings are quoted. Title,
+date, categories, thumbnail and description are required for posts. Tags
+are optional. Use `Articles` or `Portfolio` for the respective section;
+all posts also appear in `/archives/`. Posts sort newest first.
 
-## Deployment
+Put images and downloads in `source/_posts/my-post/`. The example is
+published at `/2026/09/17/my-post/`; its filename and date determine its URL.
+Keep those stable after publishing. Root-relative content links are converted
+to relative links so the output also works under a GitLab project subpath.
 
-Actually make the thing live (the generated side lives on master branch)
+Standalone pages use `source/name/index.md` with a title in TOML front matter.
+The homepage introduction is `source/index.md`. `layout = "home"`,
+`"articles"` and `"portfolio"` select the three listing layouts.
+Other files under `source/` are copied as static assets.
 
-	hexo deploy
+Markdown supports headings, lists, links, images, fenced and indented code,
+and raw HTML. Image alt text becomes a caption. Code uses plain styled boxes.
+Content is trusted author-written HTML, not sanitized user submissions.
+YouTube embeds can use ordinary HTML:
 
-Push code side changes (which lives on new_site branch)
-
-	git commit -m "blah"
-	git push origin new_site
+```html
+<div class="video-container"><iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Video title" allowfullscreen></iframe></div>
+```

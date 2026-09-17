@@ -1,15 +1,11 @@
-title: "Kinect Sports: Season Two"
-date: 2011-11-25
-categories:
-- Portfolio
-tags:
-- C++
-- C#
-- Actionscript
-- Xbox 360
-thumbnail: /2011/11/25/Kinect-Sports-Season-Two/logo.jpg
-description: Kinect Sports Season Two was a Xbox 360 game developed by Rare and Big Park for the Kinect as a direct sequel to the BAFTA award winning Kinect Sports title.
----
++++
+title = "Kinect Sports: Season Two"
+date = 2011-11-25
+categories = ["Portfolio"]
+tags = ["C++", "C#", "Actionscript", "Xbox 360"]
+thumbnail = "/2011/11/25/Kinect-Sports-Season-Two/logo.jpg"
+description = "Kinect Sports Season Two was a Xbox 360 game developed by Rare and Big Park for the Kinect as a direct sequel to the BAFTA award winning Kinect Sports title."
++++
 
 [Kinect Sports: Season Two](http://en.wikipedia.org/wiki/Kinect_Sports:_Season_Two) was a Xbox 360 game developed by [Rare](http://www.rare.co.uk/) and [Big Park](http://bigpark.com/) for the Kinect as a direct sequel to the BAFTA award winning [Kinect Sports](http://en.wikipedia.org/wiki/Kinect_Sports) title. I worked on the game at Rare as an intern software engineer between my second and third year of University.
 
@@ -23,7 +19,7 @@ After this the game moved into production and I was moved onto the core engine t
 
 ![Challenge Gameplay Mode](/2011/11/25/Kinect-Sports-Season-Two/challengemode.jpg)
 
-{% youtube rehYmXTp9yU %}
+<div class="video-container"><iframe src="https://www.youtube.com/embed/rehYmXTp9yU" title="YouTube video" allowfullscreen></iframe></div>
 
 Implementing this feature involved modifying the game code for each game to support async challenges and implementing the user interface using a combination of C++ and Actionscript since Scaleform was used for the UI. Each game mode was implemented differently and in some cases by a team working from a remote office so this presented a challenge at times. There was also an online server component that  delivered notifications of a challenge from an Xbox Live friend directly from the main menu screen.
 

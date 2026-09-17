@@ -1,13 +1,11 @@
-title: Modern Open GL Drawing a Triangle
-date: 2014/2/19
-tags:
-- OpenGL
-- C++
-categories:
-- Articles
-thumbnail: /2014/02/19/modern-opengl-a-tutorial/opengl.jpg
-description: A basic tutorial on creating a modern OpenGL context and getting a simple triangle drawn to the screen.
----
++++
+title = "Modern Open GL Drawing a Triangle"
+date = 2014-02-19
+tags = ["OpenGL", "C++"]
+categories = ["Articles"]
+thumbnail = "/2014/02/19/modern-opengl-a-tutorial/opengl.jpg"
+description = "A basic tutorial on creating a modern OpenGL context and getting a simple triangle drawn to the screen."
++++
 So. Let's talk about OpenGL. What a mess when you compare it with how DirectX has evolved over the years. I first learnt the intricacies of the DirectX API with the [XNA](http://xbox.create.msdn.com/en-US/) framework which I used to create some simple games. This messing led me to start experimenting with shaders, ultimately leading to my work on [Detour](http://www.sandswept.net/games/detour) which had lots of fancy things like local point lights, realtime shadows, water reflection, particle systems and postprocessing effects.
 
 One of the major problems with the DirectX API is that it only works on Windows. Microsoft no longer has the massive monopoly that it used to have and people expect games these days to run on every flavour of platform (Windows, Linux, OSX to name a few). So in practical terms this means you have to use OpenGL; an API that is supposed to work on every platform. What a brilliant idea! So.. how hard can it be to use OpenGL?

@@ -1,0 +1,8 @@
+deploy-pages:
+  image: python:3.14-slim
+  script:
+    - python -S build.py
+  pages:
+    publish: public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

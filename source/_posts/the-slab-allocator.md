@@ -1,13 +1,11 @@
-title: The SLAB Memory Allocator
-date: 2018/02/24
-tags:
-- OSdev
-- C++
-categories:
-- Articles
-thumbnail: /2018/02/24/the-slab-allocator/computer-memory-chips.jpg
-description: How to write your very own SLAB memory allocator!
----
++++
+title = "The SLAB Memory Allocator"
+date = 2018-02-24
+tags = ["OSdev", "C++"]
+categories = ["Articles"]
+thumbnail = "/2018/02/24/the-slab-allocator/computer-memory-chips.jpg"
+description = "How to write your very own SLAB memory allocator!"
++++
 
 One of the primary things an operating system does is allocate memory. In this tutorial we're going to write our very own memory allocator for the rest of the kernel to use to allocate memory. This will allow us to more safely use and allocate strings and implement more complicated data structures which will come in useful later!
 

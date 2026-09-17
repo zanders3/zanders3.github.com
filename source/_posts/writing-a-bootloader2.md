@@ -1,14 +1,11 @@
-title: Writing a Bootloader Part 2
-date: 2017/10/16
-tags:
-- OSdev
-- C
-- asm
-categories:
-- Articles
-thumbnail: /2017/10/13/writing-a-bootloader/floppy.jpg
-description: This second post describes how to write a protected mode 'Hello World!' bootloader
----
++++
+title = "Writing a Bootloader Part 2"
+date = 2017-10-16
+tags = ["OSdev", "C", "asm"]
+categories = ["Articles"]
+thumbnail = "/2017/10/13/writing-a-bootloader/floppy.jpg"
+description = "This second post describes how to write a protected mode 'Hello World!' bootloader"
++++
 
 In our [previous article](/2017/10/13/writing-a-bootloader/) we described how to write a bootloader that prints 'Hello World!' to the screen in 16bit Real Mode. We're now going to one up ourselves and print 'Hello World!' from 32 bit Protected Mode!
 
